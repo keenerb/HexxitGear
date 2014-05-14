@@ -174,3 +174,11 @@ Start.java
 *.ipr
 *.iws
 .idea/
+
+.gradle/
+build/
+eclipse/
+gradle/
+out/
+gradlew
+gradlew.bat
