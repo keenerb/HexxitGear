@@ -193,3 +193,5 @@ build/
 eclipse/
 gradle/
 out/
+gradlew
+gradlew.bat
