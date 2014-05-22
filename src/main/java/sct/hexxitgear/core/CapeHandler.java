@@ -81,13 +81,12 @@ public class CapeHandler {
         if (!capeUrl.equals("")) {
             capes.put(playerName, capeUrl);
             if (player != null) {
-                player.cloakUrl = capes.get(playerName);
-                FMLClientHandler.instance().getClient().renderEngine.obtainImageData(player.cloakUrl, null);
+                HexxitGear.proxy.setPlayerCape(playerName, capes.get(playerName));
             }
         } else {
             capes.remove(playerName);
             if (player != null)
-                player.cloakUrl = null;
+                HexxitGear.proxy.resetPlayerCape(playerName);
         }
     }
 
@@ -102,11 +101,7 @@ public class CapeHandler {
                 playerName = data.readUTF();
                 capeUrl = data.readUTF();
                 capes.put(playerName, capeUrl);
-                EntityPlayer player = HexxitGear.proxy.findPlayer(playerName);
-                if (player != null) {
-                    player.cloakUrl = capes.get(playerName);
-                    FMLClientHandler.instance().getClient().renderEngine.obtainImageData(player.cloakUrl, null);
-                }
+                HexxitGear.proxy.setPlayerCape(playerName, capeUrl);
             }
         } catch (IOException e) {
             e.printStackTrace();

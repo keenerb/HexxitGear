@@ -24,6 +24,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
@@ -45,32 +46,26 @@ public class ItemThiefArmor extends ItemHexxitArmor {
     }
 
     @Override
-    public void registerIcons(IconRegister ir) {
-        itemIcon = ir.registerIcon(getUnlocalizedName());
-    }
-
-    @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot,
-                                  int layer) {
+    public String getArmorTexture(ItemStack stack, Entity entity, int slot, java.lang.String type) {
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
             if (player.isPotionActive(Potion.invisibility))
-                return "/textures/armor/invisible.png";
+                return "hexxitgear:/textures/armor/invisible.png";
         }
 
         // If the helmet slot, return helmet texture map
         if (slot == 0)
-            return "/textures/maps/HoodHelmet.png";
+            return "hexxitgear:/textures/maps/HoodHelmet.png";
 
         if (stack.itemID == HexxitGear.thiefLeggings.itemID)
-            return "/textures/armor/thief2.png";
+            return "hexxitgear:/textures/armor/thief2.png";
 
-        return "/textures/armor/thief.png";
+        return "hexxitgear:/textures/armor/thief.png";
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public ModelBiped getArmorModel(EntityLiving entityLiving, ItemStack itemStack, int armorSlot) {
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
         if (armorSlot == 0)
             return new ModelHoodHelmet();
         return null;

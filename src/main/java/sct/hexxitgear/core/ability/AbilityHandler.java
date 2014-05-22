@@ -62,7 +62,7 @@ public class AbilityHandler {
         if (activeTime > 0) {
             if (ability != null) {
                 if (ability.getActive() == activeTime)
-                    player.sendChatToPlayer(ability.getName() + " activated!");
+                    player.addChatMessage(ability.getName() + " activated!");
 
                 ability.start(player);
                 if (ability.isInstant())
@@ -75,7 +75,7 @@ public class AbilityHandler {
             }
             cooldownTime--;
         } else {
-            player.sendChatToPlayer("Ability refreshed");
+            player.addChatMessage("Ability refreshed");
             removePlayer(playerName);
         }
     }

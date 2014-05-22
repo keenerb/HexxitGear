@@ -19,6 +19,7 @@
 package sct.hexxitgear.item;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
@@ -35,7 +36,7 @@ public class ItemHexxitArmor extends ItemArmor implements ISpecialArmor {
     }
 
     @Override
-    public ArmorProperties getProperties(EntityLiving player, ItemStack armor, DamageSource source, double damage, int slot) {
+    public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage, int slot) {
         return new ArmorProperties(1, damageReduceAmount / 22D, armor.getMaxDamage() + 1);
     }
 
@@ -45,7 +46,7 @@ public class ItemHexxitArmor extends ItemArmor implements ISpecialArmor {
     }
 
     @Override
-    public void damageArmor(EntityLiving entity, ItemStack stack, DamageSource source, int damage, int slot) {
+    public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
         if (entity instanceof EntityPlayer && !(((EntityPlayer) entity).capabilities.isCreativeMode)) {
             if (stack.getItemDamage() < stack.getMaxDamage()) {
                 stack.setItemDamage(stack.getItemDamage() + 1);

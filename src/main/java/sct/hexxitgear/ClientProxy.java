@@ -23,7 +23,10 @@ import cpw.mods.fml.client.registry.KeyBindingRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import sct.hexxitgear.control.HGKeyHandler;
 import sct.hexxitgear.tick.PlayerTickHandler;
 
@@ -43,6 +46,29 @@ public class ClientProxy extends CommonProxy {
             }
         }
         return null;
+    }
+
+    @Override
+    public void setPlayerCape(String playerName, String capeUrl) {
+        EntityPlayer player = HexxitGear.proxy.findPlayer(playerName);
+        if (player != null && player instanceof AbstractClientPlayer) {
+
+            String token = capeUrl.substring(capeUrl.lastIndexOf("/")+1);
+
+            AbstractClientPlayer capePlayer = (AbstractClientPlayer)player;
+            capePlayer.locationCape = new ResourceLocation("cloaks/hexxitgear/"+token);
+            capePlayer.downloadImageCape = AbstractClientPlayer.getDownloadImage(capePlayer.locationCape, capeUrl, (ResourceLocation)null, (IImageBuffer)null);
+        }
+    }
+
+    @Override
+    public void resetPlayerCape(String playerName) {
+        EntityPlayer player = HexxitGear.proxy.findPlayer(playerName);
+        if (player != null && player instanceof AbstractClientPlayer) {
+            AbstractClientPlayer capePlayer = (AbstractClientPlayer)player;
+            capePlayer.locationCape = capePlayer.getLocationCape(capePlayer.username);
+            capePlayer.downloadImageCape = AbstractClientPlayer.getDownloadImageCape(capePlayer.locationCape, capePlayer.username);
+        }
     }
 
     @Override

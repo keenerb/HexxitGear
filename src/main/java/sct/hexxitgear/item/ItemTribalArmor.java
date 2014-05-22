@@ -24,6 +24,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -38,24 +39,19 @@ public class ItemTribalArmor extends ItemHexxitArmor {
     }
 
     @Override
-    public void registerIcons(IconRegister ir) {
-        itemIcon = ir.registerIcon(getUnlocalizedName());
-    }
-
-    @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer) {
+    public String getArmorTexture(ItemStack stack, Entity entity, int slot, java.lang.String type) {
         if (slot == 0)
-            return "/textures/maps/SkullHelmet.png";
+            return "hexxitgear:/textures/maps/SkullHelmet.png";
 
         if (stack.itemID == HexxitGear.tribalLeggings.itemID)
-            return "/textures/armor/tribal2.png";
+            return "hexxitgear:/textures/armor/tribal2.png";
 
-        return "/textures/armor/tribal.png";
+        return "hexxitgear:/textures/armor/tribal.png";
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public ModelBiped getArmorModel(EntityLiving entityLiving, ItemStack itemStack, int armorSlot) {
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
         if (armorSlot == 0)
             return new ModelSkullHelmet();
         return null;

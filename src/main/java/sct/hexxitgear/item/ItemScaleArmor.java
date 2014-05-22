@@ -24,6 +24,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -38,24 +39,19 @@ public class ItemScaleArmor extends ItemHexxitArmor {
     }
 
     @Override
-    public void registerIcons(IconRegister ir) {
-        itemIcon = ir.registerIcon(getUnlocalizedName());
-    }
-
-    @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer) {
+    public String getArmorTexture(ItemStack stack, Entity entity, int slot, java.lang.String type) {
         if (slot == 0)
-            return "/textures/maps/ScaleHelmet.png";
+            return "hexxitgear:/textures/maps/ScaleHelmet.png";
 
         if (stack.itemID == HexxitGear.scaleLeggings.itemID)
-            return "/textures/armor/scale2.png";
+            return "hexxitgear:/textures/armor/scale2.png";
 
-        return "/textures/armor/scale.png";
+        return "hexxitgear:/textures/armor/scale.png";
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public ModelBiped getArmorModel(EntityLiving entityLiving, ItemStack itemStack, int armorSlot) {
+    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
         if (armorSlot == 0)
             return new ModelScaleHelmet();
         return null;

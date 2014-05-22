@@ -40,9 +40,8 @@ public class PlayerEventHandler {
 
                 EntityPlayer player = (EntityPlayer) event.entityLiving;
                 String capeUrl = CapeHandler.getCapeUrl(player.username);
-                if (capeUrl != null && !capeUrl.equals(player.cloakUrl)) {
-                    player.cloakUrl = capeUrl;
-                    FMLClientHandler.instance().getClient().renderEngine.obtainImageData(player.cloakUrl, null);
+                if (capeUrl != null) {
+                    HexxitGear.proxy.setPlayerCape(player.username, capeUrl);
                 }
             }
         ticks = 0;

@@ -34,11 +34,6 @@ public class BlockHexbiscus extends BlockFlower {
     }
 
     @Override
-    public void registerIcons(IconRegister ir) {
-        blockIcon = ir.registerIcon(getUnlocalizedName());
-    }
-
-    @Override
     public int idDropped(int par1, Random par2Random, int par3) {
         return HexxitGear.hexicalEssence.itemID;
     }

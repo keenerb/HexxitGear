@@ -39,6 +39,10 @@ public class CommonProxy {
         return null;
     }
 
+    public void setPlayerCape(String playerName, String capeUrl) {  }
+
+    public void resetPlayerCape(String playerName) {}
+
     public void registerHandlers() {
         TickRegistry.registerTickHandler(new PlayerTickHandler(), Side.SERVER);
     }
