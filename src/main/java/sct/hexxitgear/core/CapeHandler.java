@@ -73,7 +73,7 @@ public class CapeHandler {
             tempList.add(capes.get(playerName));
         }
 
-        PacketDispatcher.sendPacketToPlayer(PacketWrapper.createPacket(HexxitGear.modNetworkChannel, Packets.CapeJoin, tempList.toArray()), (Player) player);
+        PacketDispatcher.sendPacketToPlayer(PacketWrapper.createPacket(HexxitGear.modNetworkChannel, Packets.CapeJoin, tempList.toArray()), player);
     }
 
     public static void readCapeUpdate(String playerName, String capeUrl) {

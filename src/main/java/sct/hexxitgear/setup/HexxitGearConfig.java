@@ -20,31 +20,14 @@ package sct.hexxitgear.setup;
 
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import net.minecraftforge.common.Configuration;
-import net.minecraftforge.common.Property;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import sct.hexxitgear.HexxitGear;
 
 import java.io.*;
 import java.util.Properties;
 
 public class HexxitGearConfig {
-
-    public static Property hexbiscus;
-
-    public static Property tribalHelmetId;
-    public static Property tribalChestId;
-    public static Property tribalLeggingsId;
-    public static Property tribalShoesId;
-    public static Property scaleHelmetId;
-    public static Property scaleChestId;
-    public static Property scaleLeggingsId;
-    public static Property scaleBootsId;
-    public static Property thiefHelmetId;
-    public static Property thiefChestId;
-    public static Property thiefLeggingsId;
-    public static Property thiefBootsId;
-    public static Property hexicalEssence;
-    public static Property hexicalDiamond;
 
     public static Property dimensionalBlacklist;
 
@@ -55,26 +38,6 @@ public class HexxitGearConfig {
         Configuration c = new Configuration(evt.getSuggestedConfigurationFile());
         try {
             c.load();
-
-            hexbiscus = c.getBlock("ID.HexbiscusFlower", 2400);
-
-            tribalHelmetId = c.getItem(Configuration.CATEGORY_ITEM, "ID.TribalHelmet", 26200);
-            tribalChestId = c.getItem(Configuration.CATEGORY_ITEM, "ID.TribalChest", 26201);
-            tribalLeggingsId = c.getItem(Configuration.CATEGORY_ITEM, "ID.TribalLeggings", 26202);
-            tribalShoesId = c.getItem(Configuration.CATEGORY_ITEM, "ID.TribalShoes", 26203);
-
-            scaleHelmetId = c.getItem(Configuration.CATEGORY_ITEM, "ID.ScaleHelmet", 26204);
-            scaleChestId = c.getItem(Configuration.CATEGORY_ITEM, "ID.ScaleChest", 26205);
-            scaleLeggingsId = c.getItem(Configuration.CATEGORY_ITEM, "ID.ScaleLeggings", 26206);
-            scaleBootsId = c.getItem(Configuration.CATEGORY_ITEM, "ID.ScaleBoots", 26207);
-
-            thiefHelmetId = c.getItem(Configuration.CATEGORY_ITEM, "ID.ThiefHelmet", 26208);
-            thiefChestId = c.getItem(Configuration.CATEGORY_ITEM, "ID.ThiefChest", 26209);
-            thiefLeggingsId = c.getItem(Configuration.CATEGORY_ITEM, "ID.ThiefLeggings", 26210);
-            thiefBootsId = c.getItem(Configuration.CATEGORY_ITEM, "ID.ThiefBoots", 26211);
-
-            hexicalEssence = c.getItem(Configuration.CATEGORY_ITEM, "ID.HexicalEssence", 26212);
-            hexicalDiamond = c.getItem(Configuration.CATEGORY_ITEM, "ID.HexicalDiamond", 26213);
 
             dimensionalBlacklist = c.get("World Generation", "Dimensional Blacklist", "");
             dimensionalBlacklist.comment = "Comma separated list of all blacklisted dimension IDs";
@@ -123,37 +86,6 @@ public class HexxitGearConfig {
             catch (IOException e)
             {
                 e.printStackTrace();
-            }
-        }
-    }
-
-    public static void loadLang()
-    {
-        File f = new File(configFolder.getAbsolutePath() + "/lang/");
-        for (File langFile : f.listFiles(new FilenameFilter()
-        {
-            @Override
-            public boolean accept(File dir, String name)
-            {
-                return name.endsWith(".lang");
-            }
-        }))
-        {
-            try
-            {
-                Properties langPack = new Properties();
-                langPack.load(new FileInputStream(langFile));
-                String lang = langFile.getName().replace(".lang", "");
-                LanguageRegistry.instance().addStringLocalization(langPack,
-                        lang);
-            }
-            catch (FileNotFoundException x)
-            {
-                x.printStackTrace();
-            }
-            catch (IOException x)
-            {
-                x.printStackTrace();
             }
         }
     }

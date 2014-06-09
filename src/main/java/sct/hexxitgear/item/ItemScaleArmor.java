@@ -21,21 +21,16 @@ package sct.hexxitgear.item;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.EnumArmorMaterial;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import sct.hexxitgear.HexxitGear;
-import sct.hexxitgear.gui.HGCreativeTab;
 import sct.hexxitgear.model.ModelScaleHelmet;
 
 public class ItemScaleArmor extends ItemHexxitArmor {
 
-    public ItemScaleArmor(int id, int renderIndex, int slot) {
-        super(id, EnumArmorMaterial.DIAMOND, renderIndex, slot);
+    public ItemScaleArmor(int renderIndex, int slot) {
+        super(ArmorMaterial.DIAMOND, renderIndex, slot);
     }
 
     @Override
@@ -43,7 +38,7 @@ public class ItemScaleArmor extends ItemHexxitArmor {
         if (slot == 0)
             return "hexxitgear:/textures/maps/ScaleHelmet.png";
 
-        if (stack.itemID == HexxitGear.scaleLeggings.itemID)
+        if (stack.getItem() == HexxitGear.scaleLeggings)
             return "hexxitgear:/textures/armor/scale2.png";
 
         return "hexxitgear:/textures/armor/scale.png";

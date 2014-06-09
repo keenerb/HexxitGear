@@ -18,20 +18,21 @@
 
 package sct.hexxitgear.item;
 
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
+import sct.hexxitgear.core.ArmorSet;
+import sct.hexxitgear.core.ability.AbilityHandler;
 import sct.hexxitgear.gui.HGCreativeTab;
 
 public class ItemHexxitArmor extends ItemArmor implements ISpecialArmor {
 
-    public ItemHexxitArmor(int par1, EnumArmorMaterial par2EnumArmorMaterial, int par3, int par4) {
-        super(par1, par2EnumArmorMaterial, par3, par4);
+    public ItemHexxitArmor(ArmorMaterial par2EnumArmorMaterial, int par3, int par4) {
+        super(par2EnumArmorMaterial, par3, par4);
         setCreativeTab(HGCreativeTab.tab);
     }
 
@@ -53,6 +54,26 @@ public class ItemHexxitArmor extends ItemArmor implements ISpecialArmor {
             } else {
                 // Create broken item here
             }
+        }
+    }
+
+    @Override
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
+    {
+        if (this.armorType == 0)
+            return;
+
+        ArmorSet.getMatchingSet(player);
+
+        if (ArmorSet.getPlayerArmorSet(player.getDisplayName()) != null) {
+            ArmorSet armorSet = ArmorSet.getPlayerArmorSet(player.getDisplayName());
+            armorSet.applyBuffs(player);
+        }
+
+        // We run this outside of the check for an armorset just incase a player takes off armor mid ability
+        AbilityHandler bh = AbilityHandler.getPlayerAbilityHandler(player.getDisplayName());
+        if (bh != null) {
+            bh.onTick(player);
         }
     }
 }

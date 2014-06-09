@@ -20,6 +20,8 @@ package sct.hexxitgear.setup;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -38,7 +40,7 @@ public class HexxitGearRegistry {
                         "IDI",
                         " I ",
                         'I', HexxitGear.hexicalEssence,
-                        'D', Item.diamond
+                        'D', Items.diamond
                 }));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(HexxitGear.tribalHelmet), new Object[]
@@ -46,7 +48,7 @@ public class HexxitGearRegistry {
                         "BBB",
                         "BHB",
                         "   ",
-                        'B', Item.bone,
+                        'B', Items.bone,
                         'H', HexxitGear.hexicalDiamond
                 }));
 
@@ -56,7 +58,7 @@ public class HexxitGearRegistry {
                         "LHL",
                         "ILI",
                         'I', "ingotIron",
-                        'L', Item.leather,
+                        'L', Items.leather,
                         'H', HexxitGear.hexicalDiamond
                 }));
 
@@ -66,7 +68,7 @@ public class HexxitGearRegistry {
                         "IHI",
                         "L L",
                         'I', "ingotIron",
-                        'L', Item.leather,
+                        'L', Items.leather,
                         'H', HexxitGear.hexicalDiamond
                 }));
 
@@ -75,8 +77,8 @@ public class HexxitGearRegistry {
                         "   ",
                         "SHS",
                         "L L",
-                        'S', Item.silk,
-                        'L', Item.leather,
+                        'S', Items.string,
+                        'L', Items.leather,
                         'H', HexxitGear.hexicalDiamond
                 }));
 
@@ -85,7 +87,7 @@ public class HexxitGearRegistry {
                         "RRR",
                         "RHR",
                         "   ",
-                        'R', new ItemStack(Block.cloth, 1, 14),
+                        'R', new ItemStack(Blocks.wool, 1, 14),
                         'H', HexxitGear.hexicalDiamond
                 }));
 
@@ -94,8 +96,8 @@ public class HexxitGearRegistry {
                         "R R",
                         "LHL",
                         "LLL",
-                        'R', new ItemStack(Block.cloth, 1, 14),
-                        'L', Item.leather,
+                        'R', new ItemStack(Blocks.wool, 1, 14),
+                        'L', Items.leather,
                         'H', HexxitGear.hexicalDiamond
                 }));
 
@@ -104,8 +106,8 @@ public class HexxitGearRegistry {
                         "LSL",
                         "LHL",
                         "L L",
-                        'L', Item.leather,
-                        'S', Item.silk,
+                        'L', Items.leather,
+                        'S', Items.string,
                         'H', HexxitGear.hexicalDiamond
                 }));
 
@@ -114,9 +116,9 @@ public class HexxitGearRegistry {
                         "   ",
                         "LHL",
                         "B B",
-                        'L', Item.leather,
+                        'L', Items.leather,
                         'H', HexxitGear.hexicalDiamond,
-                        'B', new ItemStack(Block.cloth, 1, 7)
+                        'B', new ItemStack(Blocks.wool, 1, 7)
                 }));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(HexxitGear.scaleHelmet), new Object[]
@@ -125,7 +127,7 @@ public class HexxitGearRegistry {
                         "OHO",
                         "   ",
                         'G', "ingotGold",
-                        'O', Block.obsidian,
+                        'O', Blocks.obsidian,
                         'H', HexxitGear.hexicalDiamond
                 }));
 
@@ -135,7 +137,7 @@ public class HexxitGearRegistry {
                         "OHO",
                         "GOG",
                         'G', "ingotGold",
-                        'O', Block.obsidian,
+                        'O', Blocks.obsidian,
                         'H', HexxitGear.hexicalDiamond
                 }));
 
@@ -144,7 +146,7 @@ public class HexxitGearRegistry {
                         "OOO",
                         "GHG",
                         "O O",
-                        'O', Block.obsidian,
+                        'O', Blocks.obsidian,
                         'G', "ingotGold",
                         'H', HexxitGear.hexicalDiamond
                 }));
@@ -154,7 +156,7 @@ public class HexxitGearRegistry {
                         "   ",
                         "OHO",
                         "O O",
-                        'O', Block.obsidian,
+                        'O', Blocks.obsidian,
                         'H', HexxitGear.hexicalDiamond
                 }));
 

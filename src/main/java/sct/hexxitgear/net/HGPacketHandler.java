@@ -18,10 +18,6 @@
 
 package sct.hexxitgear.net;
 
-import cpw.mods.fml.common.network.IPacketHandler;
-import cpw.mods.fml.common.network.Player;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import sct.hexxitgear.core.ability.AbilityHandler;
 import sct.hexxitgear.core.CapeHandler;
 

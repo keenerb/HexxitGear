@@ -18,8 +18,6 @@
 
 package sct.hexxitgear.net;
 
-import net.minecraft.network.packet.Packet250CustomPayload;
-
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

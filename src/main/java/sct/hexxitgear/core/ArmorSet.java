@@ -72,16 +72,16 @@ public class ArmorSet {
                 }
             }
             if (matched == 4) {
-                if (getPlayerArmorSet(player.username) == null || !getPlayerArmorSet(player.username).equals(armorSet)) {
-                    addPlayerArmorSet(player.username, armorSet);
+                if (getPlayerArmorSet(player.getDisplayName()) == null || !getPlayerArmorSet(player.getDisplayName()).equals(armorSet)) {
+                    addPlayerArmorSet(player.getDisplayName(), armorSet);
                 }
                 foundMatch = true;
             }
         }
 
-        if (!foundMatch && getPlayerArmorSet(player.username) != null) {
-            ArmorSet as = getPlayerArmorSet(player.username);
-            removePlayerArmorSet(player.username);
+        if (!foundMatch && getPlayerArmorSet(player.getDisplayName()) != null) {
+            ArmorSet as = getPlayerArmorSet(player.getDisplayName());
+            removePlayerArmorSet(player.getDisplayName());
             as.removeBuffs(player);
         }
     }

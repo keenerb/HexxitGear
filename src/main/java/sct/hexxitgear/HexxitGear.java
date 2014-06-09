@@ -18,16 +18,17 @@
 
 package sct.hexxitgear;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
+import org.apache.logging.log4j.Logger;
 import sct.hexxitgear.block.BlockHexbiscus;
 import sct.hexxitgear.gui.HGCreativeTab;
 import sct.hexxitgear.setup.HexxitGearRegistry;
@@ -40,12 +41,8 @@ import sct.hexxitgear.world.HGWorldGen;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 @Mod(modid = HexxitGear.modId, name = "Hexxit Gear", useMetadata = true, version = HexxitGear.version)
-@NetworkMod(serverSideRequired = false, clientSideRequired = true,
-        clientPacketHandlerSpec = @NetworkMod.SidedPacketHandler(channels = { HexxitGear.modNetworkChannel }, packetHandler = HGPacketHandler.class),
-        serverPacketHandlerSpec = @NetworkMod.SidedPacketHandler(channels = { HexxitGear.modNetworkChannel }, packetHandler = HGPacketHandler.class))
 public class HexxitGear {
 
     public static final String modId = "hexxitgear";
@@ -88,9 +85,6 @@ public class HexxitGear {
         HexxitGearConfig.setConfigFolderBase(evt.getModConfigurationDirectory());
 
         HexxitGearConfig.loadCommonConfig(evt);
-
-        HexxitGearConfig.extractLang(new String[]{"en_US"});
-        HexxitGearConfig.loadLang();
         HexxitGearConfig.registerDimBlacklist();
 
         logger = evt.getModLog();
@@ -100,34 +94,34 @@ public class HexxitGear {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent evt) {
-        hexbiscus = new BlockHexbiscus(HexxitGearConfig.hexbiscus.getInt()).setTextureName("hexxitgear:hexbiscus");
+        hexbiscus = new BlockHexbiscus().setBlockTextureName("hexxitgear:hexbiscus");
 
-        tribalHelmet = new ItemTribalArmor(HexxitGearConfig.tribalHelmetId.getInt(), proxy.addArmor("tribal"), 0).setUnlocalizedName("hexxitgear.tribal.helmet").setTextureName("hexxitgear:tribal.helmet");
-        tribalChest = new ItemTribalArmor(HexxitGearConfig.tribalChestId.getInt(), proxy.addArmor("tribal"), 1).setUnlocalizedName("hexxitgear.tribal.chest").setTextureName("hexxitgear:tribal.chest");
-        tribalLeggings = new ItemTribalArmor(HexxitGearConfig.tribalLeggingsId.getInt(), proxy.addArmor("tribal"), 2).setUnlocalizedName("hexxitgear.tribal.leggings").setTextureName("hexxitgear:tribal.leggings");
-        tribalShoes = new ItemTribalArmor(HexxitGearConfig.tribalShoesId.getInt(), proxy.addArmor("tribal"), 3).setUnlocalizedName("hexxitgear.tribal.boots").setTextureName("hexxitgear:tribal.boots");
-        scaleHelmet = new ItemScaleArmor(HexxitGearConfig.scaleHelmetId.getInt(), proxy.addArmor("scale"), 0).setUnlocalizedName("hexxitgear.scale.helmet").setTextureName("hexxitgear:scale.helmet");
-        scaleChest = new ItemScaleArmor(HexxitGearConfig.scaleChestId.getInt(), proxy.addArmor("scale"), 1).setUnlocalizedName("hexxitgear.scale.chest").setTextureName("hexxitgear:scale.chest");
-        scaleLeggings = new ItemScaleArmor(HexxitGearConfig.scaleLeggingsId.getInt(), proxy.addArmor("scale"), 2).setUnlocalizedName("hexxitgear.scale.leggings").setTextureName("hexxitgear:scale.leggings");
-        scaleBoots = new ItemScaleArmor(HexxitGearConfig.scaleBootsId.getInt(), proxy.addArmor("scale"), 3).setUnlocalizedName("hexxitgear.scale.boots").setTextureName("hexxitgear:scale.boots");
-        thiefHelmet = new ItemThiefArmor(HexxitGearConfig.thiefHelmetId.getInt(), proxy.addArmor("thief"), 0).setUnlocalizedName("hexxitgear.thief.helmet").setTextureName("hexxitgear:thief.helmet");
-        thiefChest = new ItemThiefArmor(HexxitGearConfig.thiefChestId.getInt(), proxy.addArmor("thief"), 1).setUnlocalizedName("hexxitgear.thief.chest").setTextureName("hexxitgear:thief.chest");
-        thiefLeggings = new ItemThiefArmor(HexxitGearConfig.thiefLeggingsId.getInt(), proxy.addArmor("thief"), 2).setUnlocalizedName("hexxitgear.thief.leggings").setTextureName("hexxitgear:thief.leggings");
-        thiefBoots = new ItemThiefArmor(HexxitGearConfig.thiefBootsId.getInt(), proxy.addArmor("thief"), 3).setUnlocalizedName("hexxitgear.thief.boots").setTextureName("hexxitgear:thief.boots");
+        tribalHelmet = new ItemTribalArmor(proxy.addArmor("tribal"), 0).setUnlocalizedName("hexxitgear.tribal.helmet").setTextureName("hexxitgear:tribal.helmet");
+        tribalChest = new ItemTribalArmor(proxy.addArmor("tribal"), 1).setUnlocalizedName("hexxitgear.tribal.chest").setTextureName("hexxitgear:tribal.chest");
+        tribalLeggings = new ItemTribalArmor(proxy.addArmor("tribal"), 2).setUnlocalizedName("hexxitgear.tribal.leggings").setTextureName("hexxitgear:tribal.leggings");
+        tribalShoes = new ItemTribalArmor(proxy.addArmor("tribal"), 3).setUnlocalizedName("hexxitgear.tribal.boots").setTextureName("hexxitgear:tribal.boots");
+        scaleHelmet = new ItemScaleArmor(proxy.addArmor("scale"), 0).setUnlocalizedName("hexxitgear.scale.helmet").setTextureName("hexxitgear:scale.helmet");
+        scaleChest = new ItemScaleArmor(proxy.addArmor("scale"), 1).setUnlocalizedName("hexxitgear.scale.chest").setTextureName("hexxitgear:scale.chest");
+        scaleLeggings = new ItemScaleArmor(proxy.addArmor("scale"), 2).setUnlocalizedName("hexxitgear.scale.leggings").setTextureName("hexxitgear:scale.leggings");
+        scaleBoots = new ItemScaleArmor(proxy.addArmor("scale"), 3).setUnlocalizedName("hexxitgear.scale.boots").setTextureName("hexxitgear:scale.boots");
+        thiefHelmet = new ItemThiefArmor(proxy.addArmor("thief"), 0).setUnlocalizedName("hexxitgear.thief.helmet").setTextureName("hexxitgear:thief.helmet");
+        thiefChest = new ItemThiefArmor(proxy.addArmor("thief"), 1).setUnlocalizedName("hexxitgear.thief.chest").setTextureName("hexxitgear:thief.chest");
+        thiefLeggings = new ItemThiefArmor(proxy.addArmor("thief"), 2).setUnlocalizedName("hexxitgear.thief.leggings").setTextureName("hexxitgear:thief.leggings");
+        thiefBoots = new ItemThiefArmor(proxy.addArmor("thief"), 3).setUnlocalizedName("hexxitgear.thief.boots").setTextureName("hexxitgear:thief.boots");
 
-        hexicalEssence = new Item(HexxitGearConfig.hexicalEssence.getInt()).setCreativeTab(HGCreativeTab.tab).setUnlocalizedName("hexxitgear.hexicalessence").setTextureName("hexxitgear:hexicalEssence");
-        hexicalDiamond = new Item(HexxitGearConfig.hexicalDiamond.getInt()).setTextureName("hexxitgear:hexicalDiamond").setCreativeTab(HGCreativeTab.tab).setUnlocalizedName("hexxitgear.hexicaldiamond");
+        hexicalEssence = new Item().setCreativeTab(HGCreativeTab.tab).setUnlocalizedName("hexxitgear.hexicalessence").setTextureName("hexxitgear:hexicalEssence");
+        hexicalDiamond = new Item().setTextureName("hexxitgear:hexicalDiamond").setCreativeTab(HGCreativeTab.tab).setUnlocalizedName("hexxitgear.hexicaldiamond");
 
         GameRegistry.registerBlock(hexbiscus, hexbiscus.getUnlocalizedName());
 
-        GameRegistry.registerWorldGenerator(new HGWorldGen());
+        GameRegistry.registerWorldGenerator(new HGWorldGen(), 100);
 
         proxy.init();
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent evt) {
-        GameRegistry.registerPlayerTracker(PlayerTracker.instance);
+        FMLCommonHandler.instance().bus().register(new PlayerTracker());
         HexxitGearRegistry.init();
     }
 

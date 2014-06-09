@@ -18,13 +18,15 @@
 
 package sct.hexxitgear.control;
 
-import cpw.mods.fml.client.registry.KeyBindingRegistry;
-import cpw.mods.fml.common.TickType;
-import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 import sct.hexxitgear.HexxitGear;
@@ -35,44 +37,27 @@ import sct.hexxitgear.net.Packets;
 import java.util.EnumSet;
 
 @SideOnly(Side.CLIENT)
-public class HGKeyHandler extends KeyBindingRegistry.KeyHandler {
+public class HGKeyHandler {
 
-    public static KeyBinding activateHexxitArmor = new KeyBinding("Activate Hexxit Gear Armor", Keyboard.KEY_X);
+    public static KeyBinding activateHexxitArmor = new KeyBinding("Activate Hexxit Gear Armor", Keyboard.KEY_X, "Hexxit Gear");
     public static KeyBinding[] keybindArray = new KeyBinding[]{activateHexxitArmor};
     public static boolean[] repeats = new boolean[keybindArray.length];
 
     public HGKeyHandler() {
-        super(keybindArray, repeats);
+        ClientRegistry.registerKeyBinding(activateHexxitArmor);
     }
 
-    @Override
-    public void keyDown(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd, boolean isRepeat) {
-        EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
+    @SubscribeEvent
+    public void keyEvent(InputEvent.KeyInputEvent event) {
+        if (!FMLClientHandler.instance().isGUIOpen(GuiChat.class)) {
+            EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
 
-        if (player == null || tickEnd)
-            return;
-
-        if (kb.equals(activateHexxitArmor)) {
-            if (ArmorSet.getPlayerArmorSet(player.username) != null) {
-                Object[] data = new Object[] { player.username };
-                PacketDispatcher.sendPacketToServer(PacketWrapper.createPacket(HexxitGear.modNetworkChannel, Packets.armorAbility, data));
-                //ArmorSet.readArmorPacket(player.username);
+            if (activateHexxitArmor.isPressed()) {
+                if (ArmorSet.getPlayerArmorSet(player.getDisplayName()) != null) {
+                    Object[] data = new Object[] { player.getDisplayName() };
+                    PacketDispatcher.sendPacketToServer(PacketWrapper.createPacket(HexxitGear.modNetworkChannel, Packets.armorAbility, data));
+                }
             }
         }
-    }
-
-    @Override
-    public void keyUp(EnumSet<TickType> types, KeyBinding kb, boolean tickEnd) {
-
-    }
-
-    @Override
-    public EnumSet<TickType> ticks() {
-        return EnumSet.of(TickType.CLIENT);
-    }
-
-    @Override
-    public String getLabel() {
-        return "hexxitGearKeybinds";
     }
 }

@@ -19,8 +19,9 @@
 package sct.hexxitgear.event;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.core.CapeHandler;
@@ -31,7 +32,7 @@ public class PlayerEventHandler {
 
     private int ticks = 0;
 
-    @ForgeSubscribe
+    @SubscribeEvent
     public void playerUpdate(LivingEvent.LivingUpdateEvent event) {
         if (ticks > 16) {
             if (event.entityLiving != null && event.entityLiving instanceof EntityPlayer) {
@@ -39,9 +40,9 @@ public class PlayerEventHandler {
                     return;
 
                 EntityPlayer player = (EntityPlayer) event.entityLiving;
-                String capeUrl = CapeHandler.getCapeUrl(player.username);
-                if (capeUrl != null) {
-                    HexxitGear.proxy.setPlayerCape(player.username, capeUrl);
+                String capeUrl = CapeHandler.getCapeUrl(player.getDisplayName());
+                if (capeUrl != null && player instanceof AbstractClientPlayer) {
+                    HexxitGear.proxy.setPlayerCape(player, capeUrl);
                 }
             }
         ticks = 0;

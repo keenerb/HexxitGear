@@ -21,19 +21,12 @@ package sct.hexxitgear.item;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumArmorMaterial;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
-import net.minecraft.util.DamageSource;
-import net.minecraftforge.common.ISpecialArmor;
 import sct.hexxitgear.HexxitGear;
-import sct.hexxitgear.gui.HGCreativeTab;
 import sct.hexxitgear.model.ModelHoodHelmet;
 import sct.hexxitgear.util.FormatCodes;
 
@@ -41,8 +34,8 @@ import java.util.List;
 
 public class ItemThiefArmor extends ItemHexxitArmor {
 
-    public ItemThiefArmor(int id, int renderIndex, int slot) {
-        super(id, EnumArmorMaterial.DIAMOND, renderIndex, slot);
+    public ItemThiefArmor(int renderIndex, int slot) {
+        super(ArmorMaterial.DIAMOND, renderIndex, slot);
     }
 
     @Override
@@ -57,7 +50,7 @@ public class ItemThiefArmor extends ItemHexxitArmor {
         if (slot == 0)
             return "hexxitgear:/textures/maps/HoodHelmet.png";
 
-        if (stack.itemID == HexxitGear.thiefLeggings.itemID)
+        if (stack.getItem() == HexxitGear.thiefLeggings)
             return "hexxitgear:/textures/armor/thief2.png";
 
         return "hexxitgear:/textures/armor/thief.png";

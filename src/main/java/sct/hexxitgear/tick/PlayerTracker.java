@@ -18,31 +18,15 @@
 
 package sct.hexxitgear.tick;
 
-import cpw.mods.fml.common.IPlayerTracker;
-import net.minecraft.entity.player.EntityPlayer;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent;
 import sct.hexxitgear.core.ArmorSet;
 import sct.hexxitgear.core.CapeHandler;
 
-public class PlayerTracker implements IPlayerTracker {
-
-    public static PlayerTracker instance = new PlayerTracker();
-
-    @Override
-    public void onPlayerLogin(EntityPlayer player) {
-        ArmorSet.getMatchingSet(player);
-        CapeHandler.sendJoinUpdate(player);
-    }
-
-    @Override
-    public void onPlayerLogout(EntityPlayer player) {
-        ArmorSet.removePlayerArmorSet(player.username);
-    }
-
-    @Override
-    public void onPlayerChangedDimension(EntityPlayer player) {
-    }
-
-    @Override
-    public void onPlayerRespawn(EntityPlayer player) {
+public class PlayerTracker {
+    @SubscribeEvent
+    public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        ArmorSet.getMatchingSet(event.player);
+        CapeHandler.sendJoinUpdate(event.player);
     }
 }

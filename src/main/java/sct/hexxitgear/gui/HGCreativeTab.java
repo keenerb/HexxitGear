@@ -21,6 +21,7 @@ package sct.hexxitgear.gui;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import sct.hexxitgear.HexxitGear;
 
@@ -33,8 +34,8 @@ public class HGCreativeTab extends CreativeTabs {
     }
 
     @Override
-    public ItemStack getIconItemStack() {
-        return new ItemStack(HexxitGear.tribalHelmet, 1, 0);
+    public Item getTabIconItem() {
+        return HexxitGear.tribalHelmet;
     }
 
     @Override
