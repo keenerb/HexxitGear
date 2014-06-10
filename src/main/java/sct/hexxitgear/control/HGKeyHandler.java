@@ -31,8 +31,9 @@ import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.core.ArmorSet;
-import sct.hexxitgear.net.PacketWrapper;
+import sct.hexxitgear.net.HexxitGearNetwork;
 import sct.hexxitgear.net.Packets;
+import sct.hexxitgear.net.packets.ArmorAbilityPacket;
 
 import java.util.EnumSet;
 
@@ -54,8 +55,7 @@ public class HGKeyHandler {
 
             if (activateHexxitArmor.isPressed()) {
                 if (ArmorSet.getPlayerArmorSet(player.getDisplayName()) != null) {
-                    Object[] data = new Object[] { player.getDisplayName() };
-                    PacketDispatcher.sendPacketToServer(PacketWrapper.createPacket(HexxitGear.modNetworkChannel, Packets.armorAbility, data));
+                    HexxitGearNetwork.sendToServer(new ArmorAbilityPacket(player.getDisplayName()));
                 }
             }
         }

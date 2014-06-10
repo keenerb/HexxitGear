@@ -18,13 +18,12 @@
 
 package sct.hexxitgear.core;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
 import net.minecraft.entity.player.EntityPlayer;
 import sct.hexxitgear.HexxitGear;
-import sct.hexxitgear.net.PacketWrapper;
+import sct.hexxitgear.net.HexxitGearNetwork;
 import sct.hexxitgear.net.Packets;
+import sct.hexxitgear.net.packets.CapeChangePacket;
+import sct.hexxitgear.net.packets.CapeJoinPacket;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -32,7 +31,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 
 public class CapeHandler {
 
@@ -58,22 +56,12 @@ public class CapeHandler {
         if (capeUrl == null) {
             capeUrl = "";
         }
-        Object[] data = new Object[] { player, capeUrl };
 
-        PacketDispatcher.sendPacketToAllPlayers(PacketWrapper.createPacket(HexxitGear.modNetworkChannel, Packets.CapeChange, data));
+        HexxitGearNetwork.sendToAllPlayers(new CapeChangePacket(player, capeUrl));
     }
 
     public static void sendJoinUpdate(EntityPlayer player) {
-        List<Object> tempList = new ArrayList<Object>();
-
-        tempList.add(0, (byte) capes.size());
-
-        for (String playerName : capes.keySet()) {
-            tempList.add(playerName);
-            tempList.add(capes.get(playerName));
-        }
-
-        PacketDispatcher.sendPacketToPlayer(PacketWrapper.createPacket(HexxitGear.modNetworkChannel, Packets.CapeJoin, tempList.toArray()), player);
+        HexxitGearNetwork.sendToPlayer(new CapeJoinPacket(capes), player);
     }
 
     public static void readCapeUpdate(String playerName, String capeUrl) {

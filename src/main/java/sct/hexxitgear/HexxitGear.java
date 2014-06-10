@@ -33,7 +33,6 @@ import sct.hexxitgear.block.BlockHexbiscus;
 import sct.hexxitgear.gui.HGCreativeTab;
 import sct.hexxitgear.setup.HexxitGearRegistry;
 import sct.hexxitgear.event.PlayerEventHandler;
-import sct.hexxitgear.net.HGPacketHandler;
 import sct.hexxitgear.tick.PlayerTracker;
 import sct.hexxitgear.item.*;
 import sct.hexxitgear.setup.HexxitGearConfig;
