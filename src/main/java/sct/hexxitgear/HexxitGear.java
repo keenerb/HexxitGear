@@ -31,6 +31,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Logger;
 import sct.hexxitgear.block.BlockHexbiscus;
 import sct.hexxitgear.gui.HGCreativeTab;
+import sct.hexxitgear.net.HexxitGearNetwork;
 import sct.hexxitgear.setup.HexxitGearRegistry;
 import sct.hexxitgear.event.PlayerEventHandler;
 import sct.hexxitgear.tick.PlayerTracker;
@@ -93,6 +94,8 @@ public class HexxitGear {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent evt) {
+        HexxitGearNetwork.init();
+
         hexbiscus = new BlockHexbiscus().setBlockTextureName("hexxitgear:hexbiscus");
 
         tribalHelmet = new ItemTribalArmor(proxy.addArmor("tribal"), 0).setUnlocalizedName("hexxitgear.tribal.helmet").setTextureName("hexxitgear:tribal.helmet");
