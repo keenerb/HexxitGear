@@ -25,7 +25,7 @@ import net.minecraft.potion.PotionEffect;
 public class AbilityInvisibility extends Ability {
 
     public AbilityInvisibility() {
-        super("Invisibility", 20 * 10, 20 * 5, false);
+        super("ability.hexxitgear.invisibility", 20 * 10, 20 * 5, false);
     }
 
     @Override

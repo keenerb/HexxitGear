@@ -29,7 +29,7 @@ public class AbilityKnockback extends Ability {
 
 
     public AbilityKnockback() {
-        super("Knockback", 1 * 20, 10 * 20, true);
+        super("ability.hexxitgear.knockback", 1 * 20, 10 * 20, true);
     }
 
     @Override

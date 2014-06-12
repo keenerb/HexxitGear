@@ -24,7 +24,7 @@ public class AbilityShield extends Ability {
 
 
     public AbilityShield() {
-        super("Shield", 5 * 20, 10 * 20, false);
+        super("ability.hexxitgear.shield", 5 * 20, 10 * 20, false);
     }
 
     @Override

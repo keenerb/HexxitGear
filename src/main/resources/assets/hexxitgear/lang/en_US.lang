@@ -3,6 +3,12 @@ gui.hexxitgear.set.thief=Thief Set
 gui.hexxitgear.set.tribal=Tribal Set
 gui.hexxitgear.set.scale=Scale Set
 
+ability.hexxitgear.invisibility=Invisibility
+ability.hexxitgear.knockback=Knockback
+ability.hexxitgear.shield=Shield
+ability.hexxitgear.activated={0} activated!
+ability.hexxitgear.refreshed=Ability refreshed
+
 tile.hexxitgear.flora.hexbiscus.name=Hexbiscus
 
 item.hexxitgear.hexicalessence.name=Hexical Essence

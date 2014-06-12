@@ -20,6 +20,7 @@ package sct.hexxitgear.core.ability;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.StatCollector;
 import sct.hexxitgear.core.ArmorSet;
 
 import java.util.HashMap;
@@ -62,8 +63,12 @@ public class AbilityHandler {
     public void onTick(EntityPlayer player) {
         if (activeTime > 0) {
             if (ability != null) {
-                if (ability.getActive() == activeTime)
-                    player.addChatMessage(new ChatComponentText(ability.getName() + " activated!"));
+                if (ability.getActive() == activeTime) {
+                    String abilityName = StatCollector.translateToLocal(ability.getName());
+                    String activated = StatCollector.translateToLocal("ability.hexxitgear.activated");
+                    activated = activated.replace("{0}", abilityName);
+                    player.addChatMessage(new ChatComponentText(activated));
+                }
 
                 ability.start(player);
                 if (ability.isInstant())
@@ -76,7 +81,7 @@ public class AbilityHandler {
             }
             cooldownTime--;
         } else {
-            player.addChatMessage(new ChatComponentText("Ability refreshed"));
+            player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("ability.hexxitgear.refreshed")));
             removePlayer(playerName);
         }
     }
