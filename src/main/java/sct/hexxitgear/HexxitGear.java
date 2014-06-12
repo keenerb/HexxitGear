@@ -114,7 +114,21 @@ public class HexxitGear {
         hexicalEssence = new Item().setCreativeTab(HGCreativeTab.tab).setUnlocalizedName("hexxitgear.hexicalessence").setTextureName("hexxitgear:hexicalEssence");
         hexicalDiamond = new Item().setTextureName("hexxitgear:hexicalDiamond").setCreativeTab(HGCreativeTab.tab).setUnlocalizedName("hexxitgear.hexicaldiamond");
 
-        GameRegistry.registerBlock(hexbiscus, hexbiscus.getUnlocalizedName());
+        GameRegistry.registerBlock(hexbiscus, "hexbiscus");
+        GameRegistry.registerItem(tribalHelmet, "tribalHelmet");
+        GameRegistry.registerItem(tribalChest, "tribalChest");
+        GameRegistry.registerItem(tribalLeggings, "tribalLeggings");
+        GameRegistry.registerItem(tribalShoes, "tribalShoes");
+        GameRegistry.registerItem(scaleHelmet, "scaleHelmet");
+        GameRegistry.registerItem(scaleChest, "scaleChest");
+        GameRegistry.registerItem(scaleLeggings, "scaleLeggings");
+        GameRegistry.registerItem(scaleBoots, "scaleBoots");
+        GameRegistry.registerItem(thiefHelmet, "thiefHelmet");
+        GameRegistry.registerItem(thiefChest, "thiefChest");
+        GameRegistry.registerItem(thiefLeggings, "thiefLeggings");
+        GameRegistry.registerItem(thiefBoots, "thiefBoots");
+        GameRegistry.registerItem(hexicalEssence, "hexxicalEssence");
+        GameRegistry.registerItem(hexicalDiamond, "hexxicalDiamond");
 
         GameRegistry.registerWorldGenerator(new HGWorldGen(), 100);
 

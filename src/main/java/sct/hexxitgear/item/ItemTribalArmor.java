@@ -23,9 +23,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.model.ModelSkullHelmet;
+import sct.hexxitgear.util.FormatCodes;
+
+import java.util.List;
 
 public class ItemTribalArmor extends ItemHexxitArmor {
 
@@ -50,5 +55,10 @@ public class ItemTribalArmor extends ItemHexxitArmor {
         if (armorSlot == 0)
             return new ModelSkullHelmet();
         return null;
+    }
+
+    @Override
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List infoList, boolean par4) {
+        infoList.add(FormatCodes.Indigo.format + StatCollector.translateToLocal("gui.hexxitgear.set.tribal"));
     }
 }

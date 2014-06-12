@@ -23,11 +23,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import sct.hexxitgear.HexxitGear;
 
 public class HGCreativeTab extends CreativeTabs {
 
-    public static final HGCreativeTab tab = new HGCreativeTab("Hexxit Gear");
+    public static final HGCreativeTab tab = new HGCreativeTab(StatCollector.translateToLocal("gui.hexxitgear.creativetab"));
 
     public HGCreativeTab(String label) {
         super(label);

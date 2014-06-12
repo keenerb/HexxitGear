@@ -28,6 +28,7 @@ import net.minecraftforge.common.ISpecialArmor;
 import sct.hexxitgear.core.ArmorSet;
 import sct.hexxitgear.core.ability.AbilityHandler;
 import sct.hexxitgear.gui.HGCreativeTab;
+import sct.hexxitgear.util.FormatCodes;
 
 public class ItemHexxitArmor extends ItemArmor implements ISpecialArmor {
 
@@ -75,5 +76,11 @@ public class ItemHexxitArmor extends ItemArmor implements ISpecialArmor {
         if (bh != null) {
             bh.onTick(player);
         }
+    }
+
+    @Override
+    public String getItemStackDisplayName(ItemStack par1ItemStack)
+    {
+        return FormatCodes.Yellow.format + super.getItemStackDisplayName(par1ItemStack);
     }
 }
