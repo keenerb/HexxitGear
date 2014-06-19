@@ -99,7 +99,7 @@ public class HexxitGearConfig {
 
     public static void extractLang(String[] languages)
     {
-        String langResourceBase = "/sct/" + HexxitGear.modId + "/lang/";
+        String langResourceBase = "/assets/" + HexxitGear.modId + "/lang/";
         for (String lang : languages)
         {
             InputStream is = HexxitGear.instance.getClass().getResourceAsStream(langResourceBase + lang + ".lang");
