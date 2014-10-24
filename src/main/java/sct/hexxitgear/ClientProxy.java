@@ -18,10 +18,12 @@
 
 package sct.hexxitgear;
 
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,11 +57,14 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void setPlayerCape(EntityPlayer player, String capeUrl) {
         String token = capeUrl.substring(capeUrl.lastIndexOf("/")+1);
-        ResourceLocation capeResource = new ResourceLocation("hexxitgear:cloaks/hexxitgear/"+token);
-        if (player != null && player instanceof AbstractClientPlayer && !((AbstractClientPlayer)player).locationCape.equals(capeResource)) {
-            AbstractClientPlayer capePlayer = (AbstractClientPlayer)player;
-            capePlayer.locationCape = capeResource;
-            capePlayer.downloadImageCape = AbstractClientPlayer.getDownloadImage(capePlayer.locationCape, capeUrl, (ResourceLocation)null, (IImageBuffer)null);
+        ResourceLocation capeResource = new ResourceLocation("hexxitgear:cloaks/"+token);
+        if (player != null && player instanceof AbstractClientPlayer) {
+            ResourceLocation locationCape = ((AbstractClientPlayer)player).locationCape;
+
+            if (locationCape == null || !locationCape.equals(capeResource)) {
+                AbstractClientPlayer capePlayer = (AbstractClientPlayer) player;
+                capePlayer.func_152121_a(MinecraftProfileTexture.Type.CAPE, capeResource);
+            }
         }
     }
 
@@ -68,8 +73,8 @@ public class ClientProxy extends CommonProxy {
         EntityPlayer player = HexxitGear.proxy.findPlayer(playerName);
         if (player != null && player instanceof AbstractClientPlayer) {
             AbstractClientPlayer capePlayer = (AbstractClientPlayer)player;
-            capePlayer.locationCape = capePlayer.getLocationCape(capePlayer.getDisplayName());
-            capePlayer.downloadImageCape = AbstractClientPlayer.getDownloadImageCape(capePlayer.locationCape, capePlayer.getDisplayName());
+            capePlayer.func_152121_a(MinecraftProfileTexture.Type.CAPE, null);
+            Minecraft.getMinecraft().func_152342_ad().func_152790_a(capePlayer.getGameProfile(), capePlayer, true);
         }
     }
 
