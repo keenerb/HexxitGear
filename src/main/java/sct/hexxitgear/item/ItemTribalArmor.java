@@ -41,12 +41,12 @@ public class ItemTribalArmor extends ItemHexxitArmor {
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, int slot, java.lang.String type) {
         if (slot == 0)
-            return "hexxitgear:/textures/maps/SkullHelmet.png";
+            return "hexxitgear:textures/maps/SkullHelmet.png";
 
         if (stack.getItem() == HexxitGear.tribalLeggings)
-            return "hexxitgear:/textures/armor/tribal2.png";
+            return "hexxitgear:textures/armor/tribal2.png";
 
-        return "hexxitgear:/textures/armor/tribal.png";
+        return "hexxitgear:textures/armor/tribal.png";
     }
 
     @SideOnly(Side.CLIENT)
