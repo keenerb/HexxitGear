@@ -44,17 +44,17 @@ public class ItemThiefArmor extends ItemHexxitArmor {
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
             if (player.isPotionActive(Potion.invisibility))
-                return "hexxitgear:/textures/armor/invisible.png";
+                return "hexxitgear:textures/armor/invisible.png";
         }
 
         // If the helmet slot, return helmet texture map
         if (slot == 0)
-            return "hexxitgear:/textures/maps/HoodHelmet.png";
+            return "hexxitgear:textures/maps/HoodHelmet.png";
 
         if (stack.getItem() == HexxitGear.thiefLeggings)
-            return "hexxitgear:/textures/armor/thief2.png";
+            return "hexxitgear:textures/armor/thief2.png";
 
-        return "hexxitgear:/textures/armor/thief.png";
+        return "hexxitgear:textures/armor/thief.png";
     }
 
     @SideOnly(Side.CLIENT)
