@@ -23,7 +23,13 @@ archivesBaseName = "hexxitgear"
 
 minecraft {
     version = "1.7.10-10.13.2.1230"
-    assetDir = "eclipse/assets"
+    runDir = "eclipse"
+}
+
+jar {
+    manifest {
+        attributes 'FMLAT': 'hexxitgear_at.cfg'
+    }
 }
 
 processResources
