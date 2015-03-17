@@ -25,8 +25,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.*;
+import net.minecraft.world.World;
 import sct.hexxitgear.HexxitGear;
+import sct.hexxitgear.core.ArmorSet;
 import sct.hexxitgear.model.ModelScaleHelmet;
 import sct.hexxitgear.util.FormatCodes;
 
@@ -60,5 +64,60 @@ public class ItemScaleArmor extends ItemHexxitArmor {
     @Override
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List infoList, boolean par4) {
         infoList.add(FormatCodes.Indigo.format + StatCollector.translateToLocal("gui.hexxitgear.set.scale"));
+    }
+
+    @Override
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
+    {
+        super.onArmorTick(world, player, itemStack);
+
+        if (itemStack.getItem() == HexxitGear.scaleBoots) {
+            shoesChargeCheck(player);
+        }
+    }
+
+    private void shoesChargeCheck(EntityPlayer player) {
+        if (player.isSprinting()) {
+            if (player.worldObj.isRemote)
+                return;
+
+            EntityLivingBase target = null;
+            for (Object entityObj : player.worldObj.getEntitiesWithinAABBExcludingEntity(player, player.boundingBox)) {
+                if (entityObj instanceof EntityLivingBase) {
+                    target = (EntityLivingBase)entityObj;
+                    break;
+                }
+            }
+
+            if (target == null)
+                return;
+
+            Vec3 targetPosition = target.getPosition(1.0f);
+
+            AxisAlignedBB impactBox = player.boundingBox;
+            boolean hasFullSet = (ArmorSet.getPlayerArmorSet(player.getDisplayName()) != null);
+
+            if (hasFullSet)
+                impactBox.expand(2.0, 0, 2.0);
+            else
+                impactBox.expand(0.5, 0, 0.5);
+
+            for (Object entityObj : player.worldObj.getEntitiesWithinAABBExcludingEntity(player, impactBox)) {
+                if (entityObj instanceof EntityLivingBase) {
+                    impactEntity(player, (EntityLivingBase)entityObj);
+                }
+            }
+
+            player.motionX *= 0.6D;
+            player.motionZ *= 0.6D;
+            player.setSprinting(false);
+            if (!hasFullSet)
+                player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.getId(), 60, 3));
+        }
+    }
+
+    private void impactEntity(EntityPlayer player, EntityLivingBase target) {
+        target.attackEntityFrom(DamageSource.causePlayerDamage(player), 5.0f);
+        target.addVelocity((double) (-MathHelper.sin(player.rotationYaw * (float) Math.PI / 180.0F) * 0.5F), 0.1D, (double) (MathHelper.cos(player.rotationYaw * (float) Math.PI / 180.0F) * 0.5F));
     }
 }
