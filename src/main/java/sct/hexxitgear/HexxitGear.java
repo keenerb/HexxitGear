@@ -18,12 +18,13 @@
 
 package sct.hexxitgear;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -42,8 +43,22 @@ import sct.hexxitgear.world.HGWorldGen;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod(modid = HexxitGear.modId, name = "Hexxit Gear", useMetadata = true, version = HexxitGear.version)
-public class HexxitGear {
+public class HexxitGear extends DummyModContainer {
+
+    public HexxitGear() {
+        super(new ModMetadata());
+
+        ModMetadata metadata = getMetadata();
+        metadata.modId = HexxitGear.modId;
+        metadata.version = HexxitGear.version;
+        metadata.name = "Hexxit Gear";
+    }
+
+    @Override
+    public boolean registerBus(EventBus bus, LoadController controller) {
+        bus.register(this);
+        return true;
+    }
 
     public static final String modId = "hexxitgear";
     public static final String modNetworkChannel = "HexxitGear";
@@ -80,8 +95,13 @@ public class HexxitGear {
 
     public static List<Integer> dimensionalBlacklist = new ArrayList<Integer>();
 
-    @Mod.EventHandler
+    @Subscribe
     public void preInit(FMLPreInitializationEvent evt) {
+        if (FMLCommonHandler.instance().getSide().isClient())
+            proxy = new ClientProxy();
+        else
+            proxy = new CommonProxy();
+
         HexxitGearConfig.setConfigFolderBase(evt.getModConfigurationDirectory());
 
         HexxitGearConfig.loadCommonConfig(evt);
@@ -90,11 +110,14 @@ public class HexxitGear {
         logger = evt.getModLog();
         playerEventHandler = new PlayerEventHandler();
         MinecraftForge.EVENT_BUS.register(playerEventHandler);
+        FMLCommonHandler.instance().bus().register(playerEventHandler);
     }
 
-    @Mod.EventHandler
+    @Subscribe
     public void init(FMLInitializationEvent evt) {
         HexxitGearNetwork.init();
+        instance = this;
+        MinecraftForge.EVENT_BUS.register(instance);
 
         hexbiscus = new BlockHexbiscus().setBlockTextureName("hexxitgear:hexbiscus");
 
@@ -135,7 +158,7 @@ public class HexxitGear {
         proxy.init();
     }
 
-    @Mod.EventHandler
+    @Subscribe
     public void postInit(FMLPostInitializationEvent evt) {
         FMLCommonHandler.instance().bus().register(new PlayerTracker());
         HexxitGearRegistry.init();

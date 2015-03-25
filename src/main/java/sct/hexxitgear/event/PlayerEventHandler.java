@@ -18,15 +18,15 @@
 
 package sct.hexxitgear.event;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.core.CapeHandler;
-
-import java.util.logging.Level;
+import sct.hexxitgear.item.IClimbingShoesWearer;
 
 public class PlayerEventHandler {
 
@@ -48,5 +48,13 @@ public class PlayerEventHandler {
         ticks = 0;
         }
         ticks++;
+    }
+
+    @SubscribeEvent
+    public void wallRunningArmorEvent(TickEvent.PlayerTickEvent event) {
+        IClimbingShoesWearer shoesWearer = (IClimbingShoesWearer)event.player;
+
+        ItemStack boots = event.player.getCurrentArmor(0);
+        shoesWearer.setClimbingShoesEquipped(boots != null && boots.getItem() == HexxitGear.thiefBoots);
     }
 }

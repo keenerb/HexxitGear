@@ -2,20 +2,42 @@ buildscript {
     repositories {
         mavenCentral()
         maven {
+            name = 'sonatype-nexus-public'
+            url = 'https://oss.sonatype.org/content/repositories/public/'
+        }
+        maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
+        jcenter()
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.0'
     }
 }
 
 apply plugin: 'forge'
+apply plugin: 'maven'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+ext.mixinSrg = new File(project.buildDir, "tmp/mixins/mixins.srg")
+ext.mixinRefMap = new File(project.buildDir, "tmp/mixins/mixins.sponge.refmap.json")
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'sonatype-nexus'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+
+    // Add Sponge repo for custom checkstyle implementation to fix some wrong warnings
+    maven {
+        name = "sponge"
+        url = "http://repo.spongepowered.org/maven/"
+    }
+}
 
 version = "1.0"
 group= "sct.hexxitgear" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -27,6 +49,7 @@ minecraft {
 }
 
 dependencies {
+    compile "org.spongepowered:mixin:0.2-SNAPSHOT"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -42,10 +65,68 @@ dependencies {
 
 }
 
-jar {
-    manifest {
-        attributes 'FMLAT': 'hexxitgear_at.cfg'
+shadowJar  {
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    exclude 'GradleStart**'
+    dependencies {
+        include(dependency('com.google.inject:guice'))
+        include(dependency('javax.inject:javax.inject'))
+        include(dependency('org.spongepowered:mixin:0.2-SNAPSHOT'))
     }
+    classifier = ''
+
+    from project.mixinRefMap
+}
+build.dependsOn(shadowJar)
+
+reobf {
+    reobf.addExtraSrgFile project.mixinSrg
+
+    reobf(shadowJar) { spec ->
+        spec.classpath = configurations.compile
+    }
+}
+
+// Source compiler configuration
+compileJava {
+    options.compilerArgs += [
+            '-Xlint:all',
+            '-Xlint:-path',
+            '-Xlint:-processing',
+            "-AoutSrgFile=${project.mixinSrg.getCanonicalPath()}",
+            "-AoutRefMapFile=${project.mixinRefMap.getCanonicalPath()}"
+    ]
+    options.deprecation = true
+    options.encoding = 'UTF-8'
+}
+
+// set the reobf srg late
+afterEvaluate {
+    tasks.compileJava.options.compilerArgs += "-AreobfSrgFile=${tasks.reobf.srg}"
+}
+
+// Copy the current srgs to the build dir so the user doesn't have to go hunting for them
+task copySrgs(type: Copy, dependsOn: "genSrgs") {
+    // using some FG hacks here
+    from plugins.getPlugin("forge").delayedFile("{SRG_DIR}")
+
+    include '**/*.srg'
+    into 'build/srgs'
+}
+
+setupDecompWorkspace.dependsOn copySrgs
+setupDevWorkspace.dependsOn copySrgs
+
+def manifestEntries = [
+        "Built-By": System.properties['user.name'],
+        "Created-By": System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
+        "FMLCorePlugin": "sct.hexxitgear.coremod.HexxitGearCoremod",
+        "TweakClass": "org.spongepowered.asm.launch.MixinTweaker"
+]
+
+jar {
+    manifest.mainAttributes(manifestEntries)
 }
 
 processResources

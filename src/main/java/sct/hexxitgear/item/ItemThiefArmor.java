@@ -27,6 +27,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.model.ModelHoodHelmet;
 import sct.hexxitgear.util.FormatCodes;
@@ -68,5 +70,53 @@ public class ItemThiefArmor extends ItemHexxitArmor {
     @Override
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List infoList, boolean par4) {
         infoList.add(FormatCodes.Indigo.format + StatCollector.translateToLocal("gui.hexxitgear.set.thief"));
+    }
+
+    @Override
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
+    {
+        super.onArmorTick(world, player, itemStack);
+
+        if (itemStack.getItem() == HexxitGear.thiefBoots) {
+            shoesClimbCheck(world, player);
+        }
+    }
+
+    private void shoesClimbCheck(World world, EntityPlayer player) {
+        ForgeDirection floor = ForgeDirection.VALID_DIRECTIONS[player.getEntityData().getByte("BootFloor")];
+
+        ForgeDirection posY = ForgeDirection.UP;
+        ForgeDirection posX = ForgeDirection.EAST;
+        ForgeDirection posZ = ForgeDirection.SOUTH;
+
+        if (floor == ForgeDirection.UP) {
+            posY = ForgeDirection.DOWN;
+            posX = ForgeDirection.WEST;
+            posZ = ForgeDirection.NORTH;
+        } else if (floor != ForgeDirection.DOWN) {
+            posY = ForgeDirection.VALID_DIRECTIONS[ForgeDirection.OPPOSITES[floor.ordinal()]];
+            switch (floor) {
+                case WEST:
+                    posX = posX.getRotation(ForgeDirection.SOUTH);
+                    break;
+                case EAST:
+                    posX = posX.getRotation(ForgeDirection.NORTH);
+                    break;
+                case NORTH:
+                    posZ = posZ.getRotation(ForgeDirection.EAST);
+                    break;
+                case SOUTH:
+                    posZ = posZ.getRotation(ForgeDirection.WEST);
+                    break;
+            }
+        }
+
+        double motionX = player.motionX;
+        double motionY = player.motionY;
+        double motionZ = player.motionZ;
+
+        player.motionX = posX.offsetX * motionX + posX.offsetY * motionY + posX.offsetZ * motionZ;
+        player.motionY = posY.offsetX * motionX + posY.offsetY * motionY + posY.offsetZ * motionZ;
+        player.motionZ = posZ.offsetX * motionX + posZ.offsetY * motionY + posZ.offsetZ * motionZ;
     }
 }
