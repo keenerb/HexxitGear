@@ -16,8 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package sct.hexxitgear.item;
+package sct.hexxitgear.mixin;
 
-public interface IClimbingShoesWearer {
-    void setClimbingShoesEquipped(boolean equipped);
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Mixin;
+import sct.hexxitgear.item.climbing.IClimbingShoesWearer;
+
+@Mixin(EntityLivingBase.class)
+public abstract class ClimbingShoesLivingMixin extends Entity implements IClimbingShoesWearer {
+    protected ClimbingShoesLivingMixin(World world) { super(world); }
 }

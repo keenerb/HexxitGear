@@ -3,6 +3,9 @@
     "minVersion":"0.2",
     "package":"sct.hexxitgear.mixin",
     "mixins": [
-        "ClimberShoesPlayer"
+        "ClimbingShoesEntityMixin",
+        "ClimbingShoesLivingMixin",
+        "ClimbingShoesPlayerMixin",
+        "ClimbingWorldMixin"
     ]
 }
