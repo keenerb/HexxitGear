@@ -21,6 +21,7 @@ package sct.hexxitgear.mixin;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,6 +46,9 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     private boolean areClimbingShoesEquipped;
     private VectorTransformer transformer;
 
+    @Shadow
+    public PlayerCapabilities capabilities;
+
     @Inject(method = "<init>", at=@At("RETURN"))
     private void onConstructed(World world, GameProfile profile, CallbackInfo info) {
         this.climbingShoesDirection = ForgeDirection.DOWN;
@@ -55,13 +59,19 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
 
     @Inject(method="onUpdate", at=@At("HEAD"))
     private void transformPlayerPositioning(CallbackInfo info) {
+        if (!areClimbingShoesEquipped())
+            return;
+
         ClimbingHelper.transformEntity(this, getTransformer());
     }
 
     @Inject(method="onUpdate", at=@At("RETURN"))
     private void untransformPlayerPositioning(CallbackInfo info) {
-        ClimbingHelper.untransformEntity(this, getTransformer());
-        this.areClimbingShoesEquipped = willClimbingShoesBeEquipped;
+        if (areClimbingShoesEquipped()) {
+            ClimbingHelper.untransformEntity(this, getTransformer());
+        }
+
+        this.areClimbingShoesEquipped = willClimbingShoesBeEquipped && !this.capabilities.isFlying;
         transformer = new VectorTransformer(climbingShoesDirection);
     }
 
