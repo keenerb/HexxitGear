@@ -20,6 +20,8 @@ package sct.hexxitgear;
 
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import cpw.mods.fml.client.FMLFileResourcePack;
+import cpw.mods.fml.client.FMLFolderResourcePack;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -28,9 +30,11 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraftforge.classloading.FMLForgePlugin;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Logger;
 import sct.hexxitgear.block.BlockHexbiscus;
+import sct.hexxitgear.coremod.HexxitGearResourcePack;
 import sct.hexxitgear.gui.HGCreativeTab;
 import sct.hexxitgear.net.HexxitGearNetwork;
 import sct.hexxitgear.setup.HexxitGearRegistry;
@@ -40,6 +44,7 @@ import sct.hexxitgear.item.*;
 import sct.hexxitgear.setup.HexxitGearConfig;
 import sct.hexxitgear.world.HGWorldGen;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +63,12 @@ public class HexxitGear extends DummyModContainer {
     public boolean registerBus(EventBus bus, LoadController controller) {
         bus.register(this);
         return true;
+    }
+
+    @Override
+    public Class<?> getCustomResourcePackClass()
+    {
+        return HexxitGearResourcePack.class;
     }
 
     public static final String modId = "hexxitgear";
