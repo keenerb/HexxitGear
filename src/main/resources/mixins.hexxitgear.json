@@ -6,6 +6,7 @@
         "ClimbingShoesEntityMixin",
         "ClimbingShoesLivingMixin",
         "ClimbingShoesPlayerMixin",
-        "ClimbingWorldMixin"
+        "ClimbingWorldMixin",
+        "ClimbingEntityRendererMixin"
     ]
 }

@@ -83,7 +83,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     public void setClimbingShoesEquipped(boolean equipped) {
         if (willClimbingShoesBeEquipped != equipped) {
             this.willClimbingShoesBeEquipped = equipped;
-            this.climbingShoesDirection = (!equipped)?ForgeDirection.DOWN:ForgeDirection.WEST;
+            this.climbingShoesDirection = (!equipped)?ForgeDirection.DOWN:ForgeDirection.NORTH;
         }
     }
 }
