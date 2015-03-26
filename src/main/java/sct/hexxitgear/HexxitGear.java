@@ -18,6 +18,7 @@
 
 package sct.hexxitgear;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import cpw.mods.fml.client.FMLFileResourcePack;
@@ -57,6 +58,10 @@ public class HexxitGear extends DummyModContainer {
         metadata.modId = HexxitGear.modId;
         metadata.version = HexxitGear.version;
         metadata.name = "Hexxit Gear";
+        metadata.logoFile = "hexxitgear.png";
+        metadata.authorList = ImmutableList.of("sct", "CheapShot", "Cannibalvox");
+        metadata.url = "http://www.technicpack.net/";
+        metadata.credits = "Developed by Technic";
     }
 
     @Override
