@@ -35,7 +35,6 @@ public class VectorTransformer {
         xPos = ForgeDirection.EAST;
 
         if (floor == ForgeDirection.UP) {
-            zPos = ForgeDirection.VALID_DIRECTIONS[ForgeDirection.OPPOSITES[zPos.ordinal()]];
             xPos = ForgeDirection.VALID_DIRECTIONS[ForgeDirection.OPPOSITES[xPos.ordinal()]];
         } else if (floor == ForgeDirection.EAST)
             xPos = ForgeDirection.UP;

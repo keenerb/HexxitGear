@@ -20,10 +20,14 @@ package sct.hexxitgear.mixin;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import sct.hexxitgear.item.climbing.IClimbingShoesWearer;
 
 @Mixin(EntityLivingBase.class)
@@ -68,5 +72,22 @@ public abstract class ClimbingShoesLivingMixin extends Entity implements IClimbi
             return (int)getTransformer().unGetZ(x, this.posY, z);
         else
             return z;
+    }
+
+    @Inject(method="getLook", at=@At("RETURN"))
+    private void modifyLookResult(float partialTick, CallbackInfoReturnable<Vec3> info) {
+        if (areClimbingShoesEquipped()) {
+            Vec3 vector = info.getReturnValue();
+            if (getTransformer().getAxisY() == ForgeDirection.DOWN)
+                vector.rotateAroundZ((float)Math.PI);
+            else if (getTransformer().getAxisY() == ForgeDirection.SOUTH)
+                vector.rotateAroundX((float)(-Math.PI/2.0));
+            else if (getTransformer().getAxisY() == ForgeDirection.NORTH)
+                vector.rotateAroundX((float)(Math.PI/2.0));
+            else if (getTransformer().getAxisY() == ForgeDirection.EAST)
+                vector.rotateAroundZ((float)(-Math.PI/2.0));
+            else if (getTransformer().getAxisY() == ForgeDirection.WEST)
+                vector.rotateAroundZ((float)(Math.PI/2.0));
+        }
     }
 }
