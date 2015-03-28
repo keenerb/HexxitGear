@@ -34,30 +34,6 @@ import sct.hexxitgear.mixinsupport.climbing.IClimbingShoesWearer;
 public abstract class ClimbingShoesLivingMixin extends Entity implements IClimbingShoesWearer {
     protected ClimbingShoesLivingMixin(World world) { super(world); }
 
-    @ModifyArg(method="moveEntityWithHeading", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/World;blockExists(III)Z"), index = 0)
-    private int blockExistsTransformX(int x, int y, int z) {
-        if (areClimbingShoesEquipped())
-            return (int)getTransformer().unGetX(x, y, z);
-        else
-            return x;
-    }
-
-    @ModifyArg(method="moveEntityWithHeading", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/World;blockExists(III)Z"), index = 1)
-    private int blockExistsTransformY(int x, int y, int z) {
-        if (areClimbingShoesEquipped())
-            return (int)getTransformer().unGetY(x, y, z);
-        else
-            return y;
-    }
-
-    @ModifyArg(method="moveEntityWithHeading", at=@At(value = "INVOKE", target = "Lnet/minecraft/world/World;blockExists(III)Z"), index = 2)
-    private int blockExistsTransformZ(int x, int y, int z) {
-        if (areClimbingShoesEquipped())
-            return (int)getTransformer().unGetZ(x, y, z);
-        else
-            return z;
-    }
-
     @ModifyArg(method="moveEntityWithHeading", at=@At(value="INVOKE", target="Lnet/minecraft/world/World;getChunkFromBlockCoords(II)Lnet/minecraft/world/chunk/Chunk;"), index = 0)
     private int getChunkFromBlockCoordsTransformX(int x, int z) {
         if (areClimbingShoesEquipped())
