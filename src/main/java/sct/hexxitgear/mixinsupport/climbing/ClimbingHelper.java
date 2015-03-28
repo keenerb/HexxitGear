@@ -85,41 +85,23 @@ public class ClimbingHelper {
     }
 
     public static void rotateEntityBB(Entity entity, VectorTransformer transformer) {
-        double boxBottom = entity.boundingBox.minY;
-        double minX = entity.boundingBox.minX - entity.posX;
-        double minY = entity.boundingBox.minY - boxBottom;
-        double minZ = entity.boundingBox.minZ - entity.posZ;
-        double maxX = entity.boundingBox.maxX - entity.posX;
-        double maxY = entity.boundingBox.maxY - boxBottom;
-        double maxZ = entity.boundingBox.maxZ - entity.posZ;
+        double maxX = entity.boundingBox.maxX - entity.boundingBox.minX;
+        double maxY = entity.boundingBox.maxY - entity.boundingBox.minY;
+        double maxZ = entity.boundingBox.maxZ - entity.boundingBox.minZ;
 
-        entity.boundingBox.minX = entity.posX + transformer.getX(minX, minY, minZ);
-        entity.boundingBox.minY = boxBottom;
-        entity.boundingBox.minZ = entity.posZ + transformer.getZ(minX, minY, minZ);
-        entity.boundingBox.maxX = entity.posX + transformer.getX(maxX, maxY, maxZ);
-        entity.boundingBox.maxY = boxBottom + Math.abs(transformer.getY(maxX, maxY, maxZ)) + Math.abs(transformer.getY(minX, minY, minZ));
-        entity.boundingBox.maxZ = entity.posZ + transformer.getZ(maxX, maxY, maxZ);
-
-        normalizeBB(entity.boundingBox);
+        entity.boundingBox.maxX = entity.boundingBox.minX + Math.abs(transformer.getX(maxX, maxY, maxZ));
+        entity.boundingBox.maxY = entity.boundingBox.minY + Math.abs(transformer.getY(maxX, maxY, maxZ));
+        entity.boundingBox.maxZ = entity.boundingBox.minZ + Math.abs(transformer.getZ(maxX, maxY, maxZ));
     }
 
     public static void unrotateEntityBB(Entity entity, VectorTransformer transformer) {
-        double boxBottom = entity.boundingBox.minY;
-        double minX = entity.boundingBox.minX - entity.posX;
-        double minY = entity.boundingBox.minY - boxBottom;
-        double minZ = entity.boundingBox.minZ - entity.posZ;
-        double maxX = entity.boundingBox.maxX - entity.posX;
-        double maxY = entity.boundingBox.maxY - boxBottom;
-        double maxZ = entity.boundingBox.maxZ - entity.posZ;
+        double maxX = entity.boundingBox.maxX - entity.boundingBox.minX;
+        double maxY = entity.boundingBox.maxY - entity.boundingBox.minY;
+        double maxZ = entity.boundingBox.maxZ - entity.boundingBox.minZ;
 
-        entity.boundingBox.minX = entity.posX + transformer.unGetX(minX, minY, minZ);
-        entity.boundingBox.minY = boxBottom;
-        entity.boundingBox.minZ = entity.posZ + transformer.unGetZ(minX, minY, minZ);
-        entity.boundingBox.maxX = entity.posX + transformer.unGetX(maxX, maxY, maxZ);
-        entity.boundingBox.maxY = boxBottom + Math.abs(transformer.unGetY(maxX, maxY, maxZ)) + Math.abs(transformer.unGetY(minX, minY, minZ));
-        entity.boundingBox.maxZ = entity.posZ + transformer.unGetZ(maxX, maxY, maxZ);
-
-        normalizeBB(entity.boundingBox);
+        entity.boundingBox.maxX = entity.boundingBox.minX + Math.abs(transformer.unGetX(maxX, maxY, maxZ));
+        entity.boundingBox.maxY = entity.boundingBox.minY + Math.abs(transformer.unGetY(maxX, maxY, maxZ));
+        entity.boundingBox.maxZ = entity.boundingBox.minZ + Math.abs(transformer.unGetZ(maxX, maxY, maxZ));
     }
 
     public static void transformBB(AxisAlignedBB box, VectorTransformer transformer) {

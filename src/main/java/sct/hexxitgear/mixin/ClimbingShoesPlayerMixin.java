@@ -59,7 +59,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
 
     @Inject(method="onUpdate", at=@At("HEAD"))
     private void transformPlayerPositioning(CallbackInfo info) {
-        updateInProgress = true;
+        setUpdating(true);
         if (!areClimbingShoesEquipped())
             return;
 
@@ -72,7 +72,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
             ClimbingHelper.untransformEntity(this, getTransformer());
         }
 
-        updateInProgress = false;
+        setUpdating(false);
 
         ClimbingHelper.unrotateEntityBB(this, getTransformer());
         this.areClimbingShoesEquipped = willClimbingShoesBeEquipped && !this.capabilities.isFlying;
@@ -90,5 +90,9 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
             this.willClimbingShoesBeEquipped = equipped;
             this.climbingShoesDirection = (!equipped)?ForgeDirection.DOWN:ForgeDirection.NORTH;
         }
+    }
+    @Override
+    public void setUpdating(boolean updating) {
+        this.updateInProgress = updating;
     }
 }

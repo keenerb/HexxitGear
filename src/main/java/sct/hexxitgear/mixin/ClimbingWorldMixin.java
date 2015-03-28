@@ -80,6 +80,22 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
     @Shadow
     public List getEntitiesWithinAABBExcludingEntity(Entity p_72839_1_, AxisAlignedBB p_72839_2_) { return null; }
 
+    @Shadow
+    protected boolean chunkExists(int p_72916_1_, int p_72916_2_) { return false; }
+
+    @Inject(method="blockExists", at=@At("HEAD"), cancellable = true)
+    private void transformBlockExists(int x, int y, int z, CallbackInfoReturnable<Boolean> info) {
+        if (transformer == null)
+            return;
+        int tempX = x, tempY = y, tempZ = z;
+        x = (int)transformer.unGetX(tempX, tempY, tempZ);
+        y = (int)transformer.unGetY(tempX, tempY, tempZ);
+        z = (int)transformer.unGetZ(tempX, tempY, tempZ);
+
+        info.setReturnValue(y >= 0 && y < 256 ? this.chunkExists(x >> 4, z >> 4) : false);
+        info.cancel();
+    }
+
     @Inject(method="setBlock", at=@At("HEAD"), cancellable = true)
     private void transformSetBlock(int x, int y, int z, Block block, int metadata, int flags, CallbackInfoReturnable<Boolean> info) {
         if (transformer == null)
@@ -152,32 +168,8 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
         y = (int)transformer.unGetY(tmpX, tmpY, tmpZ);
         z = (int)transformer.unGetZ(tmpX, tmpY, tmpZ);
 
-        if (x >= -30000000 && z >= -30000000 && x < 30000000 && z < 30000000 && y >= 0 && y < 256)
-        {
-            Chunk chunk = null;
-
-            try
-            {
-                chunk = this.getChunkFromChunkCoords(x >> 4, z >> 4);
-                info.setReturnValue(chunk.getBlock(x & 15, y, z & 15));
-                info.cancel();
-                return;
-            }
-            catch (Throwable throwable)
-            {
-                CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Exception getting block type in world");
-                CrashReportCategory crashreportcategory = crashreport.makeCategory("Requested block coordinates");
-                crashreportcategory.addCrashSection("Found chunk", Boolean.valueOf(chunk == null));
-                crashreportcategory.addCrashSection("Location", CrashReportCategory.getLocationInfo(x, y, z));
-                throw new ReportedException(crashreport);
-            }
-        }
-        else
-        {
-            info.setReturnValue(Blocks.air);
-            info.cancel();
-            return;
-        }
+        info.setReturnValue(ClimbingWorldHelper.getBlock((World)(Object)this, x, y, z));
+        info.cancel();
     }
 
     @Inject(method="getBlockMetadata", at=@At("HEAD"), cancellable = true)

@@ -102,7 +102,7 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
 
     @ModifyArg(method="func_145775_I", at=@At(value="INVOKE", target="Lnet/minecraft/block/Block;onEntityCollidedWithBlock(Lnet/minecraft/world/World;IIILnet/minecraft/entity/Entity;)V"), index = 1)
     private int onEntityCollidedWithBlockTransformX(World world, int x, int y, int z, Entity entity) {
-        if (getTransformer() != null) {
+        if (areClimbingShoesEquipped()) {
             return (int)getTransformer().unGetX(x, y, z);
         } else
             return x;
@@ -110,7 +110,7 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
 
     @ModifyArg(method="func_145775_I", at=@At(value="INVOKE", target="Lnet/minecraft/block/Block;onEntityCollidedWithBlock(Lnet/minecraft/world/World;IIILnet/minecraft/entity/Entity;)V"), index = 2)
     private int onEntityCollidedWithBlockTransformY(World world, int x, int y, int z, Entity entity) {
-        if (getTransformer() != null) {
+        if (areClimbingShoesEquipped()) {
             return (int)getTransformer().unGetY(x, y, z);
         } else
             return y;
@@ -118,7 +118,7 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
 
     @ModifyArg(method="func_145775_I", at=@At(value="INVOKE", target="Lnet/minecraft/block/Block;onEntityCollidedWithBlock(Lnet/minecraft/world/World;IIILnet/minecraft/entity/Entity;)V"), index = 3)
     private int onEntityCollidedWithBlockTransformZ(World world, int x, int y, int z, Entity entity) {
-        if (getTransformer() != null) {
+        if (areClimbingShoesEquipped()) {
             return (int)getTransformer().unGetZ(x, y, z);
         } else
             return z;
@@ -131,4 +131,6 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
     public void setClimbingShoesEquipped(boolean equipped) { }
     @Override
     public boolean areClimbingShoesEquipped() { return false; }
+    @Override
+    public void setUpdating(boolean updating) {}
 }

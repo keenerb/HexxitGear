@@ -1,11 +1,15 @@
 package sct.hexxitgear.mixinsupport.climbing;
 
 import net.minecraft.block.Block;
+import net.minecraft.crash.CrashReport;
+import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ReportedException;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 import java.util.List;
 
@@ -62,6 +66,31 @@ public class ClimbingWorldHelper {
             {
                 collisionList.add(axisalignedbb1);
             }
+        }
+    }
+
+    public static Block getBlock(World world, int x, int y, int z) {
+        if (x >= -30000000 && z >= -30000000 && x < 30000000 && z < 30000000 && y >= 0 && y < 256)
+        {
+            Chunk chunk = null;
+
+            try
+            {
+                chunk = world.getChunkFromChunkCoords(x >> 4, z >> 4);
+                return chunk.getBlock(x & 15, y, z & 15);
+            }
+            catch (Throwable throwable)
+            {
+                CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Exception getting block type in world");
+                CrashReportCategory crashreportcategory = crashreport.makeCategory("Requested block coordinates");
+                crashreportcategory.addCrashSection("Found chunk", Boolean.valueOf(chunk == null));
+                crashreportcategory.addCrashSection("Location", CrashReportCategory.getLocationInfo(x, y, z));
+                throw new ReportedException(crashreport);
+            }
+        }
+        else
+        {
+            return Blocks.air;
         }
     }
 }
