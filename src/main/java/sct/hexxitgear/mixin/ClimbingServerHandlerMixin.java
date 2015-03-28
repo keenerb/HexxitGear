@@ -20,10 +20,6 @@ public class ClimbingServerHandlerMixin {
         wearer.setUpdating(true);
         if (wearer.areClimbingShoesEquipped()) {
             ClimbingHelper.transformEntity(this$0, wearer.getTransformer());
-//            double tempX = motionX, tempY = motionY, tempZ = motionZ;
-//            motionX = wearer.getTransformer().unGetX(tempX, tempY, tempZ);
-//            motionY = wearer.getTransformer().unGetY(tempX, tempY, tempZ);
-//            motionZ = wearer.getTransformer().unGetZ(tempX, tempY, tempZ);
         }
         this$0.moveEntity(motionX, motionY, motionZ);
         if (wearer.areClimbingShoesEquipped()) {
