@@ -18,12 +18,12 @@
 
 package sct.hexxitgear.mixin;
 
-import cpw.mods.fml.common.FMLLog;
 import net.minecraft.block.Block;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
+import net.minecraft.profiler.Profiler;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ReportedException;
@@ -33,12 +33,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import sct.hexxitgear.item.climbing.ClimbingHelper;
-import sct.hexxitgear.item.climbing.IClimbingWorld;
-import sct.hexxitgear.item.climbing.VectorTransformer;
+import sct.hexxitgear.mixinsupport.climbing.ClimbingHelper;
+import sct.hexxitgear.mixinsupport.climbing.ClimbingWorldHelper;
+import sct.hexxitgear.mixinsupport.climbing.IClimbingWorld;
+import sct.hexxitgear.mixinsupport.climbing.VectorTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,12 +50,26 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
     public void setWorldTransformer(VectorTransformer transformer) {
         this.transformer = transformer;
     }
+    @Override
+    public VectorTransformer getWorldTransformer() { return this.transformer; }
 
     @Shadow
     public Chunk getChunkFromChunkCoords(int p_72964_1_, int p_72964_2_) { return null; }
 
     @Shadow
     private ArrayList collidingBoundingBoxes;
+    @Shadow
+    public boolean captureBlockSnapshots;
+    @Shadow
+    public boolean isRemote;
+    @Shadow
+    public ArrayList<net.minecraftforge.common.util.BlockSnapshot> capturedBlockSnapshots;
+    @Shadow
+    public final Profiler theProfiler = null;
+    @Shadow
+    public boolean func_147451_t(int p_147451_1_, int p_147451_2_, int p_147451_3_) { return false; }
+    @Shadow
+    public void markAndNotifyBlock(int x, int y, int z, Chunk chunk, Block oldBlock, Block newBlock, int flag) {}
 
     @Shadow
     public boolean blockExists(int p_72899_1_, int p_72899_2_, int p_72899_3_) {return true;}
@@ -66,6 +79,67 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
 
     @Shadow
     public List getEntitiesWithinAABBExcludingEntity(Entity p_72839_1_, AxisAlignedBB p_72839_2_) { return null; }
+
+    @Inject(method="setBlock", at=@At("HEAD"), cancellable = true)
+    private void transformSetBlock(int x, int y, int z, Block block, int metadata, int flags, CallbackInfoReturnable<Boolean> info) {
+        if (transformer == null)
+            return;
+
+        int tempX = x, tempY = y, tempZ = z;
+        x = (int)transformer.unGetX(tempX, tempY, tempZ);
+        y = (int)transformer.unGetY(tempX, tempY, tempZ);
+        z = (int)transformer.unGetZ(tempX, tempY, tempZ);
+
+        if (x >= -30000000 && z >= -30000000 && x < 30000000 && z < 30000000) {
+            if (y < 0) {
+                info.setReturnValue(false);
+                info.cancel();
+                return;
+            } else if (y >= 256) {
+                info.setReturnValue(false);
+                info.cancel();
+                return;
+            } else {
+                Chunk chunk = this.getChunkFromChunkCoords(x >> 4, z >> 4);
+                Block block1 = null;
+                net.minecraftforge.common.util.BlockSnapshot blockSnapshot = null;
+
+                if ((flags & 1) != 0) {
+                    block1 = chunk.getBlock(x & 15, y, z & 15);
+                }
+
+                if (this.captureBlockSnapshots && !this.isRemote) {
+                    blockSnapshot = net.minecraftforge.common.util.BlockSnapshot.getBlockSnapshot((World)(Object)this, x, y, z, flags);
+                    this.capturedBlockSnapshots.add(blockSnapshot);
+                }
+
+                boolean flag = chunk.func_150807_a(x & 15, y, z & 15, block, metadata);
+
+                if (!flag && blockSnapshot != null) {
+                    this.capturedBlockSnapshots.remove(blockSnapshot);
+                    blockSnapshot = null;
+                }
+
+                this.theProfiler.startSection("checkLight");
+                this.func_147451_t(x, y, z);
+                this.theProfiler.endSection();
+
+                if (flag && blockSnapshot == null) // Don't notify clients or update physics while capturing blockstates
+                {
+                    // Modularize client and physic updates
+                    this.markAndNotifyBlock(x, y, z, chunk, block1, block, flags);
+                }
+
+                info.setReturnValue(flag);
+                info.cancel();
+                return;
+            }
+        } else {
+            info.setReturnValue(false);
+            info.cancel();
+            return;
+        }
+    }
 
     @Inject(method="getBlock", at=@At("HEAD"), cancellable = true)
     private void transformGetBlock(int x, int y, int z, CallbackInfoReturnable<Block> info) {
@@ -153,58 +227,7 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
         ClimbingHelper.untransformEntity(entity, transformer);
         ClimbingHelper.untransformBB(box, transformer);
 
-        this.collidingBoundingBoxes.clear();
-        int i = MathHelper.floor_double(box.minX);
-        int j = MathHelper.floor_double(box.maxX + 1.0D);
-        int k = MathHelper.floor_double(box.minY);
-        int l = MathHelper.floor_double(box.maxY + 1.0D);
-        int i1 = MathHelper.floor_double(box.minZ);
-        int j1 = MathHelper.floor_double(box.maxZ + 1.0D);
-
-        for (int k1 = i; k1 < j; ++k1)
-        {
-            for (int l1 = i1; l1 < j1; ++l1)
-            {
-                if (this.blockExists(k1, 64, l1))
-                {
-                    for (int i2 = k - 1; i2 < l; ++i2)
-                    {
-                        Block block;
-
-                        if (k1 >= -30000000 && k1 < 30000000 && l1 >= -30000000 && l1 < 30000000)
-                        {
-                            block = this.getBlock(k1, i2, l1);
-                        }
-                        else
-                        {
-                            block = Blocks.stone;
-                        }
-
-                        block.addCollisionBoxesToList(((World)((Object)this)), k1, i2, l1, box, this.collidingBoundingBoxes, entity);
-                    }
-                }
-            }
-        }
-
-        double d0 = 0.25D;
-        List list = this.getEntitiesWithinAABBExcludingEntity(entity, box.expand(d0, d0, d0));
-
-        for (int j2 = 0; j2 < list.size(); ++j2)
-        {
-            AxisAlignedBB axisalignedbb1 = ((Entity)list.get(j2)).getBoundingBox();
-
-            if (axisalignedbb1 != null && axisalignedbb1.intersectsWith(box))
-            {
-                this.collidingBoundingBoxes.add(axisalignedbb1);
-            }
-
-            axisalignedbb1 = entity.getCollisionBox((Entity)list.get(j2));
-
-            if (axisalignedbb1 != null && axisalignedbb1.intersectsWith(box))
-            {
-                this.collidingBoundingBoxes.add(axisalignedbb1);
-            }
-        }
+        ClimbingWorldHelper.processCollision(this.collidingBoundingBoxes, entity, box, (World)(Object)this);
 
         ClimbingHelper.transformEntity(entity, transformer);
 

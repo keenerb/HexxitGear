@@ -19,15 +19,21 @@
 package sct.hexxitgear.mixin;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import sct.hexxitgear.item.climbing.IClimbingShoesWearer;
-import sct.hexxitgear.item.climbing.VectorTransformer;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import sct.hexxitgear.mixinsupport.climbing.ClimbingHelper;
+import sct.hexxitgear.mixinsupport.climbing.IClimbingShoesWearer;
+import sct.hexxitgear.mixinsupport.climbing.VectorTransformer;
 
 @Mixin(Entity.class)
 public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
@@ -40,7 +46,26 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
     @Shadow
     public double posZ;
     @Shadow
+    public final AxisAlignedBB boundingBox=null;
+    @Shadow
     public void kill() {}
+
+    @Inject(method="setSize", at = @At(value="FIELD", target="Lnet/minecraft/util/AxisAlignedBB;maxY", shift = At.Shift.AFTER, opcode = Opcodes.PUTFIELD))
+    private void afterSetSize(float width, float height, CallbackInfo info) {
+        if (getTransformer() != null)
+            ClimbingHelper.rotateEntityBB((Entity)(Object)this, getTransformer());
+    }
+
+    @Inject(method="setPosition", at=@At("RETURN"))
+    private void afterSetPosition(double x, double y, double z, CallbackInfo info) {
+        if (getTransformer() != null) {
+            if (areClimbingShoesEquipped())
+                ClimbingHelper.untransformBB(this.boundingBox, getTransformer());
+            ClimbingHelper.rotateEntityBB((Entity)(Object)this, getTransformer());
+            if (areClimbingShoesEquipped())
+                ClimbingHelper.transformBB(this.boundingBox, getTransformer());
+        }
+    }
 
     @Inject(method="onEntityUpdate", at = @At(value="INVOKE", target="Lnet/minecraft/entity/Entity;handleWaterMovement()V", shift=At.Shift.AFTER))
     private void afterWaterMovement(CallbackInfo info) {
@@ -54,8 +79,49 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
 
     @Redirect(method="onEntityUpdate", at=@At(value="INVOKE", target="Lnet/minecraft/entity/Entity;kill()V"))
     private void proxyKill(Entity this$0) {
-        if (getTransformer() == null)
+        if (!areClimbingShoesEquipped())
             this.kill();
+    }
+
+    @Redirect(method="func_145775_I", at=@At(value="INVOKE", target="Lnet/minecraft/world/World;checkChunksExist(IIIIII)Z"))
+    private boolean proxyCheckChunksExist(World this$0, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
+        if (!areClimbingShoesEquipped()) {
+            return this$0.checkChunksExist(minX, minY, minZ, maxX, maxY, maxZ);
+        }
+        ClimbingHelper.untransformEntity((Entity)(Object)this, getTransformer());
+        int i = MathHelper.floor_double(this.boundingBox.minX + 0.001D);
+        int j = MathHelper.floor_double(this.boundingBox.minY + 0.001D);
+        int k = MathHelper.floor_double(this.boundingBox.minZ + 0.001D);
+        int l = MathHelper.floor_double(this.boundingBox.maxX - 0.001D);
+        int i1 = MathHelper.floor_double(this.boundingBox.maxY - 0.001D);
+        int j1 = MathHelper.floor_double(this.boundingBox.maxZ - 0.001D);
+        boolean result = this$0.checkChunksExist(i, j, k, l, i1, j1);
+        ClimbingHelper.transformEntity((Entity)(Object)this, getTransformer());
+        return result;
+    }
+
+    @ModifyArg(method="func_145775_I", at=@At(value="INVOKE", target="Lnet/minecraft/block/Block;onEntityCollidedWithBlock(Lnet/minecraft/world/World;IIILnet/minecraft/entity/Entity;)V"), index = 1)
+    private int onEntityCollidedWithBlockTransformX(World world, int x, int y, int z, Entity entity) {
+        if (getTransformer() != null) {
+            return (int)getTransformer().unGetX(x, y, z);
+        } else
+            return x;
+    }
+
+    @ModifyArg(method="func_145775_I", at=@At(value="INVOKE", target="Lnet/minecraft/block/Block;onEntityCollidedWithBlock(Lnet/minecraft/world/World;IIILnet/minecraft/entity/Entity;)V"), index = 2)
+    private int onEntityCollidedWithBlockTransformY(World world, int x, int y, int z, Entity entity) {
+        if (getTransformer() != null) {
+            return (int)getTransformer().unGetY(x, y, z);
+        } else
+            return y;
+    }
+
+    @ModifyArg(method="func_145775_I", at=@At(value="INVOKE", target="Lnet/minecraft/block/Block;onEntityCollidedWithBlock(Lnet/minecraft/world/World;IIILnet/minecraft/entity/Entity;)V"), index = 3)
+    private int onEntityCollidedWithBlockTransformZ(World world, int x, int y, int z, Entity entity) {
+        if (getTransformer() != null) {
+            return (int)getTransformer().unGetZ(x, y, z);
+        } else
+            return z;
     }
 
     @Override

@@ -16,8 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package sct.hexxitgear.item.climbing;
+package sct.hexxitgear.mixinsupport.climbing;
 
-public interface IClimbingWorld {
-    void setWorldTransformer(VectorTransformer transformer);
+public interface IClimbingShoesWearer {
+    void setClimbingShoesEquipped(boolean equipped);
+    boolean areClimbingShoesEquipped();
+    VectorTransformer getTransformer();
 }

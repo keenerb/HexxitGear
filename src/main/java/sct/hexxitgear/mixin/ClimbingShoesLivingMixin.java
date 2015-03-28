@@ -28,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import sct.hexxitgear.item.climbing.IClimbingShoesWearer;
+import sct.hexxitgear.mixinsupport.climbing.IClimbingShoesWearer;
 
 @Mixin(EntityLivingBase.class)
 public abstract class ClimbingShoesLivingMixin extends Entity implements IClimbingShoesWearer {
@@ -76,7 +76,7 @@ public abstract class ClimbingShoesLivingMixin extends Entity implements IClimbi
 
     @Inject(method="getLook", at=@At("RETURN"))
     private void modifyLookResult(float partialTick, CallbackInfoReturnable<Vec3> info) {
-        if (areClimbingShoesEquipped()) {
+        if (getTransformer() != null) {
             Vec3 vector = info.getReturnValue();
             if (getTransformer().getAxisY() == ForgeDirection.DOWN)
                 vector.rotateAroundZ((float)Math.PI);

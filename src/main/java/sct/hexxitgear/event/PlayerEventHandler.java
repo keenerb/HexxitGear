@@ -26,7 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.core.CapeHandler;
-import sct.hexxitgear.item.climbing.IClimbingShoesWearer;
+import sct.hexxitgear.mixinsupport.climbing.IClimbingShoesWearer;
 
 public class PlayerEventHandler {
 

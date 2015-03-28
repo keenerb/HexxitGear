@@ -16,10 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package sct.hexxitgear.item.climbing;
+package sct.hexxitgear.mixinsupport.climbing;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class ClimbingHelper {
     public static void transformEntity(Entity entity, VectorTransformer transformer) {
@@ -83,6 +84,44 @@ public class ClimbingHelper {
         ((IClimbingWorld)entity.worldObj).setWorldTransformer(null);
     }
 
+    public static void rotateEntityBB(Entity entity, VectorTransformer transformer) {
+        double boxBottom = entity.boundingBox.minY;
+        double minX = entity.boundingBox.minX - entity.posX;
+        double minY = entity.boundingBox.minY - boxBottom;
+        double minZ = entity.boundingBox.minZ - entity.posZ;
+        double maxX = entity.boundingBox.maxX - entity.posX;
+        double maxY = entity.boundingBox.maxY - boxBottom;
+        double maxZ = entity.boundingBox.maxZ - entity.posZ;
+
+        entity.boundingBox.minX = entity.posX + transformer.getX(minX, minY, minZ);
+        entity.boundingBox.minY = boxBottom;
+        entity.boundingBox.minZ = entity.posZ + transformer.getZ(minX, minY, minZ);
+        entity.boundingBox.maxX = entity.posX + transformer.getX(maxX, maxY, maxZ);
+        entity.boundingBox.maxY = boxBottom + Math.abs(transformer.getY(maxX, maxY, maxZ)) + Math.abs(transformer.getY(minX, minY, minZ));
+        entity.boundingBox.maxZ = entity.posZ + transformer.getZ(maxX, maxY, maxZ);
+
+        normalizeBB(entity.boundingBox);
+    }
+
+    public static void unrotateEntityBB(Entity entity, VectorTransformer transformer) {
+        double boxBottom = entity.boundingBox.minY;
+        double minX = entity.boundingBox.minX - entity.posX;
+        double minY = entity.boundingBox.minY - boxBottom;
+        double minZ = entity.boundingBox.minZ - entity.posZ;
+        double maxX = entity.boundingBox.maxX - entity.posX;
+        double maxY = entity.boundingBox.maxY - boxBottom;
+        double maxZ = entity.boundingBox.maxZ - entity.posZ;
+
+        entity.boundingBox.minX = entity.posX + transformer.unGetX(minX, minY, minZ);
+        entity.boundingBox.minY = boxBottom;
+        entity.boundingBox.minZ = entity.posZ + transformer.unGetZ(minX, minY, minZ);
+        entity.boundingBox.maxX = entity.posX + transformer.unGetX(maxX, maxY, maxZ);
+        entity.boundingBox.maxY = boxBottom + Math.abs(transformer.unGetY(maxX, maxY, maxZ)) + Math.abs(transformer.unGetY(minX, minY, minZ));
+        entity.boundingBox.maxZ = entity.posZ + transformer.unGetZ(maxX, maxY, maxZ);
+
+        normalizeBB(entity.boundingBox);
+    }
+
     public static void transformBB(AxisAlignedBB box, VectorTransformer transformer) {
         double minX = box.minX;
         double minY = box.minY;
@@ -119,7 +158,7 @@ public class ClimbingHelper {
         normalizeBB(box);
     }
 
-    protected static void normalizeBB(AxisAlignedBB box) {
+    public static void normalizeBB(AxisAlignedBB box) {
         double minX = box.minX;
         double minY = box.minY;
         double minZ = box.minZ;

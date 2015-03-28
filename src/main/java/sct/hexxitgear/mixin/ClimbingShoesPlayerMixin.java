@@ -29,10 +29,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import sct.hexxitgear.item.climbing.ClimbingHelper;
-import sct.hexxitgear.item.climbing.IClimbingShoesWearer;
-import sct.hexxitgear.item.climbing.IClimbingWorld;
-import sct.hexxitgear.item.climbing.VectorTransformer;
+import sct.hexxitgear.mixinsupport.climbing.ClimbingHelper;
+import sct.hexxitgear.mixinsupport.climbing.IClimbingShoesWearer;
+import sct.hexxitgear.mixinsupport.climbing.VectorTransformer;
 
 @Mixin(EntityPlayer.class)
 public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implements IClimbingShoesWearer {
@@ -45,6 +44,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     private boolean willClimbingShoesBeEquipped;
     private boolean areClimbingShoesEquipped;
     private VectorTransformer transformer;
+    private boolean updateInProgress = false;
 
     @Shadow
     public PlayerCapabilities capabilities;
@@ -59,6 +59,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
 
     @Inject(method="onUpdate", at=@At("HEAD"))
     private void transformPlayerPositioning(CallbackInfo info) {
+        updateInProgress = true;
         if (!areClimbingShoesEquipped())
             return;
 
@@ -71,19 +72,23 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
             ClimbingHelper.untransformEntity(this, getTransformer());
         }
 
+        updateInProgress = false;
+
+        ClimbingHelper.unrotateEntityBB(this, getTransformer());
         this.areClimbingShoesEquipped = willClimbingShoesBeEquipped && !this.capabilities.isFlying;
-        transformer = new VectorTransformer(climbingShoesDirection);
+        transformer = new VectorTransformer(areClimbingShoesEquipped?climbingShoesDirection:ForgeDirection.DOWN);
+        ClimbingHelper.rotateEntityBB(this, getTransformer());
     }
 
     @Override
     public VectorTransformer getTransformer() { return transformer; }
     @Override
-    public boolean areClimbingShoesEquipped() { return areClimbingShoesEquipped; }
+    public boolean areClimbingShoesEquipped() { return areClimbingShoesEquipped && updateInProgress; }
     @Override
     public void setClimbingShoesEquipped(boolean equipped) {
         if (willClimbingShoesBeEquipped != equipped) {
             this.willClimbingShoesBeEquipped = equipped;
-            this.climbingShoesDirection = (!equipped)?ForgeDirection.DOWN:ForgeDirection.WEST;
+            this.climbingShoesDirection = (!equipped)?ForgeDirection.DOWN:ForgeDirection.NORTH;
         }
     }
 }
