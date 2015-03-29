@@ -95,4 +95,6 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     public void setUpdating(boolean updating) {
         this.updateInProgress = updating;
     }
+    @Override
+    public boolean isUpdating() { return this.updateInProgress; }
 }

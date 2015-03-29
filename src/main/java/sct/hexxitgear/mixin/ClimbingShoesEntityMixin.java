@@ -152,4 +152,6 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
     public boolean areClimbingShoesEquipped() { return false; }
     @Override
     public void setUpdating(boolean updating) {}
+    @Override
+    public boolean isUpdating() { return false; }
 }

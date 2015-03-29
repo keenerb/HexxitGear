@@ -20,6 +20,7 @@ package sct.hexxitgear.mixinsupport.climbing;
 
 public interface IClimbingShoesWearer {
     void setClimbingShoesEquipped(boolean equipped);
+    boolean isUpdating();
     void setUpdating(boolean updating);
     boolean areClimbingShoesEquipped();
     VectorTransformer getTransformer();
