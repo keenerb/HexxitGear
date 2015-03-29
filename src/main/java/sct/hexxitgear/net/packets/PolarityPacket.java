@@ -22,7 +22,7 @@ public class PolarityPacket extends HexxitGearPacketBase {
 
     @Override
     public void write(ByteArrayDataOutput out) {
-        out.write((int)direction.ordinal());
+        out.writeInt(direction.ordinal());
     }
 
     @Override

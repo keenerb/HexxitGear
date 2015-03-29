@@ -52,7 +52,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     private VectorTransformer transformer;
     private boolean updateInProgress = false;
     private int parkourDistance;
-    private static final int MAX_PARKOUR_DISTANCE = 500;
+    private static final int MAX_PARKOUR_DISTANCE = 600;
 
     private LinkedList<ForgeDirection> collidedSides = new LinkedList<ForgeDirection>();
 
@@ -119,15 +119,16 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     public void setFloor(ForgeDirection direction) {
         if (direction != this.climbingShoesDirection) {
             this.climbingShoesDirection = direction;
-            HexxitGearNetwork.sendToServer(new PolarityPacket(direction));
         }
     }
 
     @Override
     public void spendDistance(int distance) {
         parkourDistance -= distance;
-        if (parkourDistance <= 0)
+        if (parkourDistance <= 0) {
             setFloor(ForgeDirection.DOWN);
+            HexxitGearNetwork.sendToServer(new PolarityPacket(ForgeDirection.DOWN));
+        }
     }
     @Override
     public void resetDistance() {

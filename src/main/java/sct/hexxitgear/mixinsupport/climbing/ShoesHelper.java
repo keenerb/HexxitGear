@@ -23,6 +23,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 import sct.hexxitgear.core.ArmorSet;
+import sct.hexxitgear.net.HexxitGearNetwork;
+import sct.hexxitgear.net.packets.PolarityPacket;
 
 import java.util.List;
 
@@ -32,13 +34,17 @@ public class ShoesHelper {
 
         if (entity.isJumping || entity.isInWater() || entity.fire > 0) {
             wearer.setFloor(ForgeDirection.DOWN);
+            HexxitGearNetwork.sendToServer(new PolarityPacket(ForgeDirection.DOWN));
             return;
         }
 
-        ForgeDirection facingDir = getFacingDirection(wearer.getTransformer().getAxisY(), lookDir);
+        if (entity.onGround) {
+            ForgeDirection facingDir = getFacingDirection(wearer.getTransformer().getAxisY(), lookDir);
 
-        if (collidedSides.contains(facingDir)) {
-            wearer.setFloor(facingDir);
+            if (collidedSides.contains(facingDir)) {
+                wearer.setFloor(facingDir);
+                HexxitGearNetwork.sendToServer(new PolarityPacket(facingDir));
+            }
         }
 
         boolean hasFullSet = ArmorSet.getPlayerArmorSet(entity.getDisplayName()) != null;

@@ -20,6 +20,7 @@ package sct.hexxitgear.mixinsupport.climbing;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class ClimbingHelper {
@@ -154,5 +155,18 @@ public class ClimbingHelper {
         box.maxY = Math.max(minY, maxY);
         box.minZ = Math.min(minZ, maxZ);
         box.maxZ = Math.max(minZ, maxZ);
+    }
+
+    public static void rotateLookVector(Vec3 vector, VectorTransformer transformer) {
+        if (transformer.getAxisY() == ForgeDirection.DOWN)
+            vector.rotateAroundZ((float)Math.PI);
+        else if (transformer.getAxisY() == ForgeDirection.SOUTH)
+            vector.rotateAroundX((float)(-Math.PI/2.0));
+        else if (transformer.getAxisY() == ForgeDirection.NORTH)
+            vector.rotateAroundX((float)(Math.PI/2.0));
+        else if (transformer.getAxisY() == ForgeDirection.WEST)
+            vector.rotateAroundZ((float)(-Math.PI/2.0));
+        else if (transformer.getAxisY() == ForgeDirection.EAST)
+            vector.rotateAroundZ((float)(Math.PI/2.0));
     }
 }
