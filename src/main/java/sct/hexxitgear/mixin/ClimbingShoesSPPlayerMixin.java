@@ -22,34 +22,7 @@ public abstract class ClimbingShoesSPPlayerMixin extends AbstractClientPlayer im
         super(p_i45074_1_, p_i45074_2_);
     }
 
-    private boolean wasAlreadyUpdating;
     protected boolean func_145771_j(double p_145771_1_, double p_145771_3_, double p_145771_5_){return true;}
-//
-//    @Inject(method = "onLivingUpdate", at=@At(value = "INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;func_145771_j(DDD)Z", ordinal = 0))
-//    private void beforeWhateverThisIs(CallbackInfo info) {
-//        if (isUpdating()) {
-//            wasAlreadyUpdating = true;
-//            return;
-//        }
-//        setUpdating(true);
-//        if (!areClimbingShoesEquipped())
-//            return;
-//
-//        ClimbingHelper.transformEntity(this, getTransformer());
-//    }
-//
-//    @Inject(method = "onLivingUpdate", at=@At(value="INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;func_145771_j(DDD)Z", ordinal = 3, shift = At.Shift.AFTER))
-//    private void afterWhateverThisIs(CallbackInfo info) {
-//        if (wasAlreadyUpdating) {
-//            wasAlreadyUpdating = false;
-//            return;
-//        }
-//        if (areClimbingShoesEquipped()) {
-//            ClimbingHelper.untransformEntity(this, getTransformer());
-//        }
-//
-//        setUpdating(false);
-//    }
 
     @Redirect(method="onLivingUpdate", at=@At(value="INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;func_145771_j(DDD)Z"))
     private boolean proxyFunc145771J(EntityPlayerSP this$0, double x, double y, double z) {
