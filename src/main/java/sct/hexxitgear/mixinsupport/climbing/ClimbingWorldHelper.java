@@ -1,6 +1,8 @@
 package sct.hexxitgear.mixinsupport.climbing;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.material.Material;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
@@ -8,6 +10,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ReportedException;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -91,6 +94,58 @@ public class ClimbingWorldHelper {
         else
         {
             return Blocks.air;
+        }
+    }
+
+    public static boolean handleMaterialAcceleration(World world, AxisAlignedBB box, Material material, Entity entity) {
+        int i = MathHelper.floor_double(box.minX);
+        int j = MathHelper.floor_double(box.maxX + 1.0D);
+        int k = MathHelper.floor_double(box.minY);
+        int l = MathHelper.floor_double(box.maxY + 1.0D);
+        int i1 = MathHelper.floor_double(box.minZ);
+        int j1 = MathHelper.floor_double(box.maxZ + 1.0D);
+
+        if (!world.checkChunksExist(i, k, i1, j, l, j1))
+        {
+            return false;
+        }
+        else
+        {
+            boolean flag = false;
+            Vec3 vec3 = Vec3.createVectorHelper(0.0D, 0.0D, 0.0D);
+
+            for (int k1 = i; k1 < j; ++k1)
+            {
+                for (int l1 = k; l1 < l; ++l1)
+                {
+                    for (int i2 = i1; i2 < j1; ++i2)
+                    {
+                        Block block = world.getBlock(k1, l1, i2);
+
+                        if (block.getMaterial() == material)
+                        {
+                            double d0 = (double)((float)(l1 + 1) - BlockLiquid.getLiquidHeightPercent(world.getBlockMetadata(k1, l1, i2)));
+
+                            if ((double)l >= d0)
+                            {
+                                flag = true;
+                                block.velocityToAddToEntity(world, k1, l1, i2, entity, vec3);
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (vec3.lengthVector() > 0.0D && entity.isPushedByWater())
+            {
+                vec3 = vec3.normalize();
+                double d1 = 0.014D;
+                entity.motionX += vec3.xCoord * d1;
+                entity.motionY += vec3.yCoord * d1;
+                entity.motionZ += vec3.zCoord * d1;
+            }
+
+            return flag;
         }
     }
 }

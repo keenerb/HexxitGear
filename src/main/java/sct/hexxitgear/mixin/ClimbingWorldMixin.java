@@ -19,6 +19,7 @@
 package sct.hexxitgear.mixin;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
@@ -233,6 +234,26 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
         }
 
         info.setReturnValue(outBoxes);
+        info.cancel();
+    }
+
+    @Inject(method="handleMaterialAcceleration", at=@At("HEAD"), cancellable = true)
+    private void transformHandleMaterialAcceleration(AxisAlignedBB box, Material material, Entity entity, CallbackInfoReturnable<Boolean> info) {
+        VectorTransformer transformer = getWorldTransformer();
+        if (transformer != null) {
+            ClimbingHelper.untransformEntity(entity, transformer);
+            if (box != entity.boundingBox)
+                ClimbingHelper.untransformBB(box, transformer);
+        }
+
+        info.setReturnValue(ClimbingWorldHelper.handleMaterialAcceleration((World)(Object)this, box, material, entity));
+
+        if (transformer != null) {
+            ClimbingHelper.transformEntity(entity, transformer);
+            if (box != entity.boundingBox)
+                ClimbingHelper.transformBB(box, transformer);
+        }
+
         info.cancel();
     }
 }
