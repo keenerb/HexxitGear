@@ -34,6 +34,8 @@ import sct.hexxitgear.mixinsupport.climbing.ClimbingHelper;
 import sct.hexxitgear.mixinsupport.climbing.IClimbingShoesWearer;
 import sct.hexxitgear.mixinsupport.climbing.ShoesHelper;
 import sct.hexxitgear.mixinsupport.climbing.VectorTransformer;
+import sct.hexxitgear.net.HexxitGearNetwork;
+import sct.hexxitgear.net.packets.PolarityPacket;
 
 import java.util.LinkedList;
 
@@ -114,7 +116,13 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     @Override
     public boolean isUpdating() { return this.updateInProgress; }
     @Override
-    public void setFloor(ForgeDirection direction) { this.climbingShoesDirection = direction; }
+    public void setFloor(ForgeDirection direction) {
+        if (direction != this.climbingShoesDirection) {
+            this.climbingShoesDirection = direction;
+            HexxitGearNetwork.sendToServer(new PolarityPacket(direction));
+        }
+    }
+
     @Override
     public void spendDistance(int distance) {
         parkourDistance -= distance;

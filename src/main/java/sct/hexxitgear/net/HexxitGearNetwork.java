@@ -19,10 +19,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.tileentity.TileEntity;
-import sct.hexxitgear.net.packets.ArmorAbilityPacket;
-import sct.hexxitgear.net.packets.CapeChangePacket;
-import sct.hexxitgear.net.packets.CapeJoinPacket;
-import sct.hexxitgear.net.packets.HexxitGearPacketBase;
+import net.minecraft.util.Vec3;
+import sct.hexxitgear.net.packets.*;
 
 import java.util.EnumMap;
 
@@ -39,6 +37,7 @@ public class HexxitGearNetwork extends FMLIndexedMessageToMessageCodec<HexxitGea
         INSTANCE.addDiscriminator(0, CapeChangePacket.class);
         INSTANCE.addDiscriminator(1, CapeJoinPacket.class);
         INSTANCE.addDiscriminator(2, ArmorAbilityPacket.class);
+        INSTANCE.addDiscriminator(3, PolarityPacket.class);
 
         channels.putAll(NetworkRegistry.INSTANCE.newChannel("HexxitGear", INSTANCE));
     }
@@ -85,6 +84,12 @@ public class HexxitGearNetwork extends FMLIndexedMessageToMessageCodec<HexxitGea
 
     public static void sendToAllPlayers(HexxitGearPacketBase packet) {
         channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
+        channels.get(Side.SERVER).writeAndFlush(packet);
+    }
+
+    public static void sendToNearbyPlayers(HexxitGearPacketBase packet, int dim, double x, double y, double z, double range) {
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
+        channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(new NetworkRegistry.TargetPoint(dim, x, y, z, range));
         channels.get(Side.SERVER).writeAndFlush(packet);
     }
 }

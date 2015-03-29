@@ -30,12 +30,12 @@ public class ShoesHelper {
     public static void processShoes(EntityPlayer entity, List<ForgeDirection> collidedSides, Vec3 lookDir) {
         IClimbingShoesWearer wearer = (IClimbingShoesWearer)entity;
 
-        if (entity.isJumping || entity.isInWater() || entity.fire > 0 || !entity.isSprinting()) {
+        if (entity.isJumping || entity.isInWater() || entity.fire > 0) {
             wearer.setFloor(ForgeDirection.DOWN);
             return;
         }
 
-        ForgeDirection facingDir = getFacingDirection(lookDir);
+        ForgeDirection facingDir = getFacingDirection(wearer.getTransformer().getAxisY(), lookDir);
 
         if (collidedSides.contains(facingDir)) {
             wearer.setFloor(facingDir);
@@ -58,8 +58,18 @@ public class ShoesHelper {
         }
     }
 
-    public static ForgeDirection getFacingDirection(Vec3 lookDir) {
-        double largestComponent = Math.max(Math.max(Math.abs(lookDir.xCoord), Math.abs(lookDir.yCoord)), Math.abs(lookDir.zCoord));
+    public static ForgeDirection getFacingDirection(ForgeDirection currentYAxis, Vec3 lookDir) {
+        double[] nonVerticalComponents = new double[2];
+        int index = 0;
+
+        if (currentYAxis != ForgeDirection.EAST && currentYAxis != ForgeDirection.WEST)
+            nonVerticalComponents[index++] = lookDir.xCoord;
+        if (currentYAxis != ForgeDirection.NORTH && currentYAxis != ForgeDirection.SOUTH)
+            nonVerticalComponents[index++] = lookDir.zCoord;
+        if (currentYAxis != ForgeDirection.UP && currentYAxis != ForgeDirection.DOWN)
+            nonVerticalComponents[index++] = lookDir.yCoord;
+
+        double largestComponent = Math.max(Math.abs(nonVerticalComponents[0]), Math.abs(nonVerticalComponents[1]));
 
         if (Math.abs(lookDir.xCoord) == largestComponent) {
             if (lookDir.xCoord > 0)
