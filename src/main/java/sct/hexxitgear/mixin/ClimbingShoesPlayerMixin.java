@@ -22,6 +22,7 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerCapabilities;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,7 +32,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import sct.hexxitgear.mixinsupport.climbing.ClimbingHelper;
 import sct.hexxitgear.mixinsupport.climbing.IClimbingShoesWearer;
+import sct.hexxitgear.mixinsupport.climbing.ShoesHelper;
 import sct.hexxitgear.mixinsupport.climbing.VectorTransformer;
+
+import java.util.LinkedList;
 
 @Mixin(EntityPlayer.class)
 public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implements IClimbingShoesWearer {
@@ -45,6 +49,10 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     private boolean areClimbingShoesEquipped;
     private VectorTransformer transformer;
     private boolean updateInProgress = false;
+    private int parkourDistance;
+    private static final int MAX_PARKOUR_DISTANCE = 500;
+
+    private LinkedList<ForgeDirection> collidedSides = new LinkedList<ForgeDirection>();
 
     @Shadow
     public PlayerCapabilities capabilities;
@@ -55,6 +63,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
         this.areClimbingShoesEquipped = false;
         this.willClimbingShoesBeEquipped = false;
         this.transformer = new VectorTransformer(climbingShoesDirection);
+        this.parkourDistance = MAX_PARKOUR_DISTANCE;
     }
 
     @Inject(method="onUpdate", at=@At("HEAD"))
@@ -68,13 +77,20 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
 
     @Inject(method="onUpdate", at=@At("RETURN"))
     private void untransformPlayerPositioning(CallbackInfo info) {
+        Vec3 lookDir = this.getLook(1.0f);
         if (areClimbingShoesEquipped()) {
             ClimbingHelper.untransformEntity(this, getTransformer());
         }
 
-        setUpdating(false);
-
         ClimbingHelper.unrotateEntityBB(this, getTransformer());
+
+        if (areClimbingShoesEquipped()) {
+            ShoesHelper.processShoes((EntityPlayer) (Object) this, collidedSides, lookDir);
+        }
+
+        setUpdating(false);
+        collidedSides.clear();
+
         this.areClimbingShoesEquipped = willClimbingShoesBeEquipped && !this.capabilities.isFlying;
         transformer = new VectorTransformer(areClimbingShoesEquipped?climbingShoesDirection:ForgeDirection.DOWN);
         ClimbingHelper.rotateEntityBB(this, getTransformer());
@@ -88,7 +104,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     public void setClimbingShoesEquipped(boolean equipped) {
         if (willClimbingShoesBeEquipped != equipped) {
             this.willClimbingShoesBeEquipped = equipped;
-            this.climbingShoesDirection = (!equipped)?ForgeDirection.DOWN:ForgeDirection.NORTH;
+            this.climbingShoesDirection = ForgeDirection.DOWN;
         }
     }
     @Override
@@ -97,4 +113,20 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     }
     @Override
     public boolean isUpdating() { return this.updateInProgress; }
+    @Override
+    public void setFloor(ForgeDirection direction) { this.climbingShoesDirection = direction; }
+    @Override
+    public void spendDistance(int distance) {
+        parkourDistance -= distance;
+        if (parkourDistance <= 0)
+            setFloor(ForgeDirection.DOWN);
+    }
+    @Override
+    public void resetDistance() {
+        parkourDistance = MAX_PARKOUR_DISTANCE;
+    }
+    @Override
+    public void collideWithSide(ForgeDirection direction) {
+        collidedSides.add(direction);
+    }
 }

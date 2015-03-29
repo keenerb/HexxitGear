@@ -143,6 +143,51 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
             return z;
     }
 
+    @Redirect(method="moveEntity", at=@At(value="INVOKE", target="Lnet/minecraft/util/AxisAlignedBB;calculateXOffset(Lnet/minecraft/util/AxisAlignedBB;D)D"))
+    private double proxyCalculateXOffset(AxisAlignedBB this$0, AxisAlignedBB box, double move) {
+        double newMove = this$0.calculateXOffset(box, move);
+        if (areClimbingShoesEquipped()) {
+            if (newMove != move) {
+                if (move > 0)
+                    this.collideWithSide(getTransformer().getAxisX());
+                else
+                    this.collideWithSide(ForgeDirection.VALID_DIRECTIONS[ForgeDirection.OPPOSITES[getTransformer().getAxisX().ordinal()]]);
+            }
+        }
+
+        return newMove;
+    }
+
+    @Redirect(method="moveEntity", at=@At(value="INVOKE", target="Lnet/minecraft/util/AxisAlignedBB;calculateYOffset(Lnet/minecraft/util/AxisAlignedBB;D)D"))
+    private double proxyCalculateYOffset(AxisAlignedBB this$0, AxisAlignedBB box, double move) {
+        double newMove = this$0.calculateYOffset(box, move);
+        if (areClimbingShoesEquipped()) {
+            if (newMove != move) {
+                if (move > 0)
+                    this.collideWithSide(getTransformer().getAxisY());
+                else
+                    this.collideWithSide(ForgeDirection.VALID_DIRECTIONS[ForgeDirection.OPPOSITES[getTransformer().getAxisY().ordinal()]]);
+            }
+        }
+
+        return newMove;
+    }
+
+    @Redirect(method="moveEntity", at=@At(value="INVOKE", target="Lnet/minecraft/util/AxisAlignedBB;calculateZOffset(Lnet/minecraft/util/AxisAlignedBB;D)D"))
+    private double proxyCalculateZOffset(AxisAlignedBB this$0, AxisAlignedBB box, double move) {
+        double newMove = this$0.calculateZOffset(box, move);
+        if (areClimbingShoesEquipped()) {
+            if (newMove != move) {
+                if (move > 0)
+                    this.collideWithSide(getTransformer().getAxisZ());
+                else
+                    this.collideWithSide(ForgeDirection.VALID_DIRECTIONS[ForgeDirection.OPPOSITES[getTransformer().getAxisZ().ordinal()]]);
+            }
+        }
+
+        return newMove;
+    }
+
     @Override
     public VectorTransformer getTransformer() { return null; }
 
@@ -154,4 +199,12 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
     public void setUpdating(boolean updating) {}
     @Override
     public boolean isUpdating() { return false; }
+    @Override
+    public void setFloor(ForgeDirection floor) {}
+    @Override
+    public void spendDistance(int distance) {}
+    @Override
+    public void resetDistance() {}
+    @Override
+    public void collideWithSide(ForgeDirection direction) {}
 }
