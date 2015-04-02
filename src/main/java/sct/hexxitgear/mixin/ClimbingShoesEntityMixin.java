@@ -79,6 +79,7 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
         maxY = this.posY + this.getTransformer().getY(halfWidth, maxYOffset, halfWidth);
         maxZ = this.posZ + this.getTransformer().getZ(halfWidth, maxYOffset, halfWidth);
         AxisAlignedBB bb = this$0.setBounds(minX, minY, minZ, maxX, maxY, maxZ);
+        ClimbingHelper.normalizeBB(bb);
 
         if (areClimbingShoesEquipped())
             ClimbingHelper.transformBB(this.boundingBox, getTransformer());
