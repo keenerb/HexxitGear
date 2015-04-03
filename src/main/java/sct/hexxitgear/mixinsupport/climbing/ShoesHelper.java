@@ -32,7 +32,7 @@ public class ShoesHelper {
     public static void processShoes(EntityPlayer entity, List<ForgeDirection> collidedSides, Vec3 lookDir) {
         IClimbingShoesWearer wearer = (IClimbingShoesWearer)entity;
 
-        if (entity.isJumping || entity.isInWater() || entity.fire > 0 || entity.fallDistance > 0.5) {
+        if (wearer.getTransformer().getAxisY() != ForgeDirection.UP && (entity.isJumping || entity.isInWater() || entity.fire > 0 || entity.fallDistance > 0.5)) {
             wearer.setFloor(ForgeDirection.DOWN);
             HexxitGearNetwork.sendToServer(new PolarityPacket(ForgeDirection.DOWN));
             return;
