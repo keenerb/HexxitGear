@@ -47,6 +47,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     }
 
     private ForgeDirection climbingShoesDirection;
+    private ForgeDirection newClimbingShoesDirection;
     private boolean willClimbingShoesBeEquipped;
     private boolean areClimbingShoesEquipped;
     private VectorTransformer transformer;
@@ -62,6 +63,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     @Inject(method = "<init>", at=@At("RETURN"))
     private void onConstructed(World world, GameProfile profile, CallbackInfo info) {
         this.climbingShoesDirection = ForgeDirection.DOWN;
+        this.newClimbingShoesDirection = ForgeDirection.DOWN;
         this.areClimbingShoesEquipped = false;
         this.willClimbingShoesBeEquipped = false;
         this.transformer = new VectorTransformer(climbingShoesDirection);
@@ -82,11 +84,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
         Vec3 lookDir = this.getLook(1.0f);
         if (areClimbingShoesEquipped()) {
             ClimbingHelper.untransformEntity(this, getTransformer());
-        }
 
-        ClimbingHelper.unrotateEntityBB(this, getTransformer());
-
-        if (areClimbingShoesEquipped()) {
             ShoesHelper.processShoes((EntityPlayer) (Object) this, collidedSides, lookDir);
         }
 
@@ -94,8 +92,13 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
         collidedSides.clear();
 
         this.areClimbingShoesEquipped = willClimbingShoesBeEquipped && !this.capabilities.isFlying;
-        transformer = new VectorTransformer(areClimbingShoesEquipped?climbingShoesDirection:ForgeDirection.DOWN);
-        ClimbingHelper.rotateEntityBB(this, getTransformer());
+        ForgeDirection newDirection = areClimbingShoesEquipped?newClimbingShoesDirection:ForgeDirection.DOWN;
+        transformer = new VectorTransformer(newDirection);
+        if (climbingShoesDirection != newDirection) {
+            ClimbingHelper.rotateEntityBBFromTo(this, climbingShoesDirection, newClimbingShoesDirection);
+        }
+        this.climbingShoesDirection = newDirection;
+        this.newClimbingShoesDirection = newDirection;
     }
 
     @Override
@@ -106,7 +109,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     public void setClimbingShoesEquipped(boolean equipped) {
         if (willClimbingShoesBeEquipped != equipped) {
             this.willClimbingShoesBeEquipped = equipped;
-            this.climbingShoesDirection = ForgeDirection.DOWN;
+            this.newClimbingShoesDirection = ForgeDirection.DOWN;
         }
     }
     @Override
@@ -117,9 +120,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     public boolean isUpdating() { return this.updateInProgress; }
     @Override
     public void setFloor(ForgeDirection direction) {
-        if (direction != this.climbingShoesDirection) {
-            this.climbingShoesDirection = direction;
-        }
+        this.newClimbingShoesDirection = direction;
     }
 
     @Override

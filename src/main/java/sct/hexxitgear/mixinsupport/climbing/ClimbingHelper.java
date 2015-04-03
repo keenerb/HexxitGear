@@ -73,9 +73,50 @@ public class ClimbingHelper {
         ((IClimbingWorld)entity.worldObj).setWorldTransformer(null);
     }
 
+    public static void rotateEntityBBFromTo(Entity entity,ForgeDirection from, ForgeDirection to) {
+        normalizeBB(entity.boundingBox);
+
+        VectorTransformer fromTransform = new VectorTransformer(from);
+        VectorTransformer toTransform = new VectorTransformer(to);
+
+        double oldMinX = entity.boundingBox.minX;
+        double oldMinY = entity.boundingBox.minY;
+        double oldMinZ = entity.boundingBox.minZ;
+        double diffX = entity.boundingBox.maxX - entity.boundingBox.minX;
+        double diffY = entity.boundingBox.maxY - entity.boundingBox.minY;
+        double diffZ = entity.boundingBox.maxZ - entity.boundingBox.minZ;
+
+        double interDiffX = fromTransform.unGetX(diffX, diffY, diffZ);
+        double interDiffY = fromTransform.unGetY(diffX, diffY, diffZ);
+        double interDiffZ = fromTransform.unGetZ(diffX, diffY, diffZ);
+
+        double realDiffX = Math.abs(toTransform.getX(interDiffX, interDiffY, interDiffZ));
+        double realDiffY = Math.abs(toTransform.getY(interDiffX, interDiffY, interDiffZ));
+        double realDiffZ = Math.abs(toTransform.getZ(interDiffX, interDiffY, interDiffZ));
+
+        if (to == ForgeDirection.EAST || from == ForgeDirection.EAST) {
+            entity.boundingBox.minX = entity.boundingBox.maxX - realDiffX;
+            entity.posX += (entity.boundingBox.minX - oldMinX);
+        } else
+            entity.boundingBox.maxX = entity.boundingBox.minX + realDiffX;
+
+        if (to == ForgeDirection.UP || from == ForgeDirection.UP) {
+            entity.boundingBox.minY = entity.boundingBox.maxY - realDiffY;
+            entity.posY += (entity.boundingBox.minY - oldMinY);
+        } else
+            entity.boundingBox.maxY = entity.boundingBox.minY + realDiffY;
+
+        if (to == ForgeDirection.SOUTH || from == ForgeDirection.SOUTH) {
+            entity.boundingBox.minZ = entity.boundingBox.maxZ - realDiffZ;
+            entity.posZ += (entity.boundingBox.minZ - oldMinZ);
+        } else
+            entity.boundingBox.maxZ = entity.boundingBox.minZ + realDiffZ;
+    }
+
     public static void rotateEntityBB(Entity entity, VectorTransformer transformer) {
         normalizeBB(entity.boundingBox);
         double oldMinX = entity.boundingBox.minX;
+        double oldMinY = entity.boundingBox.minY;
         double oldMinZ = entity.boundingBox.minZ;
         double diffX = entity.boundingBox.maxX - entity.boundingBox.minX;
         double diffY = entity.boundingBox.maxY - entity.boundingBox.minY;
@@ -91,7 +132,11 @@ public class ClimbingHelper {
         } else
             entity.boundingBox.maxX = entity.boundingBox.minX - realDiffX;
 
-        entity.boundingBox.maxY = entity.boundingBox.minY + Math.abs(realDiffY);
+        if (realDiffY > 0) {
+            entity.boundingBox.minY = entity.boundingBox.maxY - realDiffY;
+            entity.posY += (entity.boundingBox.minY - oldMinY);
+        } else
+            entity.boundingBox.maxY = entity.boundingBox.minY - realDiffY;
 
         if (realDiffZ > 0) {
             entity.boundingBox.minZ = entity.boundingBox.maxZ - realDiffZ;
@@ -103,6 +148,7 @@ public class ClimbingHelper {
     public static void unrotateEntityBB(Entity entity, VectorTransformer transformer) {
         normalizeBB(entity.boundingBox);
         double oldMinX = entity.boundingBox.minX;
+        double oldMinY = entity.boundingBox.minY;
         double oldMinZ = entity.boundingBox.minZ;
         double diffX = entity.boundingBox.maxX - entity.boundingBox.minX;
         double diffY = entity.boundingBox.maxY - entity.boundingBox.minY;
@@ -118,7 +164,11 @@ public class ClimbingHelper {
         } else
             entity.boundingBox.maxX = entity.boundingBox.minX + realDiffX;
 
-        entity.boundingBox.maxY = entity.boundingBox.minY + Math.abs(realDiffY);
+        if (realDiffY < 0) {
+            entity.boundingBox.minY = entity.boundingBox.maxY + realDiffY;
+            entity.posY += (entity.boundingBox.minY - oldMinY);
+        } else
+            entity.boundingBox.maxY = entity.boundingBox.minY + realDiffY;
 
         if (realDiffZ < 0) {
             entity.boundingBox.minZ = entity.boundingBox.maxZ + realDiffZ;
