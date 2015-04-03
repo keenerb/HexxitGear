@@ -74,10 +74,13 @@ public class ClimbingHelper {
     }
 
     public static void rotateEntityBBFromTo(Entity entity,ForgeDirection from, ForgeDirection to) {
-        normalizeBB(entity.boundingBox);
-
         VectorTransformer fromTransform = new VectorTransformer(from);
         VectorTransformer toTransform = new VectorTransformer(to);
+        transformEntity(entity, fromTransform);
+        entity.motionY = 0;
+        untransformEntity(entity, fromTransform);
+
+        normalizeBB(entity.boundingBox);
 
         double oldMinX = entity.boundingBox.minX;
         double oldMinY = entity.boundingBox.minY;

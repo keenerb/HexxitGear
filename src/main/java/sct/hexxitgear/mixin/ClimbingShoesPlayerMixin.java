@@ -19,6 +19,9 @@
 package sct.hexxitgear.mixin;
 
 import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerCapabilities;
@@ -120,7 +123,16 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     public boolean isUpdating() { return this.updateInProgress; }
     @Override
     public void setFloor(ForgeDirection direction) {
-        this.newClimbingShoesDirection = direction;
+        if (newClimbingShoesDirection != direction) {
+            this.newClimbingShoesDirection = direction;
+            EntityPlayer player = (EntityPlayer)(Object)this;
+            if (!this.worldObj.isRemote) {
+                HexxitGearNetwork.sendToNearbyPlayers(new PolarityPacket(direction), player.worldObj.provider.dimensionId, player.posX, player.posY, player.posZ, 64.0D);
+            } else {
+                if (player == Minecraft.getMinecraft().thePlayer)
+                    HexxitGearNetwork.sendToServer(new PolarityPacket(direction));
+            }
+        }
     }
 
     @Override
@@ -128,7 +140,6 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
         parkourDistance -= distance;
         if (parkourDistance <= 0) {
             setFloor(ForgeDirection.DOWN);
-            HexxitGearNetwork.sendToServer(new PolarityPacket(ForgeDirection.DOWN));
         }
     }
     @Override

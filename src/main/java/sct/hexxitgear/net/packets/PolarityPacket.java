@@ -2,6 +2,7 @@ package sct.hexxitgear.net.packets;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
@@ -32,12 +33,12 @@ public class PolarityPacket extends HexxitGearPacketBase {
 
     @Override
     public void handleClient(World world, EntityPlayer player) {
-        ((IClimbingShoesWearer)player).setFloor(direction);
+        if (Minecraft.getMinecraft().thePlayer != player)
+            ((IClimbingShoesWearer)player).setFloor(direction);
     }
 
     @Override
     public void handleServer(World world, EntityPlayerMP player) {
         ((IClimbingShoesWearer)player).setFloor(direction);
-        HexxitGearNetwork.sendToNearbyPlayers(new PolarityPacket(direction), player.worldObj.provider.dimensionId, player.posX, player.posY, player.posZ, 64.0D);
     }
 }
