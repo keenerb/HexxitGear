@@ -29,6 +29,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
+import org.lwjgl.input.Keyboard;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.core.ArmorSet;
 import sct.hexxitgear.model.ModelScaleHelmet;
@@ -63,7 +64,18 @@ public class ItemScaleArmor extends ItemHexxitArmor {
 
     @Override
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List infoList, boolean par4) {
-        infoList.add(FormatCodes.Indigo.format + StatCollector.translateToLocal("gui.hexxitgear.set.scale"));
+        infoList.add(FormatCodes.Bold.format + FormatCodes.Indigo.format + StatCollector.translateToLocal("gui.hexxitgear.set.scale") + FormatCodes.Reset.format);
+
+        if (this.armorType == 3) {
+            if (par4 || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+                boolean isEmpowered = (par2EntityPlayer.getCurrentArmor(0) != null && par2EntityPlayer.getCurrentArmor(0).getItem() == this && ArmorSet.getPlayerArmorSet(par2EntityPlayer.getDisplayName()) != null);
+                String powerName = isEmpowered ? "gui.hexxitgear.boots.scale.empowered" : "gui.hexxitgear.boots.scale";
+                infoList.add(FormatCodes.Bold.format + FormatCodes.Yellow.format + StatCollector.translateToLocal(powerName));
+                HexxitGear.translateAndAdd(powerName, infoList);
+            } else {
+                infoList.add(FormatCodes.Indigo.format + FormatCodes.Italic.format + StatCollector.translateToLocal("gui.hexxitgear.shiftprompt") + FormatCodes.Reset.format);
+            }
+        }
     }
 
     @Override

@@ -2,6 +2,50 @@ gui.hexxitgear.creativetab=Hexxit Gear
 gui.hexxitgear.set.thief=Thief Set
 gui.hexxitgear.set.tribal=Tribal Set
 gui.hexxitgear.set.scale=Scale Set
+gui.hexxitgear.set.magic=Magician Raiment
+
+gui.hexxitgear.shiftprompt=Press Shift for Details
+
+gui.hexxitgear.boots.magic=Light Body
+gui.hexxitgear.boots.magic0=While wearing these boots, you can
+gui.hexxitgear.boots.magic1=sprint across many liquids without
+gui.hexxitgear.boots.magic2=being harmed.  Does not work on lava.
+gui.hexxitgear.boots.magic3=With the entire §9Magician's Set§7, you gain
+gui.hexxitgear.boots.magic4=§eWeightless Soul§7.
+
+gui.hexxitgear.boots.magic.empowered=Weightless Soul
+gui.hexxitgear.boots.magic.empowered0=While wearing the entire §9Magician's
+gui.hexxitgear.boots.magic.empowered1=§9Set§7, you can walk across any liquid
+gui.hexxitgear.boots.magic.empowered2=without harm. Press §eShift§7 while standing
+gui.hexxitgear.boots.magic.empowered3=on a liquid to go for a swim!
+
+gui.hexxitgear.boots.scale=Aggressive Charge
+gui.hexxitgear.boots.scale0=While wearing these boots, sprinting
+gui.hexxitgear.boots.scale1=into an enemy deals them damage and
+gui.hexxitgear.boots.scale2=knocks them back a long way. You are
+gui.hexxitgear.boots.scale3=slowed for a few moments afterward.
+gui.hexxitgear.boots.scale4=With the entire §9Scale Set§7, you gain
+gui.hexxitgear.boots.scale5=§eBrutal Impact§7.
+
+gui.hexxitgear.boots.scale.empowered=Brutal Impact
+gui.hexxitgear.boots.scale.empowered0=While wearing the entire §9Scale Set§7,
+gui.hexxitgear.boots.scale.empowered1=charging into an enemy deals damage
+gui.hexxitgear.boots.scale.empowered2=to all nearby enemies and knocks them
+gui.hexxitgear.boots.scale.empowered3=back a long way.
+
+gui.hexxitgear.boots.tribal=Freerunning
+gui.hexxitgear.boots.tribal0=While wearing these boots, you can sprint
+gui.hexxitgear.boots.tribal1=over small obstacles on the ground and
+gui.hexxitgear.boots.tribal2=run along walls for short distances. With
+gui.hexxitgear.boots.tribal3=the entire §9Tribal Set§7, you gain §eUltimate
+gui.hexxitgear.boots.tribal4=§eParkour§7.
+
+gui.hexxitgear.boots.tribal.empowered=Ultimate Parkour
+gui.hexxitgear.boots.tribal.empowered0=While wearing the entire §9Tribal Set§7,
+gui.hexxitgear.boots.tribal.empowered1=you can sprint along walls indefinitely
+gui.hexxitgear.boots.tribal.empowered2=and across the ceiling for short
+gui.hexxitgear.boots.tribal.empowered3=distances.  You can also sprint over small
+gui.hexxitgear.boots.tribal.empowered4=obstacles on the floor and the wall.
 
 ability.hexxitgear.invisibility=Invisibility
 ability.hexxitgear.knockback=Knockback
@@ -25,3 +69,7 @@ item.hexxitgear.thief.helmet.name=Thief's Hood
 item.hexxitgear.thief.chest.name=Thief's Chestpiece
 item.hexxitgear.thief.leggings.name=Thief's Leggings
 item.hexxitgear.thief.boots.name=Thief's Boots
+item.hexxitgear.magic.helmet.name=Magician's Cap
+item.hexxitgear.magic.chest.name=Magician's Robe
+item.hexxitgear.magic.leggings.name=Magician's Wrap
+item.hexxitgear.magic.boots.name=Magician's Slippers

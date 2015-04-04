@@ -55,6 +55,6 @@ public class PlayerEventHandler {
         IClimbingShoesWearer shoesWearer = (IClimbingShoesWearer)event.player;
 
         ItemStack boots = event.player.getCurrentArmor(0);
-        shoesWearer.setClimbingShoesEquipped(boots != null && boots.getItem() == HexxitGear.thiefBoots);
+        shoesWearer.setClimbingShoesEquipped(boots != null && boots.getItem() == HexxitGear.tribalShoes);
     }
 }
