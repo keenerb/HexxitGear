@@ -95,13 +95,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
         collidedSides.clear();
 
         this.areClimbingShoesEquipped = willClimbingShoesBeEquipped && !this.capabilities.isFlying;
-        ForgeDirection newDirection = areClimbingShoesEquipped?newClimbingShoesDirection:ForgeDirection.DOWN;
-        transformer = new VectorTransformer(newDirection);
-        if (climbingShoesDirection != newDirection) {
-            ClimbingHelper.rotateEntityBBFromTo(this, climbingShoesDirection, newClimbingShoesDirection);
-        }
-        this.climbingShoesDirection = newDirection;
-        this.newClimbingShoesDirection = newDirection;
+        updateDirection();
     }
 
     @Override
@@ -124,7 +118,11 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
     @Override
     public void setFloor(ForgeDirection direction) {
         if (newClimbingShoesDirection != direction) {
+
             this.newClimbingShoesDirection = direction;
+            if (!updateInProgress)
+                updateDirection();
+
             EntityPlayer player = (EntityPlayer)(Object)this;
             if (!this.worldObj.isRemote) {
                 HexxitGearNetwork.sendToNearbyPlayers(new PolarityPacket(direction), player.worldObj.provider.dimensionId, player.posX, player.posY, player.posZ, 64.0D);
@@ -133,6 +131,16 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
                     HexxitGearNetwork.sendToServer(new PolarityPacket(direction));
             }
         }
+    }
+
+    private void updateDirection() {
+        ForgeDirection newDirection = areClimbingShoesEquipped?newClimbingShoesDirection:ForgeDirection.DOWN;
+        transformer = new VectorTransformer(newDirection);
+        if (climbingShoesDirection != newDirection) {
+            ClimbingHelper.rotateEntityBBFromTo(this, climbingShoesDirection, newClimbingShoesDirection);
+        }
+        this.climbingShoesDirection = newDirection;
+        this.newClimbingShoesDirection = newDirection;
     }
 
     @Override

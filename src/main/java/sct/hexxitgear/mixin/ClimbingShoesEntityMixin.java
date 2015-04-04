@@ -65,26 +65,7 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
         if (this.getTransformer() == null || this.getTransformer().getAxisY() == ForgeDirection.UP)
             return this$0.setBounds(minX, minY, minZ, maxX, maxY, maxZ);
 
-        if (areClimbingShoesEquipped())
-            ClimbingHelper.untransformBB(this.boundingBox, getTransformer());
-
-        double halfWidth = this.width / 2.0;
-        double minYOffset = minY - this.posY;
-        double maxYOffset = maxY - this.posY;
-
-        minX = this.posX + this.getTransformer().getX(-halfWidth, minYOffset, -halfWidth);
-        minY = this.posY + this.getTransformer().getY(-halfWidth, minYOffset, -halfWidth);
-        minZ = this.posZ + this.getTransformer().getZ(-halfWidth, minYOffset, -halfWidth);
-        maxX = this.posX + this.getTransformer().getX(halfWidth, maxYOffset, halfWidth);
-        maxY = this.posY + this.getTransformer().getY(halfWidth, maxYOffset, halfWidth);
-        maxZ = this.posZ + this.getTransformer().getZ(halfWidth, maxYOffset, halfWidth);
-        AxisAlignedBB bb = this$0.setBounds(minX, minY, minZ, maxX, maxY, maxZ);
-        ClimbingHelper.normalizeBB(bb);
-
-        if (areClimbingShoesEquipped())
-            ClimbingHelper.transformBB(this.boundingBox, getTransformer());
-
-        return bb;
+        return ClimbingHelper.setBounds((IClimbingShoesWearer)this, (Entity)(Object)this, this$0);
     }
 
     @Inject(method="onEntityUpdate", at = @At(value="INVOKE", target="Lnet/minecraft/entity/Entity;handleWaterMovement()V", shift=At.Shift.AFTER))

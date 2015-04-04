@@ -24,6 +24,34 @@ import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class ClimbingHelper {
+    public static AxisAlignedBB setBounds(IClimbingShoesWearer wearer, Entity entity, AxisAlignedBB this$0) {
+        if (wearer.areClimbingShoesEquipped())
+            ClimbingHelper.untransformBB(entity.boundingBox, wearer.getTransformer());
+
+        double halfWidth = entity.width / 2.0;
+        double minYOffset = entity.ySize - entity.yOffset;
+        double maxYOffset = (entity.ySize + entity.height) - entity.yOffset;
+
+        double minX = entity.posX + wearer.getTransformer().getX(-halfWidth, minYOffset, -halfWidth);
+        double minY = entity.posY + wearer.getTransformer().getY(-halfWidth, minYOffset, -halfWidth);
+        double minZ = entity.posZ + wearer.getTransformer().getZ(-halfWidth, minYOffset, -halfWidth);
+        double maxX = entity.posX + wearer.getTransformer().getX(halfWidth, maxYOffset, halfWidth);
+        double maxY = entity.posY + wearer.getTransformer().getY(halfWidth, maxYOffset, halfWidth);
+        double maxZ = entity.posZ + wearer.getTransformer().getZ(halfWidth, maxYOffset, halfWidth);
+
+        if (wearer.getTransformer().getAxisY() == ForgeDirection.DOWN) {
+            maxY += entity.height*2;
+        }
+
+        AxisAlignedBB bb = this$0.setBounds(minX, minY, minZ, maxX, maxY, maxZ);
+        ClimbingHelper.normalizeBB(bb);
+
+        if (wearer.areClimbingShoesEquipped())
+            ClimbingHelper.transformBB(entity.boundingBox, wearer.getTransformer());
+
+        return bb;
+    }
+
     public static void transformEntity(Entity entity, VectorTransformer transformer) {
         double prevPosX = entity.prevPosX;
         double prevPosY = entity.prevPosY;
@@ -83,7 +111,6 @@ public class ClimbingHelper {
         normalizeBB(entity.boundingBox);
 
         double oldMinX = entity.boundingBox.minX;
-        double oldMinY = entity.boundingBox.minY;
         double oldMinZ = entity.boundingBox.minZ;
         double diffX = entity.boundingBox.maxX - entity.boundingBox.minX;
         double diffY = entity.boundingBox.maxY - entity.boundingBox.minY;
@@ -105,7 +132,6 @@ public class ClimbingHelper {
 
         if (to == ForgeDirection.UP || from == ForgeDirection.UP) {
             entity.boundingBox.minY = entity.boundingBox.maxY - realDiffY;
-            entity.posY += (entity.boundingBox.minY - oldMinY);
         } else
             entity.boundingBox.maxY = entity.boundingBox.minY + realDiffY;
 
@@ -114,12 +140,14 @@ public class ClimbingHelper {
             entity.posZ += (entity.boundingBox.minZ - oldMinZ);
         } else
             entity.boundingBox.maxZ = entity.boundingBox.minZ + realDiffZ;
+
+        if (to == ForgeDirection.UP && (from == ForgeDirection.NORTH || from == ForgeDirection.SOUTH))
+            entity.rotationYaw += 180;
     }
 
     public static void rotateEntityBB(Entity entity, VectorTransformer transformer) {
         normalizeBB(entity.boundingBox);
         double oldMinX = entity.boundingBox.minX;
-        double oldMinY = entity.boundingBox.minY;
         double oldMinZ = entity.boundingBox.minZ;
         double diffX = entity.boundingBox.maxX - entity.boundingBox.minX;
         double diffY = entity.boundingBox.maxY - entity.boundingBox.minY;
@@ -137,7 +165,6 @@ public class ClimbingHelper {
 
         if (realDiffY > 0) {
             entity.boundingBox.minY = entity.boundingBox.maxY - realDiffY;
-            entity.posY += (entity.boundingBox.minY - oldMinY);
         } else
             entity.boundingBox.maxY = entity.boundingBox.minY - realDiffY;
 
@@ -146,38 +173,6 @@ public class ClimbingHelper {
             entity.posZ += (entity.boundingBox.minZ - oldMinZ);
         } else
             entity.boundingBox.maxZ = entity.boundingBox.minZ - realDiffZ;
-    }
-
-    public static void unrotateEntityBB(Entity entity, VectorTransformer transformer) {
-        normalizeBB(entity.boundingBox);
-        double oldMinX = entity.boundingBox.minX;
-        double oldMinY = entity.boundingBox.minY;
-        double oldMinZ = entity.boundingBox.minZ;
-        double diffX = entity.boundingBox.maxX - entity.boundingBox.minX;
-        double diffY = entity.boundingBox.maxY - entity.boundingBox.minY;
-        double diffZ = entity.boundingBox.maxZ - entity.boundingBox.minZ;
-
-        double realDiffX = transformer.unGetX(diffX, diffY, diffZ);
-        double realDiffY = transformer.unGetY(diffX, diffY, diffZ);
-        double realDiffZ = transformer.unGetZ(diffX, diffY, diffZ);
-
-        if (realDiffX < 0) {
-            entity.boundingBox.minX = entity.boundingBox.maxX + realDiffX;
-            entity.posX += (entity.boundingBox.minX - oldMinX);
-        } else
-            entity.boundingBox.maxX = entity.boundingBox.minX + realDiffX;
-
-        if (realDiffY < 0) {
-            entity.boundingBox.minY = entity.boundingBox.maxY + realDiffY;
-            entity.posY += (entity.boundingBox.minY - oldMinY);
-        } else
-            entity.boundingBox.maxY = entity.boundingBox.minY + realDiffY;
-
-        if (realDiffZ < 0) {
-            entity.boundingBox.minZ = entity.boundingBox.maxZ + realDiffZ;
-            entity.posZ += (entity.boundingBox.minZ - oldMinZ);
-        } else
-            entity.boundingBox.maxZ = entity.boundingBox.minZ + realDiffZ;
     }
 
     public static void transformBB(AxisAlignedBB box, VectorTransformer transformer) {
