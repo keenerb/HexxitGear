@@ -19,12 +19,13 @@
 package sct.hexxitgear.mixinsupport.climbing;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class ClimbingHelper {
-    public static AxisAlignedBB setBounds(IClimbingShoesWearer wearer, Entity entity, AxisAlignedBB this$0) {
+    public static AxisAlignedBB setBounds(IClimbingShoesWearer wearer, Entity entity, AxisAlignedBB this0) {
         if (wearer.areClimbingShoesEquipped())
             ClimbingHelper.untransformBB(entity.boundingBox, wearer.getTransformer());
 
@@ -43,7 +44,7 @@ public class ClimbingHelper {
             maxY += entity.height*2;
         }
 
-        AxisAlignedBB bb = this$0.setBounds(minX, minY, minZ, maxX, maxY, maxZ);
+        AxisAlignedBB bb = this0.setBounds(minX, minY, minZ, maxX, maxY, maxZ);
         ClimbingHelper.normalizeBB(bb);
 
         if (wearer.areClimbingShoesEquipped())
@@ -110,9 +111,6 @@ public class ClimbingHelper {
 
         normalizeBB(entity.boundingBox);
 
-        double oldMinX = entity.boundingBox.minX;
-        double oldMinY = entity.boundingBox.minY;
-        double oldMinZ = entity.boundingBox.minZ;
         double diffX = entity.boundingBox.maxX - entity.boundingBox.minX;
         double diffY = entity.boundingBox.maxY - entity.boundingBox.minY;
         double diffZ = entity.boundingBox.maxZ - entity.boundingBox.minZ;
@@ -125,23 +123,44 @@ public class ClimbingHelper {
         double realDiffY = Math.abs(toTransform.getY(interDiffX, interDiffY, interDiffZ));
         double realDiffZ = Math.abs(toTransform.getZ(interDiffX, interDiffY, interDiffZ));
 
-        if (to == ForgeDirection.EAST || from == ForgeDirection.EAST) {
+        if (to == ForgeDirection.EAST || from == ForgeDirection.EAST)
             entity.boundingBox.minX = entity.boundingBox.maxX - realDiffX;
-            entity.posX += (entity.boundingBox.minX - oldMinX);
-        } else
+        else
             entity.boundingBox.maxX = entity.boundingBox.minX + realDiffX;
 
-        if (to == ForgeDirection.UP || from == ForgeDirection.UP) {
+        if (to == ForgeDirection.UP || from == ForgeDirection.UP)
             entity.boundingBox.minY = entity.boundingBox.maxY - realDiffY;
-            entity.posY += (entity.boundingBox.minY - oldMinY);
-        } else
+        else
             entity.boundingBox.maxY = entity.boundingBox.minY + realDiffY;
 
-        if (to == ForgeDirection.SOUTH || from == ForgeDirection.SOUTH) {
+        if (to == ForgeDirection.SOUTH || from == ForgeDirection.SOUTH)
             entity.boundingBox.minZ = entity.boundingBox.maxZ - realDiffZ;
-            entity.posZ += (entity.boundingBox.minZ - oldMinZ);
-        } else
+        else
             entity.boundingBox.maxZ = entity.boundingBox.minZ + realDiffZ;
+
+        float halfWidth = entity.width/2.0f;
+        float eyeHeight = entity.yOffset;
+
+        if (to == ForgeDirection.EAST)
+            entity.posX = entity.boundingBox.maxX - eyeHeight;
+        else if (to == ForgeDirection.WEST)
+            entity.posX = entity.boundingBox.minX + eyeHeight;
+        else
+            entity.posX = entity.boundingBox.minX + halfWidth;
+
+        if (to == ForgeDirection.SOUTH)
+            entity.posZ = entity.boundingBox.maxZ - eyeHeight;
+        else if (to == ForgeDirection.NORTH)
+            entity.posZ = entity.boundingBox.minZ + eyeHeight;
+        else
+            entity.posZ = entity.boundingBox.minZ + halfWidth;
+
+        if (to == ForgeDirection.UP)
+            entity.posY = entity.boundingBox.maxY - eyeHeight;
+        else if (to == ForgeDirection.DOWN)
+            entity.posY = entity.boundingBox.minY + eyeHeight;
+        else
+            entity.posY = entity.boundingBox.minY + halfWidth;
 
         if ((to == ForgeDirection.UP && (from == ForgeDirection.NORTH || from == ForgeDirection.SOUTH)) ||
                 (from == ForgeDirection.UP && (to == ForgeDirection.NORTH || to == ForgeDirection.SOUTH)))

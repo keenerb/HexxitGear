@@ -31,10 +31,24 @@ import java.util.List;
 public class ShoesHelper {
     public static void processShoes(EntityPlayer entity, List<ForgeDirection> collidedSides, Vec3 lookDir) {
         IClimbingShoesWearer wearer = (IClimbingShoesWearer)entity;
+        boolean hasFullSet = ArmorSet.getPlayerArmorSet(entity.getDisplayName()) != null;
+        boolean isOnEasySurface = (hasFullSet && wearer.getTransformer().getAxisY() != ForgeDirection.DOWN) || (!hasFullSet && wearer.getTransformer().getAxisY() == ForgeDirection.UP);
 
-        if (entity.isJumping || entity.isInWater() || entity.fire > 0 || entity.fallDistance > 0.5) {
+        float maxFallDistance = 0.5001F;
+        if (entity.isJumping || entity.isInWater() || entity.fire > 0) {
             wearer.setFloor(ForgeDirection.DOWN);
             return;
+        }
+
+        if (entity.fallDistance > maxFallDistance) {
+            boolean switchToFloor = true;
+            if (hasFullSet && entity.fallDistance < 1.5f) {
+                switchToFloor = false;
+            }
+            if (switchToFloor) {
+                wearer.setFloor(ForgeDirection.DOWN);
+                return;
+            }
         }
 
         if (entity.onGround) {
@@ -45,9 +59,7 @@ public class ShoesHelper {
             }
         }
 
-        boolean hasFullSet = ArmorSet.getPlayerArmorSet(entity.getDisplayName()) != null;
-
-        if ((hasFullSet && wearer.getTransformer().getAxisY() == ForgeDirection.DOWN) || (!hasFullSet && wearer.getTransformer().getAxisY() != ForgeDirection.UP)) {
+        if (!isOnEasySurface) {
             //Calculate distance to spend
             double diffX = entity.posX - entity.prevPosX;
             double diffY = entity.posY - entity.prevPosY;
