@@ -56,7 +56,14 @@ public class ShoesHelper {
 
             if (collidedSides.contains(facingDir) && (hasFullSet || facingDir != ForgeDirection.UP)) {
                 wearer.setFloor(facingDir);
-            } else if (entity.isCollidedHorizontally) {
+            } else if (entity.isCollidedHorizontally && wearer.getTransformer().getAxisY() != ForgeDirection.UP) {
+                if (collidedSides.contains(ForgeDirection.UP) && wearer.getTransformer().getAxisY() != ForgeDirection.DOWN) {
+                    //We're going to expand our bounding box upward but we're already flush with the ceiling so we need to
+                    //drop our position downward a bit first
+                    float offset = (entity.width /2.0f) - entity.yOffset;
+                    entity.posY += offset;
+                    entity.boundingBox.offset(0, offset, 0);
+                }
                 entity.setSprinting(false);
                 wearer.setFloor(ForgeDirection.DOWN);
             }
