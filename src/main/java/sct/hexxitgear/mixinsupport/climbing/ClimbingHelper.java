@@ -62,16 +62,12 @@ public class ClimbingHelper {
         double minYOffset = entity.ySize - entity.yOffset;
         double maxYOffset = (entity.ySize + entity.height) - entity.yOffset;
 
-        double minX = entity.posX + wearer.getTransformer().getX(-halfWidth, minYOffset, -halfWidth);
-        double minY = entity.posY + wearer.getTransformer().getY(-halfWidth, minYOffset, -halfWidth);
-        double minZ = entity.posZ + wearer.getTransformer().getZ(-halfWidth, minYOffset, -halfWidth);
-        double maxX = entity.posX + wearer.getTransformer().getX(halfWidth, maxYOffset, halfWidth);
-        double maxY = entity.posY + wearer.getTransformer().getY(halfWidth, maxYOffset, halfWidth);
-        double maxZ = entity.posZ + wearer.getTransformer().getZ(halfWidth, maxYOffset, halfWidth);
-
-        if (wearer.getTransformer().getAxisY() == ForgeDirection.DOWN) {
-            maxY += entity.height*2;
-        }
+        double minX = entity.posX + wearer.getTransformer().unGetX(-halfWidth, minYOffset, -halfWidth);
+        double minY = entity.posY + wearer.getTransformer().unGetY(0, minYOffset, 0);
+        double minZ = entity.posZ + wearer.getTransformer().unGetZ(-halfWidth, minYOffset, -halfWidth);
+        double maxX = entity.posX + wearer.getTransformer().unGetX(halfWidth, maxYOffset, halfWidth);
+        double maxY = entity.posY + Math.abs(wearer.getTransformer().unGetY(entity.width, maxYOffset, entity.width));
+        double maxZ = entity.posZ + wearer.getTransformer().unGetZ(halfWidth, maxYOffset, halfWidth);
 
         AxisAlignedBB bb = this0.setBounds(minX, minY, minZ, maxX, maxY, maxZ);
         ClimbingHelper.normalizeBB(bb);
