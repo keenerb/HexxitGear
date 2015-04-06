@@ -35,7 +35,7 @@ public class ShoesHelper {
         boolean isOnEasySurface = (hasFullSet && wearer.getTransformer().getAxisY() != ForgeDirection.DOWN) || (!hasFullSet && wearer.getTransformer().getAxisY() == ForgeDirection.UP);
 
         float maxFallDistance = 0.5001F;
-        if (entity.isJumping || entity.isInWater() || entity.fire > 0) {
+        if (entity.isJumping || entity.isInWater() || entity.fire > 0 || !entity.isSprinting()) {
             wearer.setFloor(ForgeDirection.DOWN);
             return;
         }
@@ -54,8 +54,11 @@ public class ShoesHelper {
         if (entity.onGround) {
             ForgeDirection facingDir = getFacingDirection(wearer.getTransformer().getAxisY(), lookDir);
 
-            if (collidedSides.contains(facingDir)) {
+            if (collidedSides.contains(facingDir) && (hasFullSet || facingDir != ForgeDirection.UP)) {
                 wearer.setFloor(facingDir);
+            } else if (entity.isCollidedHorizontally) {
+                entity.setSprinting(false);
+                wearer.setFloor(ForgeDirection.DOWN);
             }
         }
 

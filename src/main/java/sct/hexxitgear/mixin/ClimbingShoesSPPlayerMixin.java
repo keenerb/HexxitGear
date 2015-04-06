@@ -54,4 +54,17 @@ public abstract class ClimbingShoesSPPlayerMixin extends AbstractClientPlayer im
         }
         return func_145771_j(x, y, z);
     }
+
+    @Redirect(method="onLivingUpdate", at=@At(value="INVOKE", target="Lnet/minecraft/client/entity/EntityPlayerSP;setSprinting(Z)V", ordinal = 3))
+    private void proxySetSprinting(EntityPlayerSP this$0, boolean sprinting) {
+        if (!sprinting && this$0.isCollidedHorizontally) {
+            boolean canSprint = (float)this$0.getFoodStats().getFoodLevel() > 6.0F || this$0.capabilities.allowFlying;
+            boolean isSprinting = this$0.movementInput.moveForward >= 0.8f;
+
+            if (canSprint && isSprinting && ((IClimbingShoesWearer)this$0).areClimbingShoesEquipped())
+                return;
+        }
+
+        this$0.setSprinting(sprinting);
+    }
 }
