@@ -9,6 +9,7 @@
         "ClimbingWorldMixin",
         "ClimbingEntityRendererMixin",
         "ClimbingServerHandlerMixin",
-        "ClimbingShoesSPPlayerMixin"
+        "ClimbingShoesSPPlayerMixin",
+        "ClimbingPlayerPacketMixin"
     ]
 }

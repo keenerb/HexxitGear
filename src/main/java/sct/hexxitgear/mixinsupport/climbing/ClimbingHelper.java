@@ -20,11 +20,40 @@ package sct.hexxitgear.mixinsupport.climbing;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class ClimbingHelper {
+    public static C03PacketPlayer transformPacket(C03PacketPlayer packet, EntityPlayerMP player, VectorTransformer transformer) {
+        if (packet.func_149466_j()) {
+            double x = packet.func_149464_c();
+            double z = packet.func_149472_e();
+            float offset = player.getDefaultEyeHeight();
+
+            if (transformer.getAxisY() == ForgeDirection.EAST) {
+                x -= offset;
+            } else if (transformer.getAxisY() == ForgeDirection.WEST) {
+                x += offset;
+            } else if (transformer.getAxisY() == ForgeDirection.NORTH) {
+                z += offset;
+            } else if (transformer.getAxisY() == ForgeDirection.SOUTH) {
+                z -= offset;
+            }
+
+            if (packet instanceof C03PacketPlayer.C04PacketPlayerPosition) {
+                packet = new C03PacketPlayer.C04PacketPlayerPosition(x, packet.func_149467_d(), packet.func_149471_f(), z, packet.func_149465_i());
+            } else if (packet instanceof C03PacketPlayer.C06PacketPlayerPosLook) {
+                packet = new C03PacketPlayer.C06PacketPlayerPosLook(x, packet.func_149467_d(), packet.func_149471_f(), z, packet.func_149462_g(), packet.func_149470_h(), packet.func_149465_i());
+            }
+        }
+
+
+        return packet;
+    }
+
     public static AxisAlignedBB setBounds(IClimbingShoesWearer wearer, Entity entity, AxisAlignedBB this0) {
         if (wearer.areClimbingShoesEquipped())
             ClimbingHelper.untransformBB(entity.boundingBox, wearer.getTransformer());
