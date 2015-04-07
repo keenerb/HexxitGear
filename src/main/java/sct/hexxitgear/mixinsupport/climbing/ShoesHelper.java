@@ -19,6 +19,7 @@
 package sct.hexxitgear.mixinsupport.climbing;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -52,6 +53,7 @@ public class ShoesHelper {
         }
 
         if (entity.onGround) {
+
             ForgeDirection facingDir = getFacingDirection(wearer.getTransformer().getAxisY(), lookDir);
 
             if (collidedSides.contains(facingDir) && (hasFullSet || facingDir != ForgeDirection.UP)) {
@@ -82,6 +84,83 @@ public class ShoesHelper {
         } else {
             wearer.resetDistance();
         }
+    }
+
+    public static boolean processStep(EntityPlayer player, double motionX, double motionZ) {
+        double motionY = 1.003;
+        IClimbingShoesWearer wearer = (IClimbingShoesWearer)player;
+        boolean hasFullSet = ArmorSet.getPlayerArmorSet(player.getDisplayName()) != null;
+        boolean isOnEasySurface = (hasFullSet && wearer.getTransformer().getAxisY() != ForgeDirection.DOWN) || (!hasFullSet && wearer.getTransformer().getAxisY() == ForgeDirection.UP);
+        AxisAlignedBB boundingBoxCopy = player.boundingBox.copy();
+
+        if (isOnEasySurface && player.isSprinting()) {
+            player.boundingBox.setBB(boundingBoxCopy);
+            double x = motionX;
+            double y = motionY;
+            double z = motionZ;
+            List collision = player.worldObj.getCollidingBoundingBoxes(player, player.boundingBox.addCoord(x, y, z));
+
+            for (int i = 0; i < collision.size(); ++i) {
+                y = ((AxisAlignedBB)collision.get(i)).calculateYOffset(player.boundingBox, y);
+            }
+
+            player.boundingBox.offset(0,y,0);
+
+            if (motionY != y) {
+                x = 0;
+                y = 0;
+                z = 0;
+            }
+
+            for (int i = 0; i < collision.size(); i++) {
+                x = ((AxisAlignedBB)collision.get(i)).calculateXOffset(player.boundingBox, x);
+            }
+
+            player.boundingBox.offset(motionX, 0, 0);
+
+            if (motionX != x) {
+                x = 0;
+                y = 0;
+                z = 0;
+            }
+
+            for (int i = 0; i < collision.size(); i++) {
+                z = ((AxisAlignedBB)collision.get(i)).calculateZOffset(player.boundingBox, z);
+            }
+
+            player.boundingBox.offset(0, 0, motionZ);
+
+            if (motionZ != z) {
+                x = 0;
+                y = 0;
+                z = 0;
+            }
+
+            if (motionY != y) {
+                x = 0;
+                y = 0;
+                z = 0;
+            } else {
+                y = -1.003;
+
+                collision = player.worldObj.getCollidingBoundingBoxes(player, player.boundingBox.addCoord(0,y,0));
+
+                for (int i = 0; i < collision.size(); i++) {
+                    y = ((AxisAlignedBB)collision.get(i)).calculateYOffset(player.boundingBox, y);
+                }
+                player.boundingBox.offset(0, y, 0);
+
+                player.posX = (player.boundingBox.minX + player.boundingBox.maxX) / 2.0D;
+                player.posY = player.boundingBox.minY + (double)player.yOffset - (double)player.ySize;
+                player.posZ = (player.boundingBox.minZ + player.boundingBox.maxZ) / 2.0D;
+                player.isCollidedHorizontally = false;
+                if (!player.isCollidedVertically) player.isCollided = false;
+                return true;
+            }
+        }
+
+        player.boundingBox.setBB(boundingBoxCopy);
+        return false;
     }
 
     public static ForgeDirection getFacingDirection(ForgeDirection currentYAxis, Vec3 lookDir) {

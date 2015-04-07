@@ -88,7 +88,8 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
         if (areClimbingShoesEquipped()) {
             ClimbingHelper.untransformEntity(this, getTransformer());
 
-            ShoesHelper.processShoes((EntityPlayer) (Object) this, collidedSides, lookDir);
+            if (this.worldObj.isRemote)
+                ShoesHelper.processShoes((EntityPlayer) (Object) this, collidedSides, lookDir);
         }
 
         setUpdating(false);
@@ -96,6 +97,26 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
 
         this.areClimbingShoesEquipped = willClimbingShoesBeEquipped && !this.capabilities.isFlying;
         updateDirection();
+    }
+
+    @Override
+    public void moveEntity(double motionX, double motionY, double motionZ) {
+        double savedMotionX = motionX;
+        double savedMotionZ = motionZ;
+        double savedPosX = this.posX;
+        double savedPosZ = this.posZ;
+
+        super.moveEntity(motionX, motionY, motionZ);
+
+        if (areClimbingShoesEquipped()) {
+            if (this.isCollidedHorizontally && this.onGround && this.worldObj.isRemote) {
+                double remainingMotionX = savedMotionX - (this.posX - savedPosX);
+                double remainingMotionZ = savedMotionZ - (this.posZ - savedPosZ);
+
+                if (ShoesHelper.processStep((EntityPlayer) (Object) this, remainingMotionX, remainingMotionZ))
+                    collidedSides.clear();
+            }
+        }
     }
 
     @Override

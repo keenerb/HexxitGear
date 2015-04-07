@@ -32,6 +32,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import sct.hexxitgear.mixinsupport.climbing.ClimbingHelper;
 import sct.hexxitgear.mixinsupport.climbing.IClimbingShoesWearer;
 import sct.hexxitgear.mixinsupport.climbing.VectorTransformer;
