@@ -63,6 +63,7 @@ public class ItemScaleArmor extends ItemHexxitArmor {
     }
 
     @Override
+    @SuppressWarnings({"unchecked","rawtypes"})
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List infoList, boolean par4) {
         infoList.add(FormatCodes.Bold.format + FormatCodes.Indigo.format + StatCollector.translateToLocal("gui.hexxitgear.set.scale") + FormatCodes.Reset.format);
 

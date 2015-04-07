@@ -33,6 +33,7 @@ public class AbilityKnockback extends Ability {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void start(EntityPlayer player) {
         List<EntityLiving> entities = player.worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox(player.posX - 5, player.posY, player.posZ - 5, player.posX + 5, player.posY + 3, player.posZ + 5));
 

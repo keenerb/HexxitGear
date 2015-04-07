@@ -68,6 +68,7 @@ public class ItemThiefArmor extends ItemHexxitArmor {
     }
 
     @Override
+    @SuppressWarnings({"rawtypes","unchecked"})
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List infoList, boolean par4) {
         infoList.add(FormatCodes.Indigo.format + StatCollector.translateToLocal("gui.hexxitgear.set.thief"));
     }

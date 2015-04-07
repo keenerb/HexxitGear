@@ -61,6 +61,7 @@ public class BlockHexbiscus extends BlockFlower {
     }
 
     @SideOnly(Side.CLIENT)
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public void getSubBlocks(Item p_149666_1_, CreativeTabs p_149666_2_, List p_149666_3_)
     {
         p_149666_3_.add(new ItemStack(p_149666_1_, 1, 0));

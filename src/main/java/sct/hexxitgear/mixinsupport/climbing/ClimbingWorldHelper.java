@@ -17,6 +17,7 @@ import net.minecraft.world.chunk.Chunk;
 import java.util.List;
 
 public class ClimbingWorldHelper {
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static void processCollision(List collisionList, Entity entity, AxisAlignedBB box, World world) {
         collisionList.clear();
         int i = MathHelper.floor_double(box.minX);

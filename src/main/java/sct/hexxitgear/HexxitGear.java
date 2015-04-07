@@ -203,6 +203,7 @@ public class HexxitGear extends DummyModContainer {
         return dimensionalBlacklist;
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static void translateAndAdd(String key, List list) {
         for (int i=0;i<10;i++) {
             if (StatCollector.canTranslate(key + Integer.toString(i))) {

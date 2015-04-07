@@ -43,6 +43,7 @@ public class ItemMagicianArmor extends ItemHexxitArmor {
     }
 
     @Override
+    @SuppressWarnings({"rawtypes","unchecked"})
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List infoList, boolean par4) {
         infoList.add(FormatCodes.Bold.format + FormatCodes.Indigo.format + StatCollector.translateToLocal("gui.hexxitgear.set.magic") + FormatCodes.Reset.format);
 

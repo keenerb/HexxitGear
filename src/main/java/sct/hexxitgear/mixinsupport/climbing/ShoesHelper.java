@@ -86,6 +86,7 @@ public class ShoesHelper {
         }
     }
 
+    @SuppressWarnings("rawtypes")
     public static boolean processStep(EntityPlayer player, double motionX, double motionZ) {
         double motionY = 1.003;
         IClimbingShoesWearer wearer = (IClimbingShoesWearer)player;

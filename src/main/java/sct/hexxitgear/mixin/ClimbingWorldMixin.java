@@ -58,6 +58,7 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
     public abstract Chunk getChunkFromChunkCoords(int p_72964_1_, int p_72964_2_);
 
     @Shadow
+    @SuppressWarnings("rawtypes")
     private ArrayList collidingBoundingBoxes;
     @Shadow
     public boolean captureBlockSnapshots;
@@ -79,6 +80,7 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
     public abstract Block getBlock(int x, int y, int z);
 
     @Shadow
+    @SuppressWarnings("rawtypes")
     public abstract List getEntitiesWithinAABBExcludingEntity(Entity p_72839_1_, AxisAlignedBB p_72839_2_);
 
     @Shadow
@@ -211,6 +213,7 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
     }
 
     @Inject(method="getCollidingBoundingBoxes", at=@At("HEAD"), cancellable = true)
+    @SuppressWarnings({"rawtypes","unchecked"})
     private void transformGetCollidingBoundingBoxes(Entity entity, AxisAlignedBB box, CallbackInfoReturnable<List> info) {
         if (this.transformer == null)
             return;
