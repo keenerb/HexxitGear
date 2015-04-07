@@ -55,7 +55,7 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
     public VectorTransformer getWorldTransformer() { return this.transformer; }
 
     @Shadow
-    public Chunk getChunkFromChunkCoords(int p_72964_1_, int p_72964_2_) { return null; }
+    public abstract Chunk getChunkFromChunkCoords(int p_72964_1_, int p_72964_2_);
 
     @Shadow
     private ArrayList collidingBoundingBoxes;
@@ -68,21 +68,21 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
     @Shadow
     public final Profiler theProfiler = null;
     @Shadow
-    public boolean func_147451_t(int p_147451_1_, int p_147451_2_, int p_147451_3_) { return false; }
+    public abstract boolean func_147451_t(int p_147451_1_, int p_147451_2_, int p_147451_3_);
     @Shadow
-    public void markAndNotifyBlock(int x, int y, int z, Chunk chunk, Block oldBlock, Block newBlock, int flag) {}
+    public abstract void markAndNotifyBlock(int x, int y, int z, Chunk chunk, Block oldBlock, Block newBlock, int flag);
 
     @Shadow
-    public boolean blockExists(int p_72899_1_, int p_72899_2_, int p_72899_3_) {return true;}
+    public abstract boolean blockExists(int p_72899_1_, int p_72899_2_, int p_72899_3_);
 
     @Shadow
-    public Block getBlock(int x, int y, int z) { return null; }
+    public abstract Block getBlock(int x, int y, int z);
 
     @Shadow
-    public List getEntitiesWithinAABBExcludingEntity(Entity p_72839_1_, AxisAlignedBB p_72839_2_) { return null; }
+    public abstract List getEntitiesWithinAABBExcludingEntity(Entity p_72839_1_, AxisAlignedBB p_72839_2_);
 
     @Shadow
-    protected boolean chunkExists(int p_72916_1_, int p_72916_2_) { return false; }
+    protected abstract boolean chunkExists(int p_72916_1_, int p_72916_2_);
 
     @Inject(method="blockExists", at=@At("HEAD"), cancellable = true)
     private void transformBlockExists(int x, int y, int z, CallbackInfoReturnable<Boolean> info) {

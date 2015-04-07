@@ -50,7 +50,7 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
     @Shadow
     public final AxisAlignedBB boundingBox=null;
     @Shadow
-    public void kill() {}
+    public abstract void kill();
 
     @Shadow
     public float width;
