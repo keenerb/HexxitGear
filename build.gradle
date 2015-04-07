@@ -18,14 +18,24 @@ buildscript {
     }
 }
 
+defaultTasks 'build', 'install'
 apply plugin: 'forge'
 apply plugin: 'maven'
-apply plugin: 'com.github.johnrengelman.shadow'
 
-ext.mixinSrg = new File(project.buildDir, "tmp/mixins/mixins.srg")
-ext.mixinRefMap = new File(project.buildDir, "tmp/mixins/mixins.sponge.refmap.json")
+version = "2.0"
+group= "sct.hexxitgear" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "hexxitgear"
+
+ext.mixinSrg = new File(project.buildDir, "tmp/mixins/mixins.hexxitgear.srg")
+ext.mixinRefMap = new File(project.buildDir, "tmp/mixins/mixin.refmap.json")
+
+reobf.addExtraSrgFile project.mixinSrg
+
+sourceCompatibility='1.7'
+targetCompatibility='1.7'
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven {
         name = 'sonatype-nexus'
@@ -34,18 +44,19 @@ repositories {
 
     // Add Sponge repo for custom checkstyle implementation to fix some wrong warnings
     maven {
-        name = "sponge"
+        name = "sponge-public"
         url = "http://repo.spongepowered.org/maven/"
     }
 }
 
-version = "1.0"
-group= "sct.hexxitgear" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "hexxitgear"
 
 minecraft {
     version = "1.7.10-10.13.2.1307-1.7.10"
     runDir = "eclipse"
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 dependencies {
@@ -65,30 +76,14 @@ dependencies {
 
 }
 
-shadowJar  {
-    exclude 'META-INF/*.DSA'
-    exclude 'META-INF/*.RSA'
-    exclude 'GradleStart**'
-    dependencies {
-        include(dependency('com.google.inject:guice'))
-        include(dependency('javax.inject:javax.inject'))
-        include(dependency('org.spongepowered:mixin:0.2-SNAPSHOT'))
-    }
-    classifier = ''
+processResources {
+    inputs.property "version", version
+    inputs.property "mcversion", project.minecraft.version
 
-    from project.mixinRefMap
-}
-build.dependsOn(shadowJar)
-
-reobf {
-    reobf.addExtraSrgFile project.mixinSrg
-
-    reobf(shadowJar) { spec ->
-        spec.classpath = configurations.compile
-    }
+    from 'LICENSE.txt'
 }
 
-// Source compiler configuration
+def defaultEncoding = 'UTF-8'
 compileJava {
     options.compilerArgs += [
             '-Xlint:all',
@@ -98,17 +93,14 @@ compileJava {
             "-AoutRefMapFile=${project.mixinRefMap.getCanonicalPath()}"
     ]
     options.deprecation = true
-    options.encoding = 'UTF-8'
+    options.encoding = defaultEncoding
 }
 
-// set the reobf srg late
 afterEvaluate {
     tasks.compileJava.options.compilerArgs += "-AreobfSrgFile=${tasks.reobf.srg}"
 }
 
-// Copy the current srgs to the build dir so the user doesn't have to go hunting for them
 task copySrgs(type: Copy, dependsOn: "genSrgs") {
-    // using some FG hacks here
     from plugins.getPlugin("forge").delayedFile("{SRG_DIR}")
 
     include '**/*.srg'
@@ -122,29 +114,26 @@ def manifestEntries = [
         "Built-By": System.properties['user.name'],
         "Created-By": System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
         "FMLCorePlugin": "sct.hexxitgear.coremod.HexxitGearCoremod",
-        "TweakClass": "org.spongepowered.asm.launch.MixinTweaker"
+        "FMLCorePluginContainsFMLMod": 'true'
 ]
 
 jar {
+    from project.mixinRefMap
     manifest.mainAttributes(manifestEntries)
 }
 
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
+task sourceJar(type: Jar, dependsOn: sourceMainJava) {
+    from "build/sources/java"
+    from "build/resources/main/java"
+    classifier = "sources"
+}
 
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = "dev"
+}
+
+artifacts {
+    archives sourceJar
+    archives deobfJar
 }

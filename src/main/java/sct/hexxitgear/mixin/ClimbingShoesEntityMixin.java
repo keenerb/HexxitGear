@@ -52,12 +52,6 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
     @Shadow
     public void kill() {}
 
-    @Inject(method="setSize", at = @At(value="FIELD", target="Lnet/minecraft/util/AxisAlignedBB;maxY", shift = At.Shift.AFTER, opcode = Opcodes.PUTFIELD))
-    private void afterSetSize(float width, float height, CallbackInfo info) {
-        if (getTransformer() != null)
-            ClimbingHelper.rotateEntityBB((Entity)(Object)this, getTransformer());
-    }
-
     @Shadow
     public float width;
 
