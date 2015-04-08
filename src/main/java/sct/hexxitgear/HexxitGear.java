@@ -141,7 +141,7 @@ public class HexxitGear extends DummyModContainer {
         instance = this;
         MinecraftForge.EVENT_BUS.register(instance);
 
-        hexbiscus = new BlockHexbiscus().setBlockTextureName("hexxitgear:hexbiscus");
+        hexbiscus = new BlockHexbiscus().setTextureName("hexxitgear:hexbiscus");
 
         tribalHelmet = new ItemTribalArmor(proxy.addArmor("tribal"), 0).setUnlocalizedName("hexxitgear.tribal.helmet").setTextureName("hexxitgear:tribal.helmet");
         tribalChest = new ItemTribalArmor(proxy.addArmor("tribal"), 1).setUnlocalizedName("hexxitgear.tribal.chest").setTextureName("hexxitgear:tribal.chest");

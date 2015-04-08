@@ -20,15 +20,13 @@ buildscript {
 
 defaultTasks 'build'
 apply plugin: 'forge'
-apply plugin: 'maven'
-apply plugin: 'com.github.johnrengelman.shadow'
 
 version = "2.0"
 group= "sct.hexxitgear" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "hexxitgear"
 
-ext.mixinSrg = new File(project.buildDir, "tmp/mixins/mixins.hexxitgear.srg")
-ext.mixinRefMap = new File(project.buildDir, "tmp/mixins/mixin.refmap.json")
+mixinSrg = new File(project.buildDir, "tmp/mixins/mixins.hexxitgear.srg")
+mixinRefMap = new File(project.buildDir, "tmp/mixins/mixin.refmap.json")
 
 reobf.addExtraSrgFile project.mixinSrg
 
@@ -54,10 +52,11 @@ repositories {
 minecraft {
     version = "1.7.10-10.13.2.1307-1.7.10"
     runDir = "eclipse"
+    mappings = "stable_12"
 }
 
 dependencies {
-    compile "org.spongepowered:mixin:0.2-SNAPSHOT"
+    compile "org.spongepowered:mixin:0.1-SNAPSHOT"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -72,21 +71,6 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
 }
-
-shadowJar {
-    exclude 'META-INF/*.DSA'
-    exclude 'META-INF/*.RSA'
-    exclude 'net/minecraftforge/**'
-    dependencies {
-        include(dependency('com.flowpowered:flow-math'))
-        include(dependency('ninja.leaping.configurate:configurate-yaml'))
-        include(dependency('ninja.leaping.configurate:configurate-core'))
-        include(dependency('org.yaml:snakeyaml'))
-    }
-    classifier = ''
-}
-
-reobf.dependsOn shadowJar
 
 processResources
         {

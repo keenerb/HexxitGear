@@ -132,7 +132,7 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
                     this.capturedBlockSnapshots.add(blockSnapshot);
                 }
 
-                boolean flag = chunk.func_150807_a(x & 15, y, z & 15, block, metadata);
+                boolean flag = chunk.setBlockIDWithMetadata(x & 15, y, z & 15, block, metadata);
 
                 if (!flag && blockSnapshot != null) {
                     this.capturedBlockSnapshots.remove(blockSnapshot);

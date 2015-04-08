@@ -39,7 +39,7 @@ public class ItemHexxitArmor extends ItemArmor implements ISpecialArmor {
 
     @Override
     public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage, int slot) {
-        return new ArmorProperties(1, damageReduceAmount / 22D, armor.getMaxDamage() + 1);
+        return new ArmorProperties(1, damageReduceAmount / 22D, armor.getMaxDurability() + 1);
     }
 
     @Override
@@ -50,8 +50,8 @@ public class ItemHexxitArmor extends ItemArmor implements ISpecialArmor {
     @Override
     public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
         if (entity instanceof EntityPlayer && !(((EntityPlayer) entity).capabilities.isCreativeMode)) {
-            if (stack.getItemDamage() < stack.getMaxDamage()) {
-                stack.setItemDamage(stack.getItemDamage() + 1);
+            if (stack.getMetadata() < stack.getMaxDurability()) {
+                stack.setMetadata(stack.getMaxDurability() + 1);
             } else {
                 // Create broken item here
             }

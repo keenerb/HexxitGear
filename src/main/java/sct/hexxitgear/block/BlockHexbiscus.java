@@ -37,7 +37,7 @@ public class BlockHexbiscus extends BlockFlower {
     public BlockHexbiscus() {
         super(0);
         setCreativeTab(HGCreativeTab.tab);
-        setBlockName("hexxitgear.flora.hexbiscus");
+        setUnlocalizedName("hexxitgear.flora.hexbiscus");
     }
 
     public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_)

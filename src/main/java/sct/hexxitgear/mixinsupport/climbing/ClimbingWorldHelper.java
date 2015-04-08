@@ -130,7 +130,7 @@ public class ClimbingWorldHelper {
                             if ((double)l >= d0)
                             {
                                 flag = true;
-                                block.velocityToAddToEntity(world, k1, l1, i2, entity, vec3);
+                                block.modifyEntityVelocity(world, k1, l1, i2, entity, vec3);
                             }
                         }
                     }

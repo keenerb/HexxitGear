@@ -29,8 +29,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class ClimbingHelper {
     public static C03PacketPlayer transformPacket(C03PacketPlayer packet, EntityPlayerMP player, VectorTransformer transformer) {
         if (packet.func_149466_j()) {
-            double x = packet.func_149464_c();
-            double z = packet.func_149472_e();
+            double x = packet.getPositionX();
+            double z = packet.getPositionZ();
             float offset = player.getDefaultEyeHeight();
 
             if (transformer.getAxisY() == ForgeDirection.EAST) {
@@ -44,9 +44,9 @@ public class ClimbingHelper {
             }
 
             if (packet instanceof C03PacketPlayer.C04PacketPlayerPosition) {
-                packet = new C03PacketPlayer.C04PacketPlayerPosition(x, packet.func_149467_d(), packet.func_149471_f(), z, packet.func_149465_i());
+                packet = new C03PacketPlayer.C04PacketPlayerPosition(x, packet.getPositionY(), packet.getStance(), z, packet.func_149465_i());
             } else if (packet instanceof C03PacketPlayer.C06PacketPlayerPosLook) {
-                packet = new C03PacketPlayer.C06PacketPlayerPosLook(x, packet.func_149467_d(), packet.func_149471_f(), z, packet.func_149462_g(), packet.func_149470_h(), packet.func_149465_i());
+                packet = new C03PacketPlayer.C06PacketPlayerPosLook(x, packet.getPositionY(), packet.getStance(), z, packet.getYaw(), packet.getPitch(), packet.func_149465_i());
             }
         }
 
@@ -59,8 +59,8 @@ public class ClimbingHelper {
             ClimbingHelper.untransformBB(entity.boundingBox, wearer.getTransformer());
 
         double halfWidth = entity.width / 2.0;
-        double minYOffset = entity.ySize - entity.yOffset;
-        double maxYOffset = (entity.ySize + entity.height) - entity.yOffset;
+        double minYOffset = entity.yOffset2 - entity.yOffset;
+        double maxYOffset = (entity.yOffset2 + entity.height) - entity.yOffset;
 
         double minX = entity.posX + wearer.getTransformer().unGetX(-halfWidth, minYOffset, -halfWidth);
         double minY = entity.posY + wearer.getTransformer().unGetY(0, minYOffset, 0);

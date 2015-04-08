@@ -152,7 +152,7 @@ public class ShoesHelper {
                 player.boundingBox.offset(0, y, 0);
 
                 player.posX = (player.boundingBox.minX + player.boundingBox.maxX) / 2.0D;
-                player.posY = player.boundingBox.minY + (double)player.yOffset - (double)player.ySize;
+                player.posY = player.boundingBox.minY + (double)player.yOffset - (double)player.yOffset2;
                 player.posZ = (player.boundingBox.minZ + player.boundingBox.maxZ) / 2.0D;
                 player.isCollidedHorizontally = false;
                 if (!player.isCollidedVertically) player.isCollided = false;

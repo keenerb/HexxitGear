@@ -63,7 +63,7 @@ public class ClientProxy extends CommonProxy {
 
             if (locationCape == null || !locationCape.equals(capeResource)) {
                 AbstractClientPlayer capePlayer = (AbstractClientPlayer) player;
-                capePlayer.func_152121_a(MinecraftProfileTexture.Type.CAPE, capeResource);
+                capePlayer.onSkinAvailable(MinecraftProfileTexture.Type.CAPE, capeResource);
             }
         }
     }
@@ -73,8 +73,8 @@ public class ClientProxy extends CommonProxy {
         EntityPlayer player = HexxitGear.proxy.findPlayer(playerName);
         if (player != null && player instanceof AbstractClientPlayer) {
             AbstractClientPlayer capePlayer = (AbstractClientPlayer)player;
-            capePlayer.func_152121_a(MinecraftProfileTexture.Type.CAPE, null);
-            Minecraft.getMinecraft().func_152342_ad().func_152790_a(capePlayer.getGameProfile(), capePlayer, true);
+            capePlayer.onSkinAvailable(MinecraftProfileTexture.Type.CAPE, null);
+            Minecraft.getMinecraft().getSkinManager().func_152790_a(capePlayer.getGameProfile(), capePlayer, true);
         }
     }
 
