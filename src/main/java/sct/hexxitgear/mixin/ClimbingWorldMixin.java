@@ -69,7 +69,7 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
     @Shadow
     public final Profiler theProfiler = null;
     @Shadow
-    public abstract boolean func_147451_t(int p_147451_1_, int p_147451_2_, int p_147451_3_);
+    public abstract boolean updateAllLightTypes(int p_147451_1_, int p_147451_2_, int p_147451_3_);
     @Shadow
     public abstract void markAndNotifyBlock(int x, int y, int z, Chunk chunk, Block oldBlock, Block newBlock, int flag);
 
@@ -140,7 +140,7 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
                 }
 
                 this.theProfiler.startSection("checkLight");
-                this.func_147451_t(x, y, z);
+                this.updateAllLightTypes(x, y, z);
                 this.theProfiler.endSection();
 
                 if (flag && blockSnapshot == null) // Don't notify clients or update physics while capturing blockstates

@@ -12,7 +12,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.0'
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
         classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
     }
@@ -25,13 +24,10 @@ version = "2.0"
 group= "sct.hexxitgear" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "hexxitgear"
 
-mixinSrg = new File(project.buildDir, "tmp/mixins/mixins.hexxitgear.srg")
-mixinRefMap = new File(project.buildDir, "tmp/mixins/mixin.refmap.json")
+ext.mixinSrg = new File(project.buildDir, "tmp/mixins/mixins.hexxitgear.srg")
+ext.mixinRefMap = new File(project.buildDir, "tmp/mixins/mixin.refmap.json")
 
 reobf.addExtraSrgFile project.mixinSrg
-
-sourceCompatibility='1.7'
-targetCompatibility='1.7'
 
 repositories {
     mavenLocal()
@@ -56,7 +52,7 @@ minecraft {
 }
 
 dependencies {
-    compile "org.spongepowered:mixin:0.1-SNAPSHOT"
+    compile "org.spongepowered:mixin:0.2-SNAPSHOT"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
@@ -73,24 +69,24 @@ dependencies {
 }
 
 processResources
-        {
-            // this will ensure that this task is redone when the versions change.
-            inputs.property "version", project.version
-            inputs.property "mcversion", project.minecraft.version
+{
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
 
-            // replace stuff in mcmod.info, nothing else
-            from(sourceSets.main.resources.srcDirs) {
-                include 'mcmod.info'
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
 
-                // replace version and mcversion
-                expand 'version':project.version, 'mcversion':project.minecraft.version
-            }
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
 
-            // copy everything else, thats not the mcmod.info
-            from(sourceSets.main.resources.srcDirs) {
-                exclude 'mcmod.info'
-            }
-        }
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
 
 def defaultEncoding = 'UTF-8'
 compileJava {

@@ -40,9 +40,9 @@ public abstract class ClimbingShoesSPPlayerMixin extends AbstractClientPlayer im
         super(p_i45074_1_, p_i45074_2_);
     }
 
-    protected boolean func_145771_j(double p_145771_1_, double p_145771_3_, double p_145771_5_){return true;}
+    protected boolean pushOutOfBlocks(double p_145771_1_, double p_145771_3_, double p_145771_5_){return true;}
 
-    @Redirect(method="onLivingUpdate", at=@At(value="INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;func_145771_j(DDD)Z"))
+    @Redirect(method="onLivingUpdate", at=@At(value="INVOKE", target = "Lnet/minecraft/client/entity/EntityPlayerSP;pushOutOfBlocks(DDD)Z"))
     private boolean proxyFunc145771J(EntityPlayerSP this$0, double x, double y, double z) {
         if (areClimbingShoesEquipped()) {
             double xOffset = x - this.posX;
@@ -52,7 +52,7 @@ public abstract class ClimbingShoesSPPlayerMixin extends AbstractClientPlayer im
             y = this.posY + getTransformer().getY(xOffset, yOffset, zOffset);
             z = this.posZ + getTransformer().getZ(xOffset, yOffset, zOffset);
         }
-        return func_145771_j(x, y, z);
+        return pushOutOfBlocks(x, y, z);
     }
 
     @Redirect(method="onLivingUpdate", at=@At(value="INVOKE", target="Lnet/minecraft/client/entity/EntityPlayerSP;setSprinting(Z)V", ordinal = 3))
