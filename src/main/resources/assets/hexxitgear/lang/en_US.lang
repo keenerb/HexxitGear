@@ -2,7 +2,7 @@ gui.hexxitgear.creativetab=Hexxit Gear
 gui.hexxitgear.set.thief=Thief Set
 gui.hexxitgear.set.tribal=Tribal Set
 gui.hexxitgear.set.scale=Scale Set
-gui.hexxitgear.set.magic=Magician Raiment
+gui.hexxitgear.set.magic=Sage Set
 
 gui.hexxitgear.shiftprompt=Press Shift for Details
 
@@ -10,11 +10,11 @@ gui.hexxitgear.boots.magic=Light Body
 gui.hexxitgear.boots.magic0=While wearing these boots, you can
 gui.hexxitgear.boots.magic1=sprint across many liquids without
 gui.hexxitgear.boots.magic2=being harmed.  Does not work on lava.
-gui.hexxitgear.boots.magic3=With the entire §9Magician's Set§7, you gain
+gui.hexxitgear.boots.magic3=With the entire §9Sage Set§7, you gain
 gui.hexxitgear.boots.magic4=§eWeightless Soul§7.
 
 gui.hexxitgear.boots.magic.empowered=Weightless Soul
-gui.hexxitgear.boots.magic.empowered0=While wearing the entire §9Magician's
+gui.hexxitgear.boots.magic.empowered0=While wearing the entire §9Sage
 gui.hexxitgear.boots.magic.empowered1=§9Set§7, you can walk across any liquid
 gui.hexxitgear.boots.magic.empowered2=without harm. Press §eShift§7 while standing
 gui.hexxitgear.boots.magic.empowered3=on a liquid to go for a swim!
@@ -69,7 +69,7 @@ item.hexxitgear.thief.helmet.name=Thief's Hood
 item.hexxitgear.thief.chest.name=Thief's Chestpiece
 item.hexxitgear.thief.leggings.name=Thief's Leggings
 item.hexxitgear.thief.boots.name=Thief's Boots
-item.hexxitgear.magic.helmet.name=Magician's Cap
-item.hexxitgear.magic.chest.name=Magician's Robe
-item.hexxitgear.magic.leggings.name=Magician's Wrap
-item.hexxitgear.magic.boots.name=Magician's Slippers
+item.hexxitgear.magic.helmet.name=Sage's Hood
+item.hexxitgear.magic.chest.name=Sage's Robe
+item.hexxitgear.magic.leggings.name=Sage's Wrap
+item.hexxitgear.magic.boots.name=Sage's Slippers
