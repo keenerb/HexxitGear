@@ -25,7 +25,7 @@ group= "sct.hexxitgear" // http://maven.apache.org/guides/mini/guide-naming-conv
 archivesBaseName = "hexxitgear"
 
 ext.mixinSrg = new File(project.buildDir, "tmp/mixins/mixins.hexxitgear.srg")
-ext.mixinRefMap = new File(project.buildDir, "tmp/mixins/mixin.refmap.json")
+ext.mixinRefMap = new File(project.buildDir, "tmp/mixins/hexxitgear.mixin.refmap.json")
 
 reobf.addExtraSrgFile project.mixinSrg
 
