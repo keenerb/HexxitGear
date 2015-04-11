@@ -26,7 +26,6 @@ public class ModelSkullHelmet extends ModelBiped {
 
     //fields
     ModelRenderer head;
-    ModelRenderer Shape4;
     ModelRenderer Shape1;
     ModelRenderer Shape2;
     ModelRenderer Shape3;
@@ -41,12 +40,6 @@ public class ModelSkullHelmet extends ModelBiped {
         head.setTextureSize(64, 32);
         head.mirror = true;
         setRotation(head, 0F, 0F, 0F);
-        Shape4 = new ModelRenderer(this, 25, 0);
-        Shape4.addBox(4F, -7F, 0F, 3, 2, 2);
-        Shape4.setRotationPoint(0F, 0F, 0F);
-        Shape4.setTextureSize(64, 32);
-        Shape4.mirror = true;
-        setRotation(Shape4, 0F, 0F, 0F);
         Shape1 = new ModelRenderer(this, 25, 0);
         Shape1.addBox(-7F, -7F, 0F, 3, 2, 2);
         Shape1.setRotationPoint(0F, 0F, 0F);
@@ -54,13 +47,13 @@ public class ModelSkullHelmet extends ModelBiped {
         Shape1.mirror = true;
         setRotation(Shape1, 0F, 0F, 0F);
         Shape2 = new ModelRenderer(this, 25, 5);
-        Shape2.addBox(6F, -8F, 0F, 1, 1, 1);
+        Shape2.addBox(-7F, -8F, 0F, 1, 1, 1);
         Shape2.setRotationPoint(0F, 0F, 0F);
         Shape2.setTextureSize(64, 32);
         Shape2.mirror = true;
         setRotation(Shape2, 0F, 0F, 0F);
-        Shape3 = new ModelRenderer(this, 25, 5);
-        Shape3.addBox(-7F, -8F, 0F, 1, 1, 1);
+        Shape3 = new ModelRenderer(this, 27, 0);
+        Shape3.addBox(4F, -7F, 0F, 1, 2, 2);
         Shape3.setRotationPoint(0F, 0F, 0F);
         Shape3.setTextureSize(64, 32);
         Shape3.mirror = true;
@@ -72,7 +65,6 @@ public class ModelSkullHelmet extends ModelBiped {
         float scaledUp = f5 + 0.01F;
         setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         head.render(scaledUp);
-        Shape4.render(scaledUp);
         Shape1.render(scaledUp);
         Shape2.render(scaledUp);
         Shape3.render(scaledUp);
@@ -94,7 +86,6 @@ public class ModelSkullHelmet extends ModelBiped {
         setRotation(Shape1, newX, newY, 0);
         setRotation(Shape2, newX, newY, 0);
         setRotation(Shape3, newX, newY, 0);
-        setRotation(Shape4, newX, newY, 0);
 
     }
 
