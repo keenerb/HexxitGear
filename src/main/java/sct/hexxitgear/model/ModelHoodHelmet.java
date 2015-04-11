@@ -82,6 +82,7 @@ public class ModelHoodHelmet extends ModelBiped {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
+        model.rotationPointY = (this.isSneak)?1.0f:0;
     }
 
     @Override
@@ -95,6 +96,5 @@ public class ModelHoodHelmet extends ModelBiped {
         setRotation(Shape2, newX, newY, 0);
         setRotation(Shape3, newX, newY, 0);
         setRotation(Shape4, newX, newY, 0);
-
     }
 }

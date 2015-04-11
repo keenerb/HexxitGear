@@ -60,10 +60,24 @@ public class ItemThiefArmor extends ItemHexxitArmor {
     }
 
     @SideOnly(Side.CLIENT)
+    private static ModelHoodHelmet hoodHelmet;
+
+    @SideOnly(Side.CLIENT)
+    private ModelBiped getHelmet() {
+        if (hoodHelmet == null)
+            hoodHelmet = new ModelHoodHelmet();
+
+        return hoodHelmet;
+    }
+
+    @SideOnly(Side.CLIENT)
     @Override
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
-        if (armorSlot == 0)
-            return new ModelHoodHelmet();
+        if (armorSlot == 0) {
+            ModelBiped helmet = getHelmet();
+            helmet.isSneak = entityLiving.isSneaking();
+            return helmet;
+        }
         return null;
     }
 

@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.core.ArmorSet;
+import sct.hexxitgear.model.ModelSageHood;
 import sct.hexxitgear.util.FormatCodes;
 
 import java.util.List;
@@ -28,17 +29,32 @@ public class ItemMagicianArmor extends ItemHexxitArmor {
     public String getArmorTexture(ItemStack stack, Entity entity, int slot, java.lang.String type) {
         // If the helmet slot, return helmet texture map
         if (slot == 0)
-            return "hexxitgear:textures/maps/MagicHelmet.png";
+            return "hexxitgear:textures/maps/SageHood.png";
 
         if (stack.getItem() == HexxitGear.magicLeggings)
-            return "hexxitgear:textures/armor/magic2.png";
+            return "hexxitgear:textures/armor/sage2.png";
 
-        return "hexxitgear:textures/armor/magic.png";
+        return "hexxitgear:textures/armor/sage.png";
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static ModelSageHood hood;
+
+    @SideOnly(Side.CLIENT)
+    protected ModelSageHood getHoodModel() {
+        if (hood == null)
+            hood = new ModelSageHood();
+        return hood;
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
+        if (armorSlot == 0) {
+            ModelBiped retVal = getHoodModel();
+            retVal.isSneak = entityLiving.isSneaking();
+            return retVal;
+        }
         return null;
     }
 

@@ -34,7 +34,7 @@ public class ArmorSet {
             Arrays.asList(HexxitGear.thiefHelmet, HexxitGear.thiefChest, HexxitGear.thiefLeggings, HexxitGear.thiefBoots), new BuffThiefSet(), new AbilityInvisibility());
     public static ArmorSet scaleSet = new ArmorSet("Scale", "http://hexxit.sctgaming.com/capes/purplecape.png",
             Arrays.asList(HexxitGear.scaleHelmet, HexxitGear.scaleChest, HexxitGear.scaleLeggings, HexxitGear.scaleBoots), new BuffScaleSet(), new AbilityShield());
-    public static ArmorSet magicSet = new ArmorSet("Magician", "http://hexxit.sctgaming.com/capes/magiccape.png",
+    public static ArmorSet magicSet = new ArmorSet("Magician", "http://hexxit.sctgaming.com/capes/sagecape.png",
             Arrays.asList(HexxitGear.magicHelmet, HexxitGear.magicChest, HexxitGear.magicLeggings, HexxitGear.magicBoots), new BuffMagicSet(), new AbilityNull());
 
     private static List<ArmorSet>armorSets;
