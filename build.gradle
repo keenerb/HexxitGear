@@ -52,7 +52,7 @@ minecraft {
 }
 
 dependencies {
-    compile "org.spongepowered:mixin:0.2-SNAPSHOT"
+    compile "org.spongepowered:mixin:0.3-SNAPSHOT"
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..
     //compile "some.group:artifact:version:classifier"
