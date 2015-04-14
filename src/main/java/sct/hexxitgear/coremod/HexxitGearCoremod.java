@@ -29,6 +29,7 @@ public class HexxitGearCoremod implements IFMLLoadingPlugin {
     public HexxitGearCoremod() {
         MixinBootstrap.init();
         MixinEnvironment env = MixinEnvironment.getDefaultEnvironment();
+        System.err.println(env);
         env.addConfiguration("mixins.hexxitgear.json");
     }
 

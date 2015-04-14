@@ -11,5 +11,6 @@
         "ClimbingServerHandlerMixin",
         "ClimbingShoesSPPlayerMixin",
         "ClimbingPlayerPacketMixin"
-    ]
+    ],
+    "refmap":"hexxitgear.mixin.refmap.json"
 }
