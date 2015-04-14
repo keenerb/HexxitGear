@@ -19,7 +19,6 @@
 package sct.hexxitgear.world;
 
 import cpw.mods.fml.common.IWorldGenerator;
-import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -46,7 +45,7 @@ public class HGWorldGen implements IWorldGenerator {
 
         int tries = random.nextInt(2);
 
-        for (int i=0; i < tries; i++) {
+        for (int i = 0; i < tries; i++) {
             int x = startX + random.nextInt(8) - random.nextInt(8);
             int z = startZ + random.nextInt(8) - random.nextInt(8);
             int y = world.getHeightValue(x, z);

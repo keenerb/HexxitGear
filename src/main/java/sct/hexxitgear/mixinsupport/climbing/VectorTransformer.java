@@ -25,9 +25,17 @@ public class VectorTransformer {
     private ForgeDirection yPos;
     private ForgeDirection zPos;
 
-    public ForgeDirection getAxisX() { return xPos; }
-    public ForgeDirection getAxisY() { return yPos; }
-    public ForgeDirection getAxisZ() { return zPos; }
+    public ForgeDirection getAxisX() {
+        return xPos;
+    }
+
+    public ForgeDirection getAxisY() {
+        return yPos;
+    }
+
+    public ForgeDirection getAxisZ() {
+        return zPos;
+    }
 
     public VectorTransformer(ForgeDirection floor) {
         yPos = ForgeDirection.VALID_DIRECTIONS[ForgeDirection.OPPOSITES[floor.ordinal()]];

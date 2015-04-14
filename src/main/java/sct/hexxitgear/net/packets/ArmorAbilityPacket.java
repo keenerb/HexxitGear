@@ -11,7 +11,9 @@ public class ArmorAbilityPacket extends HexxitGearPacketBase {
 
     private String playerName;
 
-    public ArmorAbilityPacket() {}
+    public ArmorAbilityPacket() {
+    }
+
     public ArmorAbilityPacket(String playerName) {
         this.playerName = playerName;
     }

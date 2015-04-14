@@ -22,7 +22,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class CommonProxy {
 
-    public void init () {
+    public void init() {
         registerHandlers();
     }
 
@@ -34,11 +34,14 @@ public class CommonProxy {
         return null;
     }
 
-    public void setPlayerCape(String playerName, String capeUrl) {  }
+    public void setPlayerCape(String playerName, String capeUrl) {
+    }
 
-    public void setPlayerCape(EntityPlayer player, String capeUrl) {  }
+    public void setPlayerCape(EntityPlayer player, String capeUrl) {
+    }
 
-    public void resetPlayerCape(String playerName) {}
+    public void resetPlayerCape(String playerName) {
+    }
 
     public void registerHandlers() {
     }

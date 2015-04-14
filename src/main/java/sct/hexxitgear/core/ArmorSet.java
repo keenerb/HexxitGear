@@ -37,7 +37,7 @@ public class ArmorSet {
     public static ArmorSet magicSet = new ArmorSet("Magician", "http://hexxit.sctgaming.com/capes/sagecape.png",
             Arrays.asList(HexxitGear.magicHelmet, HexxitGear.magicChest, HexxitGear.magicLeggings, HexxitGear.magicBoots), new BuffMagicSet(), new AbilityNull());
 
-    private static List<ArmorSet>armorSets;
+    private static List<ArmorSet> armorSets;
     private static Map<String, ArmorSet> playerMap = new HashMap<String, ArmorSet>();
     private static List<String> activeArmors = new ArrayList<String>();
 
@@ -119,7 +119,7 @@ public class ArmorSet {
         }
     }
 
-    public ArmorSet(String name, String capeUrl, List<Item>armor, IBuffHandler buffHandler, Ability ability) {
+    public ArmorSet(String name, String capeUrl, List<Item> armor, IBuffHandler buffHandler, Ability ability) {
         this.name = name;
         this.armors = armor;
         this.capeUrl = capeUrl;
@@ -131,7 +131,7 @@ public class ArmorSet {
         armorSets.add(this);
     }
 
-    public ArmorSet(String name, List<Item>armor, IBuffHandler buffHandler, Ability ability) {
+    public ArmorSet(String name, List<Item> armor, IBuffHandler buffHandler, Ability ability) {
         this(name, null, armor, buffHandler, ability);
     }
 

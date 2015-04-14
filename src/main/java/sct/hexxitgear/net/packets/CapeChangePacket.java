@@ -12,7 +12,9 @@ public class CapeChangePacket extends HexxitGearPacketBase {
     private String playerDisplayName;
     private String playerCapeUrl;
 
-    public CapeChangePacket() {}
+    public CapeChangePacket() {
+    }
+
     public CapeChangePacket(String playerName, String capeUrl) {
         this.playerDisplayName = playerName;
         this.playerCapeUrl = capeUrl;

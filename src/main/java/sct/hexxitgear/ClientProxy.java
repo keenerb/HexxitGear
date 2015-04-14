@@ -22,10 +22,8 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import sct.hexxitgear.control.HGKeyHandler;
@@ -56,10 +54,10 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public void setPlayerCape(EntityPlayer player, String capeUrl) {
-        String token = capeUrl.substring(capeUrl.lastIndexOf("/")+1);
-        ResourceLocation capeResource = new ResourceLocation("hexxitgear:cloaks/"+token);
+        String token = capeUrl.substring(capeUrl.lastIndexOf("/") + 1);
+        ResourceLocation capeResource = new ResourceLocation("hexxitgear:cloaks/" + token);
         if (player != null && player instanceof AbstractClientPlayer) {
-            ResourceLocation locationCape = ((AbstractClientPlayer)player).locationCape;
+            ResourceLocation locationCape = ((AbstractClientPlayer) player).locationCape;
 
             if (locationCape == null || !locationCape.equals(capeResource)) {
                 AbstractClientPlayer capePlayer = (AbstractClientPlayer) player;
@@ -72,7 +70,7 @@ public class ClientProxy extends CommonProxy {
     public void resetPlayerCape(String playerName) {
         EntityPlayer player = HexxitGear.proxy.findPlayer(playerName);
         if (player != null && player instanceof AbstractClientPlayer) {
-            AbstractClientPlayer capePlayer = (AbstractClientPlayer)player;
+            AbstractClientPlayer capePlayer = (AbstractClientPlayer) player;
             capePlayer.onSkinAvailable(MinecraftProfileTexture.Type.CAPE, null);
             Minecraft.getMinecraft().getSkinManager().func_152790_a(capePlayer.getGameProfile(), capePlayer, true);
         }

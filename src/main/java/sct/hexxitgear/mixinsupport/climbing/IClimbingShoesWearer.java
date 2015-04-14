@@ -22,12 +22,20 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public interface IClimbingShoesWearer {
     void setClimbingShoesEquipped(boolean equipped);
+
     boolean isUpdating();
+
     void setUpdating(boolean updating);
+
     boolean areClimbingShoesEquipped();
+
     VectorTransformer getTransformer();
+
     void setFloor(ForgeDirection floor);
+
     void spendDistance(int distance);
+
     void resetDistance();
+
     void collideWithSide(ForgeDirection side);
 }

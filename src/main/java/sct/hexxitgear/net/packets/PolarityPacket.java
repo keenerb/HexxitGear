@@ -7,9 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.mixinsupport.climbing.IClimbingShoesWearer;
-import sct.hexxitgear.net.HexxitGearNetwork;
 
 public class PolarityPacket extends HexxitGearPacketBase {
 
@@ -19,7 +17,8 @@ public class PolarityPacket extends HexxitGearPacketBase {
         this.direction = direction;
     }
 
-    public PolarityPacket() {}
+    public PolarityPacket() {
+    }
 
     @Override
     public void write(ByteArrayDataOutput out) {
@@ -34,11 +33,11 @@ public class PolarityPacket extends HexxitGearPacketBase {
     @Override
     public void handleClient(World world, EntityPlayer player) {
         if (Minecraft.getMinecraft().thePlayer != player)
-            ((IClimbingShoesWearer)player).setFloor(direction);
+            ((IClimbingShoesWearer) player).setFloor(direction);
     }
 
     @Override
     public void handleServer(World world, EntityPlayerMP player) {
-        ((IClimbingShoesWearer)player).setFloor(direction);
+        ((IClimbingShoesWearer) player).setFloor(direction);
     }
 }

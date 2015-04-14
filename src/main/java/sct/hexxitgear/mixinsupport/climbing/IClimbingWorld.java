@@ -20,5 +20,6 @@ package sct.hexxitgear.mixinsupport.climbing;
 
 public interface IClimbingWorld {
     void setWorldTransformer(VectorTransformer transformer);
+
     VectorTransformer getWorldTransformer();
 }

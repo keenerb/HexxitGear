@@ -45,14 +45,14 @@ public class PlayerEventHandler {
                     HexxitGear.proxy.setPlayerCape(player, capeUrl);
                 }
             }
-        ticks = 0;
+            ticks = 0;
         }
         ticks++;
     }
 
     @SubscribeEvent
     public void wallRunningArmorEvent(TickEvent.PlayerTickEvent event) {
-        IClimbingShoesWearer shoesWearer = (IClimbingShoesWearer)event.player;
+        IClimbingShoesWearer shoesWearer = (IClimbingShoesWearer) event.player;
 
         ItemStack boots = event.player.getCurrentArmor(0);
         shoesWearer.setClimbingShoesEquipped(boots != null && boots.getItem() == HexxitGear.tribalShoes);

@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 
 public abstract class HexxitGearPacketBase {
     public abstract void write(ByteArrayDataOutput out);
+
     public abstract void read(ByteArrayDataInput in);
 
     @SideOnly(Side.CLIENT)

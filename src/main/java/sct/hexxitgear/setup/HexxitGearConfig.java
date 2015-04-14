@@ -19,13 +19,11 @@
 package sct.hexxitgear.setup;
 
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import sct.hexxitgear.HexxitGear;
 
 import java.io.*;
-import java.util.Properties;
 
 public class HexxitGearConfig {
 
@@ -33,8 +31,7 @@ public class HexxitGearConfig {
 
     public static File configFolder;
 
-    public static void loadCommonConfig(FMLPreInitializationEvent evt)
-    {
+    public static void loadCommonConfig(FMLPreInitializationEvent evt) {
         Configuration c = new Configuration(evt.getSuggestedConfigurationFile());
         try {
             c.load();
@@ -49,25 +46,20 @@ public class HexxitGearConfig {
         }
     }
 
-    public static String getConfigBaseFolder()
-    {
+    public static String getConfigBaseFolder() {
         return "sct";
     }
 
-    public static void setConfigFolderBase(File folder)
-    {
+    public static void setConfigFolderBase(File folder) {
         configFolder = new File(folder.getAbsolutePath() + "/" + getConfigBaseFolder() + "/"
                 + HexxitGear.modId + "/");
     }
 
-    public static void extractLang(String[] languages)
-    {
+    public static void extractLang(String[] languages) {
         String langResourceBase = "/sct/" + HexxitGear.modId + "/lang/";
-        for (String lang : languages)
-        {
+        for (String lang : languages) {
             InputStream is = HexxitGear.instance.getClass().getResourceAsStream(langResourceBase + lang + ".lang");
-            try
-            {
+            try {
                 File f = new File(configFolder.getAbsolutePath() + "/lang/"
                         + lang + ".lang");
                 if (!f.exists())
@@ -75,16 +67,13 @@ public class HexxitGearConfig {
                 OutputStream os = new FileOutputStream(f);
                 byte[] buffer = new byte[1024];
                 int read = 0;
-                while ((read = is.read(buffer)) != -1)
-                {
+                while ((read = is.read(buffer)) != -1) {
                     os.write(buffer, 0, read);
                 }
                 is.close();
                 os.flush();
                 os.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }

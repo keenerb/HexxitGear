@@ -38,9 +38,9 @@ public class ClimbingEntityRendererMixin {
     @Shadow
     private Minecraft mc;
 
-    @Inject(method="setupCameraTransform", at=@At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/EntityRenderer;orientCamera(F)V", shift= At.Shift.AFTER))
+    @Inject(method = "setupCameraTransform", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/EntityRenderer;orientCamera(F)V", shift = At.Shift.AFTER))
     private void preRotateCamera(float x, int z, CallbackInfo info) {
-        IClimbingShoesWearer wearer = ((IClimbingShoesWearer)this.mc.renderViewEntity);
+        IClimbingShoesWearer wearer = ((IClimbingShoesWearer) this.mc.renderViewEntity);
         if (wearer.getTransformer() != null) {
             if (wearer.getTransformer().getAxisY() == ForgeDirection.DOWN)
                 GL11.glRotatef(180, 0, 0, 1);

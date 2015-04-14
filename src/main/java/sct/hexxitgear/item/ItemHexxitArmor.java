@@ -59,8 +59,7 @@ public class ItemHexxitArmor extends ItemArmor implements ISpecialArmor {
     }
 
     @Override
-    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
-    {
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
         if (this.armorType == 0)
             return;
 
@@ -79,8 +78,7 @@ public class ItemHexxitArmor extends ItemArmor implements ISpecialArmor {
     }
 
     @Override
-    public String getItemStackDisplayName(ItemStack par1ItemStack)
-    {
+    public String getItemStackDisplayName(ItemStack par1ItemStack) {
         return FormatCodes.Yellow.format + super.getItemStackDisplayName(par1ItemStack);
     }
 }

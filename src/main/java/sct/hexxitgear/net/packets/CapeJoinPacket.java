@@ -14,9 +14,11 @@ public class CapeJoinPacket extends HexxitGearPacketBase {
 
     private Map<String, String> allPlayerCapes = new HashMap<String, String>();
 
-    public CapeJoinPacket() {}
+    public CapeJoinPacket() {
+    }
+
     public CapeJoinPacket(Map<String, String> capes) {
-        for(String playerName : capes.keySet()) {
+        for (String playerName : capes.keySet()) {
             allPlayerCapes.put(playerName, capes.get(playerName));
         }
     }

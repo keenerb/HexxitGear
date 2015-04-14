@@ -21,32 +21,30 @@ package sct.hexxitgear;
 import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-import cpw.mods.fml.client.FMLFileResourcePack;
-import cpw.mods.fml.client.FMLFolderResourcePack;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.classloading.FMLForgePlugin;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Logger;
 import sct.hexxitgear.block.BlockHexbiscus;
 import sct.hexxitgear.coremod.HexxitGearResourcePack;
-import sct.hexxitgear.gui.HGCreativeTab;
-import sct.hexxitgear.net.HexxitGearNetwork;
-import sct.hexxitgear.setup.HexxitGearRegistry;
 import sct.hexxitgear.event.PlayerEventHandler;
-import sct.hexxitgear.tick.PlayerTracker;
-import sct.hexxitgear.item.*;
+import sct.hexxitgear.gui.HGCreativeTab;
+import sct.hexxitgear.item.ItemMagicianArmor;
+import sct.hexxitgear.item.ItemScaleArmor;
+import sct.hexxitgear.item.ItemThiefArmor;
+import sct.hexxitgear.item.ItemTribalArmor;
+import sct.hexxitgear.net.HexxitGearNetwork;
 import sct.hexxitgear.setup.HexxitGearConfig;
+import sct.hexxitgear.setup.HexxitGearRegistry;
+import sct.hexxitgear.tick.PlayerTracker;
 import sct.hexxitgear.world.HGWorldGen;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,8 +70,7 @@ public class HexxitGear extends DummyModContainer {
     }
 
     @Override
-    public Class<?> getCustomResourcePackClass()
-    {
+    public Class<?> getCustomResourcePackClass() {
         return HexxitGearResourcePack.class;
     }
 
@@ -84,7 +81,7 @@ public class HexxitGear extends DummyModContainer {
     @Mod.Instance(modId)
     public static HexxitGear instance;
 
-    @SidedProxy(clientSide="sct.hexxitgear.ClientProxy", serverSide="sct.hexxitgear.CommonProxy")
+    @SidedProxy(clientSide = "sct.hexxitgear.ClientProxy", serverSide = "sct.hexxitgear.CommonProxy")
     public static CommonProxy proxy;
 
     public static Logger logger;
@@ -205,7 +202,7 @@ public class HexxitGear extends DummyModContainer {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static void translateAndAdd(String key, List list) {
-        for (int i=0;i<10;i++) {
+        for (int i = 0; i < 10; i++) {
             if (StatCollector.canTranslate(key + Integer.toString(i))) {
                 String line = StatCollector.translateToLocal(key + Integer.toString(i));
                 list.add(line);

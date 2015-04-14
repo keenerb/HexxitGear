@@ -20,14 +20,9 @@ package sct.hexxitgear.mixin;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.ReportedException;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import org.spongepowered.asm.mixin.Mixin;
@@ -51,8 +46,11 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
     public void setWorldTransformer(VectorTransformer transformer) {
         this.transformer = transformer;
     }
+
     @Override
-    public VectorTransformer getWorldTransformer() { return this.transformer; }
+    public VectorTransformer getWorldTransformer() {
+        return this.transformer;
+    }
 
     @Shadow
     public abstract Chunk getChunkFromChunkCoords(int p_72964_1_, int p_72964_2_);
@@ -68,8 +66,10 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
     public ArrayList<net.minecraftforge.common.util.BlockSnapshot> capturedBlockSnapshots;
     @Shadow
     public final Profiler theProfiler = null;
+
     @Shadow
     public abstract boolean updateAllLightTypes(int p_147451_1_, int p_147451_2_, int p_147451_3_);
+
     @Shadow
     public abstract void markAndNotifyBlock(int x, int y, int z, Chunk chunk, Block oldBlock, Block newBlock, int flag);
 
@@ -86,28 +86,28 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
     @Shadow
     protected abstract boolean chunkExists(int p_72916_1_, int p_72916_2_);
 
-    @Inject(method="blockExists", at=@At("HEAD"), cancellable = true)
+    @Inject(method = "blockExists", at = @At("HEAD"), cancellable = true)
     private void transformBlockExists(int x, int y, int z, CallbackInfoReturnable<Boolean> info) {
         if (transformer == null)
             return;
         int tempX = x, tempY = y, tempZ = z;
-        x = (int)transformer.unGetX(tempX, tempY, tempZ);
-        y = (int)transformer.unGetY(tempX, tempY, tempZ);
-        z = (int)transformer.unGetZ(tempX, tempY, tempZ);
+        x = (int) transformer.unGetX(tempX, tempY, tempZ);
+        y = (int) transformer.unGetY(tempX, tempY, tempZ);
+        z = (int) transformer.unGetZ(tempX, tempY, tempZ);
 
         info.setReturnValue(y >= 0 && y < 256 ? this.chunkExists(x >> 4, z >> 4) : false);
         info.cancel();
     }
 
-    @Inject(method="setBlock", at=@At("HEAD"), cancellable = true)
+    @Inject(method = "setBlock", at = @At("HEAD"), cancellable = true)
     private void transformSetBlock(int x, int y, int z, Block block, int metadata, int flags, CallbackInfoReturnable<Boolean> info) {
         if (transformer == null)
             return;
 
         int tempX = x, tempY = y, tempZ = z;
-        x = (int)transformer.unGetX(tempX, tempY, tempZ);
-        y = (int)transformer.unGetY(tempX, tempY, tempZ);
-        z = (int)transformer.unGetZ(tempX, tempY, tempZ);
+        x = (int) transformer.unGetX(tempX, tempY, tempZ);
+        y = (int) transformer.unGetY(tempX, tempY, tempZ);
+        z = (int) transformer.unGetZ(tempX, tempY, tempZ);
 
         if (x >= -30000000 && z >= -30000000 && x < 30000000 && z < 30000000) {
             if (y < 0) {
@@ -128,7 +128,7 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
                 }
 
                 if (this.captureBlockSnapshots && !this.isRemote) {
-                    blockSnapshot = net.minecraftforge.common.util.BlockSnapshot.getBlockSnapshot((World)(Object)this, x, y, z, flags);
+                    blockSnapshot = net.minecraftforge.common.util.BlockSnapshot.getBlockSnapshot((World) (Object) this, x, y, z, flags);
                     this.capturedBlockSnapshots.add(blockSnapshot);
                 }
 
@@ -160,60 +160,52 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
         }
     }
 
-    @Inject(method="getBlock", at=@At("HEAD"), cancellable = true)
+    @Inject(method = "getBlock", at = @At("HEAD"), cancellable = true)
     private void transformGetBlock(int x, int y, int z, CallbackInfoReturnable<Block> info) {
         if (transformer == null)
             return;
         int tmpX = x;
         int tmpY = y;
         int tmpZ = z;
-        x = (int)transformer.unGetX(tmpX, tmpY, tmpZ);
-        y = (int)transformer.unGetY(tmpX, tmpY, tmpZ);
-        z = (int)transformer.unGetZ(tmpX, tmpY, tmpZ);
+        x = (int) transformer.unGetX(tmpX, tmpY, tmpZ);
+        y = (int) transformer.unGetY(tmpX, tmpY, tmpZ);
+        z = (int) transformer.unGetZ(tmpX, tmpY, tmpZ);
 
-        info.setReturnValue(ClimbingWorldHelper.getBlock((World)(Object)this, x, y, z));
+        info.setReturnValue(ClimbingWorldHelper.getBlock((World) (Object) this, x, y, z));
         info.cancel();
     }
 
-    @Inject(method="getBlockMetadata", at=@At("HEAD"), cancellable = true)
+    @Inject(method = "getBlockMetadata", at = @At("HEAD"), cancellable = true)
     private void transformGetBlockMetadata(int x, int y, int z, CallbackInfoReturnable<Integer> info) {
         if (transformer == null)
             return;
         int tmpX = x;
         int tmpY = y;
         int tmpZ = z;
-        x = (int)transformer.unGetX(tmpX, tmpY, tmpZ);
-        y = (int)transformer.unGetY(tmpX, tmpY, tmpZ);
-        z = (int)transformer.unGetZ(tmpX, tmpY, tmpZ);
+        x = (int) transformer.unGetX(tmpX, tmpY, tmpZ);
+        y = (int) transformer.unGetY(tmpX, tmpY, tmpZ);
+        z = (int) transformer.unGetZ(tmpX, tmpY, tmpZ);
 
-        if (x >= -30000000 && z >= -30000000 && x < 30000000 && z < 30000000)
-        {
-            if (y < 0)
-            {
+        if (x >= -30000000 && z >= -30000000 && x < 30000000 && z < 30000000) {
+            if (y < 0) {
                 info.setReturnValue(0);
-            }
-            else if (y >= 256)
-            {
+            } else if (y >= 256) {
                 info.setReturnValue(0);
-            }
-            else
-            {
+            } else {
                 Chunk chunk = this.getChunkFromChunkCoords(x >> 4, z >> 4);
                 x &= 15;
                 z &= 15;
                 info.setReturnValue(chunk.getBlockMetadata(x, y, z));
             }
-        }
-        else
-        {
+        } else {
             info.setReturnValue(0);
         }
 
         info.cancel();
     }
 
-    @Inject(method="getCollidingBoundingBoxes", at=@At("HEAD"), cancellable = true)
-    @SuppressWarnings({"rawtypes","unchecked"})
+    @Inject(method = "getCollidingBoundingBoxes", at = @At("HEAD"), cancellable = true)
+    @SuppressWarnings({"rawtypes", "unchecked"})
     private void transformGetCollidingBoundingBoxes(Entity entity, AxisAlignedBB box, CallbackInfoReturnable<List> info) {
         if (this.transformer == null)
             return;
@@ -223,14 +215,14 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
         ClimbingHelper.untransformEntity(entity, transformer);
         ClimbingHelper.untransformBB(box, transformer);
 
-        ClimbingWorldHelper.processCollision(this.collidingBoundingBoxes, entity, box, (World)(Object)this);
+        ClimbingWorldHelper.processCollision(this.collidingBoundingBoxes, entity, box, (World) (Object) this);
 
         ClimbingHelper.transformEntity(entity, transformer);
 
         List outBoxes = new ArrayList(this.collidingBoundingBoxes.size());
 
-        for(Object out : this.collidingBoundingBoxes) {
-            AxisAlignedBB outBox = (AxisAlignedBB)out;
+        for (Object out : this.collidingBoundingBoxes) {
+            AxisAlignedBB outBox = (AxisAlignedBB) out;
             AxisAlignedBB newBox = AxisAlignedBB.getBoundingBox(outBox.minX, outBox.minY, outBox.minZ, outBox.maxX, outBox.maxY, outBox.maxZ);
             ClimbingHelper.transformBB(newBox, transformer);
             outBoxes.add(newBox);
@@ -240,7 +232,7 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
         info.cancel();
     }
 
-    @Inject(method="handleMaterialAcceleration", at=@At("HEAD"), cancellable = true)
+    @Inject(method = "handleMaterialAcceleration", at = @At("HEAD"), cancellable = true)
     private void transformHandleMaterialAcceleration(AxisAlignedBB box, Material material, Entity entity, CallbackInfoReturnable<Boolean> info) {
         VectorTransformer transformer = getWorldTransformer();
         if (transformer != null) {
@@ -249,7 +241,7 @@ public abstract class ClimbingWorldMixin implements IClimbingWorld {
                 ClimbingHelper.untransformBB(box, transformer);
         }
 
-        info.setReturnValue(ClimbingWorldHelper.handleMaterialAcceleration((World)(Object)this, box, material, entity));
+        info.setReturnValue(ClimbingWorldHelper.handleMaterialAcceleration((World) (Object) this, box, material, entity));
 
         if (transformer != null) {
             ClimbingHelper.transformEntity(entity, transformer);

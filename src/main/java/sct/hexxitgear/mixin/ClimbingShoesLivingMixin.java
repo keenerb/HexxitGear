@@ -33,25 +33,27 @@ import sct.hexxitgear.mixinsupport.climbing.IClimbingShoesWearer;
 
 @Mixin(EntityLivingBase.class)
 public abstract class ClimbingShoesLivingMixin extends Entity implements IClimbingShoesWearer {
-    protected ClimbingShoesLivingMixin(World world) { super(world); }
+    protected ClimbingShoesLivingMixin(World world) {
+        super(world);
+    }
 
-    @ModifyArg(method="moveEntityWithHeading", at=@At(value="INVOKE", target="Lnet/minecraft/world/World;getChunkFromBlockCoords(II)Lnet/minecraft/world/chunk/Chunk;"), index = 0)
+    @ModifyArg(method = "moveEntityWithHeading", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getChunkFromBlockCoords(II)Lnet/minecraft/world/chunk/Chunk;"), index = 0)
     private int getChunkFromBlockCoordsTransformX(int x, int z) {
         if (areClimbingShoesEquipped())
-            return (int)getTransformer().unGetX(x, this.posY, z);
+            return (int) getTransformer().unGetX(x, this.posY, z);
         else
             return x;
     }
 
-    @ModifyArg(method="moveEntityWithHeading", at=@At(value="INVOKE", target="Lnet/minecraft/world/World;getChunkFromBlockCoords(II)Lnet/minecraft/world/chunk/Chunk;"), index = 1)
+    @ModifyArg(method = "moveEntityWithHeading", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;getChunkFromBlockCoords(II)Lnet/minecraft/world/chunk/Chunk;"), index = 1)
     private int getChunkFromBlockCoordsTransformZ(int x, int z) {
         if (areClimbingShoesEquipped())
-            return (int)getTransformer().unGetZ(x, this.posY, z);
+            return (int) getTransformer().unGetZ(x, this.posY, z);
         else
             return z;
     }
 
-    @Inject(method="getLook", at=@At("RETURN"))
+    @Inject(method = "getLook", at = @At("RETURN"))
     private void modifyLookResult(float partialTick, CallbackInfoReturnable<Vec3> info) {
         if (getTransformer() != null && getTransformer().getAxisY() != ForgeDirection.UP) {
             Vec3 vector = info.getReturnValue();

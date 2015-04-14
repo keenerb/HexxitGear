@@ -53,7 +53,7 @@ public class HexxitGearResourcePack implements IResourcePack {
     }
 
     private String getResourcePath(ResourceLocation location) {
-        return "/assets/hexxitgear/"+location.getResourcePath();
+        return "/assets/hexxitgear/" + location.getResourcePath();
     }
 
     private InputStream getResourceStream(ResourceLocation par1ResourceLocation) {

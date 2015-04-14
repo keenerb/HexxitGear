@@ -74,12 +74,11 @@ public class ModelSkullHelmet extends ModelBiped {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
-        model.rotationPointY = (this.isSneak)?1.0f:0;
+        model.rotationPointY = (this.isSneak) ? 1.0f : 0;
     }
 
     @Override
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity)
-    {
+    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
         super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         float newX = this.bipedHeadwear.rotateAngleX;
         float newY = this.bipedHeadwear.rotateAngleY;

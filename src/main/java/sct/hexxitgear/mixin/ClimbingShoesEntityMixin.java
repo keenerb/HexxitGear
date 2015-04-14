@@ -23,7 +23,6 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,7 +36,8 @@ import sct.hexxitgear.mixinsupport.climbing.VectorTransformer;
 
 @Mixin(Entity.class)
 public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
-    protected ClimbingShoesEntityMixin(World world) {}
+    protected ClimbingShoesEntityMixin(World world) {
+    }
 
     @Shadow
     public double posX;
@@ -46,22 +46,23 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
     @Shadow
     public double posZ;
     @Shadow
-    public final AxisAlignedBB boundingBox=null;
+    public final AxisAlignedBB boundingBox = null;
+
     @Shadow
     public abstract void kill();
 
     @Shadow
     public float width;
 
-    @Redirect(method="setPosition", at=@At(value = "INVOKE", target = "Lnet/minecraft/util/AxisAlignedBB;setBounds(DDDDDD)Lnet/minecraft/util/AxisAlignedBB;"))
+    @Redirect(method = "setPosition", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/AxisAlignedBB;setBounds(DDDDDD)Lnet/minecraft/util/AxisAlignedBB;"))
     private AxisAlignedBB proxySetBounds(AxisAlignedBB this$0, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
         if (this.getTransformer() == null || this.getTransformer().getAxisY() == ForgeDirection.UP)
             return this$0.setBounds(minX, minY, minZ, maxX, maxY, maxZ);
 
-        return ClimbingHelper.setBounds((IClimbingShoesWearer)this, (Entity)(Object)this, this$0);
+        return ClimbingHelper.setBounds((IClimbingShoesWearer) this, (Entity) (Object) this, this$0);
     }
 
-    @Inject(method="onEntityUpdate", at = @At(value="INVOKE", target="Lnet/minecraft/entity/Entity;handleWaterMovement()Z", shift=At.Shift.AFTER))
+    @Inject(method = "onEntityUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;handleWaterMovement()Z", shift = At.Shift.AFTER))
     private void afterWaterMovement(CallbackInfo info) {
         VectorTransformer transformer = getTransformer();
         if (transformer != null) {
@@ -71,18 +72,18 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
         }
     }
 
-    @Redirect(method="onEntityUpdate", at=@At(value="INVOKE", target="Lnet/minecraft/entity/Entity;kill()V"))
+    @Redirect(method = "onEntityUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;kill()V"))
     private void proxyKill(Entity this$0) {
         if (!areClimbingShoesEquipped())
             this.kill();
     }
 
-    @Redirect(method="doBlockCollisions()V", at=@At(value="INVOKE", target="Lnet/minecraft/world/World;checkChunksExist(IIIIII)Z"))
+    @Redirect(method = "doBlockCollisions()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;checkChunksExist(IIIIII)Z"))
     private boolean proxyCheckChunksExist(World this$0, int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
         if (!areClimbingShoesEquipped()) {
             return this$0.checkChunksExist(minX, minY, minZ, maxX, maxY, maxZ);
         }
-        ClimbingHelper.untransformEntity((Entity)(Object)this, getTransformer());
+        ClimbingHelper.untransformEntity((Entity) (Object) this, getTransformer());
         int i = MathHelper.floor_double(this.boundingBox.minX + 0.001D);
         int j = MathHelper.floor_double(this.boundingBox.minY + 0.001D);
         int k = MathHelper.floor_double(this.boundingBox.minZ + 0.001D);
@@ -90,35 +91,35 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
         int i1 = MathHelper.floor_double(this.boundingBox.maxY - 0.001D);
         int j1 = MathHelper.floor_double(this.boundingBox.maxZ - 0.001D);
         boolean result = this$0.checkChunksExist(i, j, k, l, i1, j1);
-        ClimbingHelper.transformEntity((Entity)(Object)this, getTransformer());
+        ClimbingHelper.transformEntity((Entity) (Object) this, getTransformer());
         return result;
     }
 
-    @ModifyArg(method="doBlockCollisions", at=@At(value="INVOKE", target="Lnet/minecraft/block/Block;onEntityCollidedWithBlock(Lnet/minecraft/world/World;IIILnet/minecraft/entity/Entity;)V"), index = 1)
+    @ModifyArg(method = "doBlockCollisions", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onEntityCollidedWithBlock(Lnet/minecraft/world/World;IIILnet/minecraft/entity/Entity;)V"), index = 1)
     private int onEntityCollidedWithBlockTransformX(World world, int x, int y, int z, Entity entity) {
         if (areClimbingShoesEquipped()) {
-            return (int)getTransformer().unGetX(x, y, z);
+            return (int) getTransformer().unGetX(x, y, z);
         } else
             return x;
     }
 
-    @ModifyArg(method="doBlockCollisions", at=@At(value="INVOKE", target="Lnet/minecraft/block/Block;onEntityCollidedWithBlock(Lnet/minecraft/world/World;IIILnet/minecraft/entity/Entity;)V"), index = 2)
+    @ModifyArg(method = "doBlockCollisions", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onEntityCollidedWithBlock(Lnet/minecraft/world/World;IIILnet/minecraft/entity/Entity;)V"), index = 2)
     private int onEntityCollidedWithBlockTransformY(World world, int x, int y, int z, Entity entity) {
         if (areClimbingShoesEquipped()) {
-            return (int)getTransformer().unGetY(x, y, z);
+            return (int) getTransformer().unGetY(x, y, z);
         } else
             return y;
     }
 
-    @ModifyArg(method="doBlockCollisions", at=@At(value="INVOKE", target="Lnet/minecraft/block/Block;onEntityCollidedWithBlock(Lnet/minecraft/world/World;IIILnet/minecraft/entity/Entity;)V"), index = 3)
+    @ModifyArg(method = "doBlockCollisions", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;onEntityCollidedWithBlock(Lnet/minecraft/world/World;IIILnet/minecraft/entity/Entity;)V"), index = 3)
     private int onEntityCollidedWithBlockTransformZ(World world, int x, int y, int z, Entity entity) {
         if (areClimbingShoesEquipped()) {
-            return (int)getTransformer().unGetZ(x, y, z);
+            return (int) getTransformer().unGetZ(x, y, z);
         } else
             return z;
     }
 
-    @Redirect(method="moveEntity", at=@At(value="INVOKE", target="Lnet/minecraft/util/AxisAlignedBB;calculateXOffset(Lnet/minecraft/util/AxisAlignedBB;D)D"))
+    @Redirect(method = "moveEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/AxisAlignedBB;calculateXOffset(Lnet/minecraft/util/AxisAlignedBB;D)D"))
     private double proxyCalculateXOffset(AxisAlignedBB this$0, AxisAlignedBB box, double move) {
         double newMove = this$0.calculateXOffset(box, move);
         if (areClimbingShoesEquipped()) {
@@ -133,7 +134,7 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
         return newMove;
     }
 
-    @Redirect(method="moveEntity", at=@At(value="INVOKE", target="Lnet/minecraft/util/AxisAlignedBB;calculateYOffset(Lnet/minecraft/util/AxisAlignedBB;D)D"))
+    @Redirect(method = "moveEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/AxisAlignedBB;calculateYOffset(Lnet/minecraft/util/AxisAlignedBB;D)D"))
     private double proxyCalculateYOffset(AxisAlignedBB this$0, AxisAlignedBB box, double move) {
         double newMove = this$0.calculateYOffset(box, move);
         if (areClimbingShoesEquipped()) {
@@ -148,7 +149,7 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
         return newMove;
     }
 
-    @Redirect(method="moveEntity", at=@At(value="INVOKE", target="Lnet/minecraft/util/AxisAlignedBB;calculateZOffset(Lnet/minecraft/util/AxisAlignedBB;D)D"))
+    @Redirect(method = "moveEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/AxisAlignedBB;calculateZOffset(Lnet/minecraft/util/AxisAlignedBB;D)D"))
     private double proxyCalculateZOffset(AxisAlignedBB this$0, AxisAlignedBB box, double move) {
         double newMove = this$0.calculateZOffset(box, move);
         if (areClimbingShoesEquipped()) {
@@ -164,22 +165,41 @@ public abstract class ClimbingShoesEntityMixin implements IClimbingShoesWearer {
     }
 
     @Override
-    public VectorTransformer getTransformer() { return null; }
+    public VectorTransformer getTransformer() {
+        return null;
+    }
 
     @Override
-    public void setClimbingShoesEquipped(boolean equipped) { }
+    public void setClimbingShoesEquipped(boolean equipped) {
+    }
+
     @Override
-    public boolean areClimbingShoesEquipped() { return false; }
+    public boolean areClimbingShoesEquipped() {
+        return false;
+    }
+
     @Override
-    public void setUpdating(boolean updating) {}
+    public void setUpdating(boolean updating) {
+    }
+
     @Override
-    public boolean isUpdating() { return false; }
+    public boolean isUpdating() {
+        return false;
+    }
+
     @Override
-    public void setFloor(ForgeDirection floor) {}
+    public void setFloor(ForgeDirection floor) {
+    }
+
     @Override
-    public void spendDistance(int distance) {}
+    public void spendDistance(int distance) {
+    }
+
     @Override
-    public void resetDistance() {}
+    public void resetDistance() {
+    }
+
     @Override
-    public void collideWithSide(ForgeDirection direction) {}
+    public void collideWithSide(ForgeDirection direction) {
+    }
 }

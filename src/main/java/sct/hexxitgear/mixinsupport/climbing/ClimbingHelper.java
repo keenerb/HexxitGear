@@ -19,7 +19,6 @@
 package sct.hexxitgear.mixinsupport.climbing;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.client.C03PacketPlayer;
 import net.minecraft.util.AxisAlignedBB;
@@ -100,7 +99,7 @@ public class ClimbingHelper {
         entity.motionZ = transformer.getZ(motionX, motionY, motionZ);
         transformBB(entity.boundingBox, transformer);
 
-        ((IClimbingWorld)entity.worldObj).setWorldTransformer(transformer);
+        ((IClimbingWorld) entity.worldObj).setWorldTransformer(transformer);
     }
 
     public static void untransformEntity(Entity entity, VectorTransformer transformer) {
@@ -124,10 +123,10 @@ public class ClimbingHelper {
         entity.motionY = transformer.unGetY(motionX, motionY, motionZ);
         entity.motionZ = transformer.unGetZ(motionX, motionY, motionZ);
         untransformBB(entity.boundingBox, transformer);
-        ((IClimbingWorld)entity.worldObj).setWorldTransformer(null);
+        ((IClimbingWorld) entity.worldObj).setWorldTransformer(null);
     }
 
-    public static void rotateEntityBBFromTo(Entity entity,ForgeDirection from, ForgeDirection to) {
+    public static void rotateEntityBBFromTo(Entity entity, ForgeDirection from, ForgeDirection to) {
         VectorTransformer fromTransform = new VectorTransformer(from);
         VectorTransformer toTransform = new VectorTransformer(to);
         transformEntity(entity, fromTransform);
@@ -163,7 +162,7 @@ public class ClimbingHelper {
         else
             entity.boundingBox.maxZ = entity.boundingBox.minZ + realDiffZ;
 
-        float halfWidth = entity.width/2.0f;
+        float halfWidth = entity.width / 2.0f;
         float eyeHeight = entity.yOffset;
 
         if (to == ForgeDirection.EAST)
@@ -246,14 +245,14 @@ public class ClimbingHelper {
 
     public static void rotateLookVector(Vec3 vector, VectorTransformer transformer) {
         if (transformer.getAxisY() == ForgeDirection.DOWN)
-            vector.rotateAroundZ((float)Math.PI);
+            vector.rotateAroundZ((float) Math.PI);
         else if (transformer.getAxisY() == ForgeDirection.SOUTH)
-            vector.rotateAroundX((float)(-Math.PI/2.0));
+            vector.rotateAroundX((float) (-Math.PI / 2.0));
         else if (transformer.getAxisY() == ForgeDirection.NORTH)
-            vector.rotateAroundX((float)(Math.PI/2.0));
+            vector.rotateAroundX((float) (Math.PI / 2.0));
         else if (transformer.getAxisY() == ForgeDirection.WEST)
-            vector.rotateAroundZ((float)(-Math.PI/2.0));
+            vector.rotateAroundZ((float) (-Math.PI / 2.0));
         else if (transformer.getAxisY() == ForgeDirection.EAST)
-            vector.rotateAroundZ((float)(Math.PI/2.0));
+            vector.rotateAroundZ((float) (Math.PI / 2.0));
     }
 }

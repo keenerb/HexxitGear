@@ -24,14 +24,12 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.common.util.ForgeDirection;
 import sct.hexxitgear.core.ArmorSet;
-import sct.hexxitgear.net.HexxitGearNetwork;
-import sct.hexxitgear.net.packets.PolarityPacket;
 
 import java.util.List;
 
 public class ShoesHelper {
     public static void processShoes(EntityPlayer entity, List<ForgeDirection> collidedSides, Vec3 lookDir) {
-        IClimbingShoesWearer wearer = (IClimbingShoesWearer)entity;
+        IClimbingShoesWearer wearer = (IClimbingShoesWearer) entity;
         boolean hasFullSet = ArmorSet.getPlayerArmorSet(entity.getDisplayName()) != null;
         boolean isOnEasySurface = (hasFullSet && wearer.getTransformer().getAxisY() != ForgeDirection.DOWN) || (!hasFullSet && wearer.getTransformer().getAxisY() == ForgeDirection.UP);
 
@@ -62,7 +60,7 @@ public class ShoesHelper {
                 if (collidedSides.contains(ForgeDirection.UP) && wearer.getTransformer().getAxisY() != ForgeDirection.DOWN) {
                     //We're going to expand our bounding box upward but we're already flush with the ceiling so we need to
                     //drop our position downward a bit first
-                    float offset = (entity.width /2.0f) - entity.yOffset;
+                    float offset = (entity.width / 2.0f) - entity.yOffset;
                     entity.posY += offset;
                     entity.boundingBox.offset(0, offset, 0);
                 }
@@ -89,7 +87,7 @@ public class ShoesHelper {
     @SuppressWarnings("rawtypes")
     public static boolean processStep(EntityPlayer player, double motionX, double motionZ) {
         double motionY = 1.003;
-        IClimbingShoesWearer wearer = (IClimbingShoesWearer)player;
+        IClimbingShoesWearer wearer = (IClimbingShoesWearer) player;
         boolean hasFullSet = ArmorSet.getPlayerArmorSet(player.getDisplayName()) != null;
         boolean isOnEasySurface = (hasFullSet && wearer.getTransformer().getAxisY() != ForgeDirection.DOWN) || (!hasFullSet && wearer.getTransformer().getAxisY() == ForgeDirection.UP);
         AxisAlignedBB boundingBoxCopy = player.boundingBox.copy();
@@ -102,10 +100,10 @@ public class ShoesHelper {
             List collision = player.worldObj.getCollidingBoundingBoxes(player, player.boundingBox.addCoord(x, y, z));
 
             for (int i = 0; i < collision.size(); ++i) {
-                y = ((AxisAlignedBB)collision.get(i)).calculateYOffset(player.boundingBox, y);
+                y = ((AxisAlignedBB) collision.get(i)).calculateYOffset(player.boundingBox, y);
             }
 
-            player.boundingBox.offset(0,y,0);
+            player.boundingBox.offset(0, y, 0);
 
             if (motionY != y) {
                 x = 0;
@@ -114,7 +112,7 @@ public class ShoesHelper {
             }
 
             for (int i = 0; i < collision.size(); i++) {
-                x = ((AxisAlignedBB)collision.get(i)).calculateXOffset(player.boundingBox, x);
+                x = ((AxisAlignedBB) collision.get(i)).calculateXOffset(player.boundingBox, x);
             }
 
             player.boundingBox.offset(motionX, 0, 0);
@@ -126,7 +124,7 @@ public class ShoesHelper {
             }
 
             for (int i = 0; i < collision.size(); i++) {
-                z = ((AxisAlignedBB)collision.get(i)).calculateZOffset(player.boundingBox, z);
+                z = ((AxisAlignedBB) collision.get(i)).calculateZOffset(player.boundingBox, z);
             }
 
             player.boundingBox.offset(0, 0, motionZ);
@@ -144,15 +142,15 @@ public class ShoesHelper {
             } else {
                 y = -1.003;
 
-                collision = player.worldObj.getCollidingBoundingBoxes(player, player.boundingBox.addCoord(0,y,0));
+                collision = player.worldObj.getCollidingBoundingBoxes(player, player.boundingBox.addCoord(0, y, 0));
 
                 for (int i = 0; i < collision.size(); i++) {
-                    y = ((AxisAlignedBB)collision.get(i)).calculateYOffset(player.boundingBox, y);
+                    y = ((AxisAlignedBB) collision.get(i)).calculateYOffset(player.boundingBox, y);
                 }
                 player.boundingBox.offset(0, y, 0);
 
                 player.posX = (player.boundingBox.minX + player.boundingBox.maxX) / 2.0D;
-                player.posY = player.boundingBox.minY + (double)player.yOffset - (double)player.yOffset2;
+                player.posY = player.boundingBox.minY + (double) player.yOffset - (double) player.yOffset2;
                 player.posZ = (player.boundingBox.minZ + player.boundingBox.maxZ) / 2.0D;
                 player.isCollidedHorizontally = false;
                 if (!player.isCollidedVertically) player.isCollided = false;

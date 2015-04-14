@@ -77,7 +77,7 @@ public class ItemScaleArmor extends ItemHexxitArmor {
     }
 
     @Override
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List infoList, boolean par4) {
         infoList.add(FormatCodes.Bold.format + FormatCodes.Indigo.format + StatCollector.translateToLocal("gui.hexxitgear.set.scale") + FormatCodes.Reset.format);
 
@@ -94,8 +94,7 @@ public class ItemScaleArmor extends ItemHexxitArmor {
     }
 
     @Override
-    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack)
-    {
+    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
         super.onArmorTick(world, player, itemStack);
 
         if (itemStack.getItem() == HexxitGear.scaleBoots) {
@@ -111,7 +110,7 @@ public class ItemScaleArmor extends ItemHexxitArmor {
             EntityLivingBase target = null;
             for (Object entityObj : player.worldObj.getEntitiesWithinAABBExcludingEntity(player, player.boundingBox)) {
                 if (entityObj instanceof EntityLivingBase) {
-                    target = (EntityLivingBase)entityObj;
+                    target = (EntityLivingBase) entityObj;
                     break;
                 }
             }
@@ -131,7 +130,7 @@ public class ItemScaleArmor extends ItemHexxitArmor {
 
             for (Object entityObj : player.worldObj.getEntitiesWithinAABBExcludingEntity(player, impactBox)) {
                 if (entityObj instanceof EntityLivingBase) {
-                    impactEntity(player, (EntityLivingBase)entityObj);
+                    impactEntity(player, (EntityLivingBase) entityObj);
                 }
             }
 
