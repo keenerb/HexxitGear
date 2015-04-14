@@ -21,7 +21,6 @@ package sct.hexxitgear.core;
 import net.minecraft.entity.player.EntityPlayer;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.net.HexxitGearNetwork;
-import sct.hexxitgear.net.Packets;
 import sct.hexxitgear.net.packets.CapeChangePacket;
 import sct.hexxitgear.net.packets.CapeJoinPacket;
 
