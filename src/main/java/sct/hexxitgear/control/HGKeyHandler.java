@@ -32,7 +32,6 @@ import org.lwjgl.input.Keyboard;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.core.ArmorSet;
 import sct.hexxitgear.net.HexxitGearNetwork;
-import sct.hexxitgear.net.Packets;
 import sct.hexxitgear.net.packets.ArmorAbilityPacket;
 
 import java.util.EnumSet;

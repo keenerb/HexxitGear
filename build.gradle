@@ -119,9 +119,7 @@ def manifestEntries = [
         "Built-By": System.properties['user.name'],
         "Created-By": System.properties['java.vm.version'] + " (" + System.properties['java.vm.vendor'] + ")",
         "FMLCorePlugin": "sct.hexxitgear.coremod.HexxitGearCoremod",
-        "FMLCorePluginContainsFMLMod": 'true',
-        "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
-        "TweakOrder": "10000"
+        "FMLCorePluginContainsFMLMod": 'true'
 ]
 
 jar {
