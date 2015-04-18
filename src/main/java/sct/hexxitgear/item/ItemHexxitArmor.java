@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ISpecialArmor;
 import sct.hexxitgear.core.ArmorSet;
 import sct.hexxitgear.core.ability.AbilityHandler;
+import sct.hexxitgear.core.buff.IBuffHandler;
 import sct.hexxitgear.gui.HGCreativeTab;
 import sct.hexxitgear.util.FormatCodes;
 
@@ -47,6 +48,10 @@ public class ItemHexxitArmor extends ItemArmor implements ISpecialArmor {
         return damageReduceAmount;
     }
 
+    public IBuffHandler getBuffHandler() {
+        return null;
+    }
+
     @Override
     public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
         if (entity instanceof EntityPlayer && !(((EntityPlayer) entity).capabilities.isCreativeMode)) {
@@ -55,25 +60,6 @@ public class ItemHexxitArmor extends ItemArmor implements ISpecialArmor {
             } else {
                 // Create broken item here
             }
-        }
-    }
-
-    @Override
-    public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-        if (this.armorType == 0)
-            return;
-
-        ArmorSet.getMatchingSet(player);
-
-        if (ArmorSet.getPlayerArmorSet(player.getDisplayName()) != null) {
-            ArmorSet armorSet = ArmorSet.getPlayerArmorSet(player.getDisplayName());
-            armorSet.applyBuffs(player);
-        }
-
-        // We run this outside of the check for an armorset just incase a player takes off armor mid ability
-        AbilityHandler bh = AbilityHandler.getPlayerAbilityHandler(player.getDisplayName());
-        if (bh != null) {
-            bh.onTick(player);
         }
     }
 

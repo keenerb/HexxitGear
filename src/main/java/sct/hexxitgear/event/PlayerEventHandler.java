@@ -23,9 +23,12 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import sct.hexxitgear.HexxitGear;
+import sct.hexxitgear.core.ArmorSet;
 import sct.hexxitgear.core.CapeHandler;
+import sct.hexxitgear.core.ability.AbilityHandler;
 import sct.hexxitgear.mixinsupport.climbing.IClimbingShoesWearer;
 
 public class PlayerEventHandler {
@@ -56,5 +59,21 @@ public class PlayerEventHandler {
 
         ItemStack boots = event.player.getCurrentArmor(0);
         shoesWearer.setClimbingShoesEquipped(boots != null && boots.getItem() == HexxitGear.tribalShoes);
+    }
+
+    @SubscribeEvent
+    public void armorBuffCheck(TickEvent.PlayerTickEvent event) {
+        ArmorSet.getMatchingSet(event.player);
+
+        if (ArmorSet.getPlayerArmorSet(event.player.getDisplayName()) != null) {
+            ArmorSet armorSet = ArmorSet.getPlayerArmorSet(event.player.getDisplayName());
+            armorSet.applyBuffs(event.player);
+        }
+
+        // We run this outside of the check for an armorset just incase a player takes off armor mid ability
+        AbilityHandler bh = AbilityHandler.getPlayerAbilityHandler(event.player.getDisplayName());
+        if (bh != null) {
+            bh.onTick(event.player);
+        }
     }
 }

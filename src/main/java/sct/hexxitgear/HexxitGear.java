@@ -35,10 +35,7 @@ import sct.hexxitgear.block.BlockHexbiscus;
 import sct.hexxitgear.coremod.HexxitGearResourcePack;
 import sct.hexxitgear.event.PlayerEventHandler;
 import sct.hexxitgear.gui.HGCreativeTab;
-import sct.hexxitgear.item.ItemMagicianArmor;
-import sct.hexxitgear.item.ItemScaleArmor;
-import sct.hexxitgear.item.ItemThiefArmor;
-import sct.hexxitgear.item.ItemTribalArmor;
+import sct.hexxitgear.item.*;
 import sct.hexxitgear.net.HexxitGearNetwork;
 import sct.hexxitgear.setup.HexxitGearConfig;
 import sct.hexxitgear.setup.HexxitGearRegistry;
@@ -92,25 +89,25 @@ public class HexxitGear extends DummyModContainer {
     public static Item hexicalEssence;
     public static Item hexicalDiamond;
 
-    public static Item tribalHelmet;
-    public static Item tribalChest;
-    public static Item tribalLeggings;
-    public static Item tribalShoes;
+    public static ItemHexxitArmor tribalHelmet;
+    public static ItemHexxitArmor tribalChest;
+    public static ItemHexxitArmor tribalLeggings;
+    public static ItemHexxitArmor tribalShoes;
 
-    public static Item thiefHelmet;
-    public static Item thiefChest;
-    public static Item thiefLeggings;
-    public static Item thiefBoots;
+    public static ItemHexxitArmor thiefHelmet;
+    public static ItemHexxitArmor thiefChest;
+    public static ItemHexxitArmor thiefLeggings;
+    public static ItemHexxitArmor thiefBoots;
 
-    public static Item scaleHelmet;
-    public static Item scaleChest;
-    public static Item scaleLeggings;
-    public static Item scaleBoots;
+    public static ItemHexxitArmor scaleHelmet;
+    public static ItemHexxitArmor scaleChest;
+    public static ItemHexxitArmor scaleLeggings;
+    public static ItemHexxitArmor scaleBoots;
 
-    public static Item magicHelmet;
-    public static Item magicChest;
-    public static Item magicLeggings;
-    public static Item magicBoots;
+    public static ItemHexxitArmor magicHelmet;
+    public static ItemHexxitArmor magicChest;
+    public static ItemHexxitArmor magicLeggings;
+    public static ItemHexxitArmor magicBoots;
 
     public static List<Integer> dimensionalBlacklist = new ArrayList<Integer>();
 
@@ -140,22 +137,22 @@ public class HexxitGear extends DummyModContainer {
 
         hexbiscus = new BlockHexbiscus().setTextureName("hexxitgear:hexbiscus");
 
-        tribalHelmet = new ItemTribalArmor(proxy.addArmor("tribal"), 0).setUnlocalizedName("hexxitgear.tribal.helmet").setTextureName("hexxitgear:tribal.helmet");
-        tribalChest = new ItemTribalArmor(proxy.addArmor("tribal"), 1).setUnlocalizedName("hexxitgear.tribal.chest").setTextureName("hexxitgear:tribal.chest");
-        tribalLeggings = new ItemTribalArmor(proxy.addArmor("tribal"), 2).setUnlocalizedName("hexxitgear.tribal.leggings").setTextureName("hexxitgear:tribal.leggings");
-        tribalShoes = new ItemTribalArmor(proxy.addArmor("tribal"), 3).setUnlocalizedName("hexxitgear.tribal.boots").setTextureName("hexxitgear:tribal.boots");
-        scaleHelmet = new ItemScaleArmor(proxy.addArmor("scale"), 0).setUnlocalizedName("hexxitgear.scale.helmet").setTextureName("hexxitgear:scale.helmet");
-        scaleChest = new ItemScaleArmor(proxy.addArmor("scale"), 1).setUnlocalizedName("hexxitgear.scale.chest").setTextureName("hexxitgear:scale.chest");
-        scaleLeggings = new ItemScaleArmor(proxy.addArmor("scale"), 2).setUnlocalizedName("hexxitgear.scale.leggings").setTextureName("hexxitgear:scale.leggings");
-        scaleBoots = new ItemScaleArmor(proxy.addArmor("scale"), 3).setUnlocalizedName("hexxitgear.scale.boots").setTextureName("hexxitgear:scale.boots");
-        thiefHelmet = new ItemThiefArmor(proxy.addArmor("thief"), 0).setUnlocalizedName("hexxitgear.thief.helmet").setTextureName("hexxitgear:thief.helmet");
-        thiefChest = new ItemThiefArmor(proxy.addArmor("thief"), 1).setUnlocalizedName("hexxitgear.thief.chest").setTextureName("hexxitgear:thief.chest");
-        thiefLeggings = new ItemThiefArmor(proxy.addArmor("thief"), 2).setUnlocalizedName("hexxitgear.thief.leggings").setTextureName("hexxitgear:thief.leggings");
-        thiefBoots = new ItemThiefArmor(proxy.addArmor("thief"), 3).setUnlocalizedName("hexxitgear.thief.boots").setTextureName("hexxitgear:thief.boots");
-        magicHelmet = new ItemMagicianArmor(proxy.addArmor("magic"), 0).setUnlocalizedName("hexxitgear.magic.helmet").setTextureName("hexxitgear:magic.helmet");
-        magicChest = new ItemMagicianArmor(proxy.addArmor("magic"), 1).setUnlocalizedName("hexxitgear.magic.chest").setTextureName("hexxitgear:magic.chest");
-        magicLeggings = new ItemMagicianArmor(proxy.addArmor("magic"), 2).setUnlocalizedName("hexxitgear.magic.leggings").setTextureName("hexxitgear:magic.leggings");
-        magicBoots = new ItemMagicianArmor(proxy.addArmor("magic"), 3).setUnlocalizedName("hexxitgear.magic.boots").setTextureName("hexxitgear:magic.boots");
+        tribalHelmet = (ItemHexxitArmor)new ItemTribalArmor(proxy.addArmor("tribal"), 0).setUnlocalizedName("hexxitgear.tribal.helmet").setTextureName("hexxitgear:tribal.helmet");
+        tribalChest = (ItemHexxitArmor)new ItemTribalArmor(proxy.addArmor("tribal"), 1).setUnlocalizedName("hexxitgear.tribal.chest").setTextureName("hexxitgear:tribal.chest");
+        tribalLeggings = (ItemHexxitArmor)new ItemTribalArmor(proxy.addArmor("tribal"), 2).setUnlocalizedName("hexxitgear.tribal.leggings").setTextureName("hexxitgear:tribal.leggings");
+        tribalShoes = (ItemHexxitArmor)new ItemTribalArmor(proxy.addArmor("tribal"), 3).setUnlocalizedName("hexxitgear.tribal.boots").setTextureName("hexxitgear:tribal.boots");
+        scaleHelmet = (ItemHexxitArmor)new ItemScaleArmor(proxy.addArmor("scale"), 0).setUnlocalizedName("hexxitgear.scale.helmet").setTextureName("hexxitgear:scale.helmet");
+        scaleChest = (ItemHexxitArmor)new ItemScaleArmor(proxy.addArmor("scale"), 1).setUnlocalizedName("hexxitgear.scale.chest").setTextureName("hexxitgear:scale.chest");
+        scaleLeggings = (ItemHexxitArmor)new ItemScaleArmor(proxy.addArmor("scale"), 2).setUnlocalizedName("hexxitgear.scale.leggings").setTextureName("hexxitgear:scale.leggings");
+        scaleBoots = (ItemHexxitArmor)new ItemScaleArmor(proxy.addArmor("scale"), 3).setUnlocalizedName("hexxitgear.scale.boots").setTextureName("hexxitgear:scale.boots");
+        thiefHelmet = (ItemHexxitArmor)new ItemThiefArmor(proxy.addArmor("thief"), 0).setUnlocalizedName("hexxitgear.thief.helmet").setTextureName("hexxitgear:thief.helmet");
+        thiefChest =(ItemHexxitArmor) new ItemThiefArmor(proxy.addArmor("thief"), 1).setUnlocalizedName("hexxitgear.thief.chest").setTextureName("hexxitgear:thief.chest");
+        thiefLeggings = (ItemHexxitArmor)new ItemThiefArmor(proxy.addArmor("thief"), 2).setUnlocalizedName("hexxitgear.thief.leggings").setTextureName("hexxitgear:thief.leggings");
+        thiefBoots = (ItemHexxitArmor)new ItemThiefArmor(proxy.addArmor("thief"), 3).setUnlocalizedName("hexxitgear.thief.boots").setTextureName("hexxitgear:thief.boots");
+        magicHelmet = (ItemHexxitArmor)new ItemMagicianArmor(proxy.addArmor("magic"), 0).setUnlocalizedName("hexxitgear.magic.helmet").setTextureName("hexxitgear:magic.helmet");
+        magicChest = (ItemHexxitArmor)new ItemMagicianArmor(proxy.addArmor("magic"), 1).setUnlocalizedName("hexxitgear.magic.chest").setTextureName("hexxitgear:magic.chest");
+        magicLeggings = (ItemHexxitArmor)new ItemMagicianArmor(proxy.addArmor("magic"), 2).setUnlocalizedName("hexxitgear.magic.leggings").setTextureName("hexxitgear:magic.leggings");
+        magicBoots = (ItemHexxitArmor)new ItemMagicianArmor(proxy.addArmor("magic"), 3).setUnlocalizedName("hexxitgear.magic.boots").setTextureName("hexxitgear:magic.boots");
 
         hexicalEssence = new Item().setCreativeTab(HGCreativeTab.tab).setUnlocalizedName("hexxitgear.hexicalessence").setTextureName("hexxitgear:hexicalEssence");
         hexicalDiamond = new Item().setTextureName("hexxitgear:hexicalDiamond").setCreativeTab(HGCreativeTab.tab).setUnlocalizedName("hexxitgear.hexicaldiamond");

@@ -47,6 +47,19 @@ gui.hexxitgear.boots.tribal.empowered2=and across the ceiling for short
 gui.hexxitgear.boots.tribal.empowered3=distances.  You can also sprint over small
 gui.hexxitgear.boots.tribal.empowered4=obstacles on the floor and the wall.
 
+gui.hexxitgear.boots.thief=Striding
+gui.hexxitgear.boots.thief0=While wearing these boots, you can
+gui.hexxitgear.boots.thief1=effortlessly walk over small
+gui.hexxitgear.boots.thief2=obstacles. You also run slightly
+gui.hexxitgear.boots.thief3=faster. With the entire §9Thief Set§7,
+gui.hexxitgear.boots.thief4=you gain §eStriding and Springing§7.
+
+gui.hexxitgear.boots.thief.empowered=Striding and Springing
+gui.hexxitgear.boots.thief.empowered0=While wearing the entire §9Thief Set§7,
+gui.hexxitgear.boots.thief.empowered1=you run much faster and jump much
+gui.hexxitgear.boots.thief.empowered2=further. You can also effortlessly
+gui.hexxitgear.boots.thief.empowered3=walk over small obstacles.
+
 ability.hexxitgear.invisibility=Invisibility
 ability.hexxitgear.knockback=Knockback
 ability.hexxitgear.shield=Shield

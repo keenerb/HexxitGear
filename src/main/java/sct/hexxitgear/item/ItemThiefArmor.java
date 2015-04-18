@@ -27,13 +27,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.StatCollector;
+import org.lwjgl.input.Keyboard;
 import sct.hexxitgear.HexxitGear;
+import sct.hexxitgear.core.ArmorSet;
+import sct.hexxitgear.core.buff.BuffThiefBoots;
+import sct.hexxitgear.core.buff.IBuffHandler;
 import sct.hexxitgear.model.ModelHoodHelmet;
 import sct.hexxitgear.util.FormatCodes;
 
 import java.util.List;
 
 public class ItemThiefArmor extends ItemHexxitArmor {
+
+    public static final IBuffHandler bootsBuff = new BuffThiefBoots();
 
     public ItemThiefArmor(int renderIndex, int slot) {
         super(ArmorMaterial.DIAMOND, renderIndex, slot);
@@ -55,6 +61,13 @@ public class ItemThiefArmor extends ItemHexxitArmor {
             return "hexxitgear:textures/armor/thief2.png";
 
         return "hexxitgear:textures/armor/thief.png";
+    }
+
+    @Override
+    public IBuffHandler getBuffHandler() {
+        if (armorType == 3)
+            return bootsBuff;
+        return null;
     }
 
     @SideOnly(Side.CLIENT)
@@ -82,6 +95,17 @@ public class ItemThiefArmor extends ItemHexxitArmor {
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List infoList, boolean par4) {
-        infoList.add(FormatCodes.Indigo.format + StatCollector.translateToLocal("gui.hexxitgear.set.thief"));
+        infoList.add(FormatCodes.Bold.format + FormatCodes.Indigo.format + StatCollector.translateToLocal("gui.hexxitgear.set.thief") + FormatCodes.Reset.format);
+
+        if (this.armorType == 3) {
+            if (par4 || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+                boolean isEmpowered = (par2EntityPlayer.getCurrentArmor(0) != null && par2EntityPlayer.getCurrentArmor(0).getItem() == this && ArmorSet.getPlayerArmorSet(par2EntityPlayer.getDisplayName()) != null);
+                String powerName = isEmpowered ? "gui.hexxitgear.boots.thief.empowered" : "gui.hexxitgear.boots.thief";
+                infoList.add(FormatCodes.Bold.format + FormatCodes.Yellow.format + StatCollector.translateToLocal(powerName));
+                HexxitGear.translateAndAdd(powerName, infoList);
+            } else {
+                infoList.add(FormatCodes.Indigo.format + FormatCodes.Italic.format + StatCollector.translateToLocal("gui.hexxitgear.shiftprompt") + FormatCodes.Reset.format);
+            }
+        }
     }
 }

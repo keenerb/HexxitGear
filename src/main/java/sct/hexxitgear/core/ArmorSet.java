@@ -23,6 +23,7 @@ import net.minecraft.item.Item;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.core.ability.*;
 import sct.hexxitgear.core.buff.*;
+import sct.hexxitgear.item.ItemHexxitArmor;
 
 import java.util.*;
 
@@ -40,8 +41,9 @@ public class ArmorSet {
     private static List<ArmorSet> armorSets;
     private static Map<String, ArmorSet> playerMap = new HashMap<String, ArmorSet>();
     private static List<String> activeArmors = new ArrayList<String>();
+    private static Map<String, List<IBuffHandler>> buffMap = new HashMap<String, List<IBuffHandler>>();
 
-    private List<Item> armors = new ArrayList<Item>();
+    private List<ItemHexxitArmor> armors = new ArrayList<ItemHexxitArmor>();
     private String capeUrl;
     private String name;
     private IBuffHandler buffHandler;
@@ -59,15 +61,21 @@ public class ArmorSet {
         List<Item> playerSet = getPlayerArmors(player);
 
         boolean foundMatch = false;
+        List<IBuffHandler> shouldHaveBuffs = new ArrayList<IBuffHandler>(4);
 
         for (ArmorSet armorSet : getArmorSets()) {
             int matched = 0;
-            for (Item armor : armorSet.getArmors()) {
+            for (ItemHexxitArmor armor : armorSet.getArmors()) {
                 if (playerSet.contains(armor)) {
+                    IBuffHandler armorBuff = armor.getBuffHandler();
+                    if (armorBuff != null)
+                        shouldHaveBuffs.add(armorBuff);
                     matched++;
                 }
             }
             if (matched == 4) {
+                shouldHaveBuffs.clear();
+                shouldHaveBuffs.add(armorSet.buffHandler);
                 if (getPlayerArmorSet(player.getDisplayName()) == null || !getPlayerArmorSet(player.getDisplayName()).equals(armorSet)) {
                     addPlayerArmorSet(player.getDisplayName(), armorSet);
                 }
@@ -76,10 +84,25 @@ public class ArmorSet {
         }
 
         if (!foundMatch && getPlayerArmorSet(player.getDisplayName()) != null) {
-            ArmorSet as = getPlayerArmorSet(player.getDisplayName());
             removePlayerArmorSet(player.getDisplayName());
-            as.removeBuffs(player);
         }
+
+        List<IBuffHandler> actualBuffs;
+        if (buffMap.containsKey(player.getDisplayName()))
+            actualBuffs = buffMap.get(player.getDisplayName());
+        else
+            actualBuffs = new ArrayList<IBuffHandler>(0);
+
+        for (IBuffHandler buff : actualBuffs) {
+            if (!shouldHaveBuffs.contains(buff))
+                buff.removePlayerBuffs(player);
+        }
+
+        for (IBuffHandler buff : shouldHaveBuffs) {
+            buff.applyPlayerBuffs(player);
+        }
+
+        buffMap.put(player.getDisplayName(), shouldHaveBuffs);
     }
 
     private static List<Item> getPlayerArmors(EntityPlayer player) {
@@ -119,7 +142,7 @@ public class ArmorSet {
         }
     }
 
-    public ArmorSet(String name, String capeUrl, List<Item> armor, IBuffHandler buffHandler, Ability ability) {
+    public ArmorSet(String name, String capeUrl, List<ItemHexxitArmor> armor, IBuffHandler buffHandler, Ability ability) {
         this.name = name;
         this.armors = armor;
         this.capeUrl = capeUrl;
@@ -131,7 +154,7 @@ public class ArmorSet {
         armorSets.add(this);
     }
 
-    public ArmorSet(String name, List<Item> armor, IBuffHandler buffHandler, Ability ability) {
+    public ArmorSet(String name, List<ItemHexxitArmor> armor, IBuffHandler buffHandler, Ability ability) {
         this(name, null, armor, buffHandler, ability);
     }
 
@@ -139,7 +162,7 @@ public class ArmorSet {
         return name;
     }
 
-    public List<Item> getArmors() {
+    public List<ItemHexxitArmor> getArmors() {
         return armors;
     }
 
