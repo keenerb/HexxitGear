@@ -40,6 +40,7 @@ public class BlockHexbiscus extends BlockFlower {
         setUnlocalizedName("hexxitgear.flora.hexbiscus");
     }
 
+    @Override
     public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_) {
         return HexxitGear.hexicalEssence;
     }
@@ -48,16 +49,19 @@ public class BlockHexbiscus extends BlockFlower {
      * Gets the block's texture. Args: side, meta
      */
     @SideOnly(Side.CLIENT)
+    @Override
     public IIcon getIcon(int p_149691_1_, int p_149691_2_) {
         return blockIcon;
     }
 
     @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister p_149651_1_) {
+    @Override
+    public void registerIcons(IIconRegister p_149651_1_) {
         blockIcon = p_149651_1_.registerIcon(getTextureName());
     }
 
     @SideOnly(Side.CLIENT)
+    @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void getSubBlocks(Item p_149666_1_, CreativeTabs p_149666_2_, List p_149666_3_) {
         p_149666_3_.add(new ItemStack(p_149666_1_, 1, 0));
