@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.core.ArmorSet;
+import sct.hexxitgear.model.ModelDualLayerArmor;
 import sct.hexxitgear.model.ModelSageHood;
 import sct.hexxitgear.util.FormatCodes;
 
@@ -26,36 +27,46 @@ public class ItemMagicianArmor extends ItemHexxitArmor {
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, java.lang.String type) {
-        // If the helmet slot, return helmet texture map
-        if (slot == 0)
-            return "hexxitgear:textures/maps/SageHood.png";
+    @SideOnly(Side.CLIENT)
+    protected String getHoodTexture() {
+        return "hexxitgear:textures/maps/SageHood.png";
+    }
 
-        if (stack.getItem() == HexxitGear.magicLeggings)
-            return "hexxitgear:textures/armor/sage2.png";
-
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected String getOverlayTexture() {
         return "hexxitgear:textures/armor/sage.png";
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
-    private static ModelSageHood hood;
+    protected String getBodyTexture() {
+        return "hexxitgear:textures/armor/sage2.png";
+    }
 
+    @Override
     @SideOnly(Side.CLIENT)
-    protected ModelSageHood getHoodModel() {
-        if (hood == null)
-            hood = new ModelSageHood();
-        return hood;
+    protected ModelDualLayerArmor getBodyModel(int slot) {
+        switch (slot) {
+            case 1: return chest;
+            case 2: return leggings;
+            case 3: return feet;
+            default: return null;
+        }
     }
 
     @SideOnly(Side.CLIENT)
-    @Override
-    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
-        if (armorSlot == 0) {
-            ModelBiped retVal = getHoodModel();
-            retVal.isSneak = entityLiving.isSneaking();
-            return retVal;
-        }
-        return null;
+    private static ModelSageHood hood = new ModelSageHood();
+    @SideOnly(Side.CLIENT)
+    private static ModelDualLayerArmor leggings = new ModelDualLayerArmor(0.5f);
+    @SideOnly(Side.CLIENT)
+    private static ModelDualLayerArmor chest = new ModelDualLayerArmor(1.0f);
+    @SideOnly(Side.CLIENT)
+    private static ModelDualLayerArmor feet = new ModelDualLayerArmor(0.5f);
+
+    @SideOnly(Side.CLIENT)
+    protected ModelBiped getHeadModel() {
+        return hood;
     }
 
     @Override

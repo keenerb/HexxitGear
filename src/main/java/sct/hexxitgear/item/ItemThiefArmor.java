@@ -32,6 +32,7 @@ import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.core.ArmorSet;
 import sct.hexxitgear.core.buff.BuffThiefBoots;
 import sct.hexxitgear.core.buff.IBuffHandler;
+import sct.hexxitgear.model.ModelDualLayerArmor;
 import sct.hexxitgear.model.ModelHoodHelmet;
 import sct.hexxitgear.util.FormatCodes;
 
@@ -46,6 +47,7 @@ public class ItemThiefArmor extends ItemHexxitArmor {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public String getArmorTexture(ItemStack stack, Entity entity, int slot, java.lang.String type) {
         if (entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) entity;
@@ -53,14 +55,40 @@ public class ItemThiefArmor extends ItemHexxitArmor {
                 return "hexxitgear:textures/armor/invisible.png";
         }
 
-        // If the helmet slot, return helmet texture map
-        if (slot == 0)
-            return "hexxitgear:textures/maps/HoodHelmet.png";
+        return super.getArmorTexture(stack, entity, slot, type);
+    }
 
-        if (stack.getItem() == HexxitGear.thiefLeggings)
-            return "hexxitgear:textures/armor/thief2.png";
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected String getHoodTexture() {
+        return "hexxitgear:textures/maps/HoodHelmet.png";
+    }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected String getBodyTexture() {
+        return "hexxitgear:textures/armor/thief2.png";
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected String getOverlayTexture() {
         return "hexxitgear:textures/armor/thief.png";
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected ModelDualLayerArmor getBodyModel(int slot) {
+        switch (slot) {
+            case 2:
+                return leggings;
+            case 1:
+                return chest;
+            case 3:
+                return feet;
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -71,25 +99,18 @@ public class ItemThiefArmor extends ItemHexxitArmor {
     }
 
     @SideOnly(Side.CLIENT)
-    private static ModelHoodHelmet hoodHelmet;
-
+    private static ModelHoodHelmet hoodHelmet = new ModelHoodHelmet();
     @SideOnly(Side.CLIENT)
-    private ModelBiped getHelmet() {
-        if (hoodHelmet == null)
-            hoodHelmet = new ModelHoodHelmet();
-
-        return hoodHelmet;
-    }
+    private static ModelDualLayerArmor leggings = new ModelDualLayerArmor(0.5f);
+    @SideOnly(Side.CLIENT)
+    private static ModelDualLayerArmor chest = new ModelDualLayerArmor(1.0f);
+    @SideOnly(Side.CLIENT)
+    private static ModelDualLayerArmor feet = new ModelDualLayerArmor(0.5f);
 
     @SideOnly(Side.CLIENT)
     @Override
-    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
-        if (armorSlot == 0) {
-            ModelBiped helmet = getHelmet();
-            helmet.isSneak = entityLiving.isSneaking();
-            return helmet;
-        }
-        return null;
+    protected ModelBiped getHeadModel() {
+        return hoodHelmet;
     }
 
     @Override
