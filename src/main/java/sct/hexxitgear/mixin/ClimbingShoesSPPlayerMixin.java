@@ -19,6 +19,8 @@
 package sct.hexxitgear.mixin;
 
 import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.world.World;
@@ -27,6 +29,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import sct.hexxitgear.mixinsupport.climbing.IClimbingShoesWearer;
 
+@SideOnly(Side.CLIENT)
 @Mixin(EntityPlayerSP.class)
 public abstract class ClimbingShoesSPPlayerMixin extends AbstractClientPlayer implements IClimbingShoesWearer {
     public ClimbingShoesSPPlayerMixin(World p_i45074_1_, GameProfile p_i45074_2_) {
