@@ -45,4 +45,8 @@ public class CommonProxy {
 
     public void registerHandlers() {
     }
+
+    public boolean isClientPlayer(EntityPlayer player) {
+        return false;
+    }
 }

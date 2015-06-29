@@ -42,11 +42,8 @@ public class ClimbingHelper {
                 z -= offset;
             }
 
-            if (packet instanceof C03PacketPlayer.C04PacketPlayerPosition) {
-                packet = new C03PacketPlayer.C04PacketPlayerPosition(x, packet.getPositionY(), packet.getStance(), z, packet.func_149465_i());
-            } else if (packet instanceof C03PacketPlayer.C06PacketPlayerPosLook) {
-                packet = new C03PacketPlayer.C06PacketPlayerPosLook(x, packet.getPositionY(), packet.getStance(), z, packet.getYaw(), packet.getPitch(), packet.func_149465_i());
-            }
+            packet.x = x;
+            packet.z = z;
         }
 
 

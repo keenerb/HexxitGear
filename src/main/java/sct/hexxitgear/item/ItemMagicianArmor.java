@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
+import sct.hexxitgear.ClientProxy;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.core.ArmorSet;
 import sct.hexxitgear.model.ModelDualLayerArmor;
@@ -48,25 +49,16 @@ public class ItemMagicianArmor extends ItemHexxitArmor {
     @SideOnly(Side.CLIENT)
     protected ModelDualLayerArmor getBodyModel(int slot) {
         switch (slot) {
-            case 1: return chest;
-            case 2: return leggings;
-            case 3: return feet;
+            case 1: return ClientProxy.sageChest;
+            case 2: return ClientProxy.sageLeggings;
+            case 3: return ClientProxy.sageFeet;
             default: return null;
         }
     }
 
     @SideOnly(Side.CLIENT)
-    private static ModelSageHood hood = new ModelSageHood();
-    @SideOnly(Side.CLIENT)
-    private static ModelDualLayerArmor leggings = new ModelDualLayerArmor(0.5f);
-    @SideOnly(Side.CLIENT)
-    private static ModelDualLayerArmor chest = new ModelDualLayerArmor(1.0f);
-    @SideOnly(Side.CLIENT)
-    private static ModelDualLayerArmor feet = new ModelDualLayerArmor(0.5f);
-
-    @SideOnly(Side.CLIENT)
     protected ModelBiped getHeadModel() {
-        return hood;
+        return ClientProxy.sageHelmet;
     }
 
     @Override

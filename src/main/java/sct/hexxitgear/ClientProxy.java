@@ -22,13 +22,35 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import sct.hexxitgear.control.HGKeyHandler;
+import sct.hexxitgear.model.*;
 
 public class ClientProxy extends CommonProxy {
+
+    public static ModelScaleHelmet scaleHelmet = new ModelScaleHelmet();
+    public static ModelDualLayerArmor scaleChest = new ModelDualLayerArmor(1.0f);
+    public static ModelDualLayerArmor scaleLeggings = new ModelDualLayerArmor(0.5f);
+    public static ModelDualLayerArmor scaleFeet = new ModelDualLayerArmor(0.5f);
+    public static ModelSkullHelmet tribalHelmet = new ModelSkullHelmet();
+    public static ModelDualLayerArmor tribalChest = new ModelDualLayerArmor(1.0f);
+    public static ModelDualLayerArmor tribalLeggings = new ModelDualLayerArmor(0.5f);
+    public static ModelDualLayerArmor tribalFeet = new ModelDualLayerArmor(0.5f);
+    public static ModelHoodHelmet thiefHelmet = new ModelHoodHelmet();
+    public static ModelDualLayerArmor thiefLeggings = new ModelDualLayerArmor(0.5f);
+    public static ModelDualLayerArmor thiefChest = new ModelDualLayerArmor(1.0f);
+    public static ModelDualLayerArmor thiefFeet = new ModelDualLayerArmor(0.5f);
+    public static ModelSageHood sageHelmet = new ModelSageHood();
+    public static ModelDualLayerArmor sageLeggings = new ModelDualLayerArmor(0.5f);
+    public static ModelDualLayerArmor sageChest = new ModelDualLayerArmor(1.0f);
+    public static ModelDualLayerArmor sageFeet = new ModelDualLayerArmor(0.5f);
+
 
     @Override
     public int addArmor(String armorName) {
@@ -80,5 +102,10 @@ public class ClientProxy extends CommonProxy {
     public void registerHandlers() {
         super.registerHandlers();
         FMLCommonHandler.instance().bus().register(new HGKeyHandler());
+    }
+
+    @Override
+    public boolean isClientPlayer(EntityPlayer player) {
+        return player == Minecraft.getMinecraft().thePlayer;
     }
 }

@@ -21,7 +21,6 @@ package sct.hexxitgear.item;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -30,10 +29,10 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
+import sct.hexxitgear.ClientProxy;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.core.ArmorSet;
 import sct.hexxitgear.model.ModelDualLayerArmor;
-import sct.hexxitgear.model.ModelScaleHelmet;
 import sct.hexxitgear.util.FormatCodes;
 
 import java.util.List;
@@ -67,29 +66,20 @@ public class ItemScaleArmor extends ItemHexxitArmor {
     protected ModelDualLayerArmor getBodyModel(int slot) {
         switch(slot) {
             case 2:
-                return leggings;
+                return ClientProxy.scaleLeggings;
             case 1:
-                return chest;
+                return ClientProxy.scaleChest;
             case 3:
-                return feet;
+                return ClientProxy.scaleFeet;
             default:
                 return null;
         }
     }
 
     @SideOnly(Side.CLIENT)
-    private static ModelScaleHelmet scaleHelmet = new ModelScaleHelmet();
-    @SideOnly(Side.CLIENT)
-    private static ModelDualLayerArmor chest = new ModelDualLayerArmor(1.0f);
-    @SideOnly(Side.CLIENT)
-    private static ModelDualLayerArmor leggings = new ModelDualLayerArmor(0.5f);
-    @SideOnly(Side.CLIENT)
-    private static ModelDualLayerArmor feet = new ModelDualLayerArmor(0.5f);
-
-    @SideOnly(Side.CLIENT)
     @Override
     protected ModelBiped getHeadModel() {
-        return scaleHelmet;
+        return ClientProxy.scaleHelmet;
     }
 
     @Override

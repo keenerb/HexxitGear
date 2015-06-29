@@ -1,0 +1,14 @@
+{
+    "required":true,
+    "minVersion":"0.2",
+    "package":"sct.hexxitgear.mixin",
+    "mixins": [
+        "ClimbingShoesEntityMixin",
+        "ClimbingShoesLivingMixin",
+        "ClimbingShoesPlayerMixin",
+        "ClimbingWorldMixin",
+        "ClimbingServerHandlerMixin",
+        "ClimbingPlayerPacketMixin"
+    ],
+    "refmap":"hexxitgear.mixin.refmap.json"
+}

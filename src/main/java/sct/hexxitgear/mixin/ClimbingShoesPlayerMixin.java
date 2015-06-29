@@ -31,6 +31,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.mixinsupport.climbing.ClimbingHelper;
 import sct.hexxitgear.mixinsupport.climbing.IClimbingShoesWearer;
 import sct.hexxitgear.mixinsupport.climbing.ShoesHelper;
@@ -157,7 +158,7 @@ public abstract class ClimbingShoesPlayerMixin extends EntityLivingBase implemen
             if (!this.worldObj.isRemote) {
                 HexxitGearNetwork.sendToNearbyPlayers(new PolarityPacket(direction), player.worldObj.provider.dimensionId, player.posX, player.posY, player.posZ, 64.0D);
             } else {
-                if (player == Minecraft.getMinecraft().thePlayer)
+                if (HexxitGear.proxy.isClientPlayer(player))
                     HexxitGearNetwork.sendToServer(new PolarityPacket(direction));
             }
         }

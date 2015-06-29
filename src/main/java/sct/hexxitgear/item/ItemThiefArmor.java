@@ -22,18 +22,17 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
+import sct.hexxitgear.ClientProxy;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.core.ArmorSet;
 import sct.hexxitgear.core.buff.BuffThiefBoots;
 import sct.hexxitgear.core.buff.IBuffHandler;
 import sct.hexxitgear.model.ModelDualLayerArmor;
-import sct.hexxitgear.model.ModelHoodHelmet;
 import sct.hexxitgear.util.FormatCodes;
 
 import java.util.List;
@@ -81,11 +80,11 @@ public class ItemThiefArmor extends ItemHexxitArmor {
     protected ModelDualLayerArmor getBodyModel(int slot) {
         switch (slot) {
             case 2:
-                return leggings;
+                return ClientProxy.thiefLeggings;
             case 1:
-                return chest;
+                return ClientProxy.thiefChest;
             case 3:
-                return feet;
+                return ClientProxy.thiefFeet;
             default:
                 return null;
         }
@@ -99,18 +98,9 @@ public class ItemThiefArmor extends ItemHexxitArmor {
     }
 
     @SideOnly(Side.CLIENT)
-    private static ModelHoodHelmet hoodHelmet = new ModelHoodHelmet();
-    @SideOnly(Side.CLIENT)
-    private static ModelDualLayerArmor leggings = new ModelDualLayerArmor(0.5f);
-    @SideOnly(Side.CLIENT)
-    private static ModelDualLayerArmor chest = new ModelDualLayerArmor(1.0f);
-    @SideOnly(Side.CLIENT)
-    private static ModelDualLayerArmor feet = new ModelDualLayerArmor(0.5f);
-
-    @SideOnly(Side.CLIENT)
     @Override
     protected ModelBiped getHeadModel() {
-        return hoodHelmet;
+        return ClientProxy.thiefHelmet;
     }
 
     @Override

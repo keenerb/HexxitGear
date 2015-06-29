@@ -21,16 +21,14 @@ package sct.hexxitgear.item;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
+import sct.hexxitgear.ClientProxy;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.core.ArmorSet;
 import sct.hexxitgear.model.ModelDualLayerArmor;
-import sct.hexxitgear.model.ModelSkullHelmet;
 import sct.hexxitgear.util.FormatCodes;
 
 import java.util.List;
@@ -62,27 +60,19 @@ public class ItemTribalArmor extends ItemHexxitArmor {
     @Override
     @SideOnly(Side.CLIENT)
     protected ModelDualLayerArmor getBodyModel(int slot) {
-        switch (slot) {
-            case 1: return chest;
-            case 2: return leggings;
-            case 3: return feet;
-            default: return null;
-        }
+//        switch (slot) {
+//            case 1: return ClientProxy.tribalChest;
+//            case 2: return ClientProxy.tribalLeggings;
+//            case 3: return ClientProxy.tribalFeet;
+//            default: return null;
+//        }
+        return null;
     }
 
     @SideOnly(Side.CLIENT)
-    private static ModelSkullHelmet skullHelmet = new ModelSkullHelmet();
-    @SideOnly(Side.CLIENT)
-    private static ModelDualLayerArmor chest = new ModelDualLayerArmor(1.0f);
-    @SideOnly(Side.CLIENT)
-    private static ModelDualLayerArmor leggings = new ModelDualLayerArmor(0.5f);
-    @SideOnly(Side.CLIENT)
-    private static ModelDualLayerArmor feet = new ModelDualLayerArmor(0.5f);
-
-    @SideOnly(Side.CLIENT)
     @Override
-    protected ModelSkullHelmet getHeadModel() {
-        return skullHelmet;
+    protected ModelBiped getHeadModel() {
+        return ClientProxy.tribalHelmet;
     }
 
     @Override

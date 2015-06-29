@@ -18,7 +18,10 @@
 
 package sct.hexxitgear.coremod;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.FMLLaunchHandler;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
+import cpw.mods.fml.relauncher.Side;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.MixinEnvironment;
 
@@ -30,7 +33,10 @@ public class HexxitGearCoremod implements IFMLLoadingPlugin {
         MixinBootstrap.init();
         MixinEnvironment env = MixinEnvironment.getDefaultEnvironment();
         System.err.println(env);
-        env.addConfiguration("mixins.hexxitgear.json");
+        if (FMLLaunchHandler.side() == Side.SERVER)
+            env.addConfiguration("mixins.server.hexxitgear.json");
+        else
+            env.addConfiguration("mixins.client.hexxitgear.json");
     }
 
     @Override
