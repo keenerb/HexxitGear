@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import sct.hexxitgear.HexxitGear;
+import sct.hexxitgear.model.ModelDualLayerArmor;
 import sct.hexxitgear.model.ModelScaleHelmet;
 import sct.hexxitgear.util.FormatCodes;
 
@@ -39,22 +40,51 @@ public class ItemScaleArmor extends ItemHexxitArmor {
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, java.lang.String type) {
-        if (slot == 0)
-            return "hexxitgear:textures/maps/ScaleHelmet.png";
+    @SideOnly(Side.CLIENT)
+    protected String getHoodTexture() {
+        return "hexxitgear:textures/maps/ScaleHelmet.png";
+    }
 
-        if (stack.getItem() == HexxitGear.scaleLeggings)
-            return "hexxitgear:textures/armor/scale2.png";
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected String getBodyTexture() {
+        return "hexxitgear:textures/armor/scale2.png";
+    }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected String getOverlayTexture() {
         return "hexxitgear:textures/armor/scale.png";
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected ModelDualLayerArmor getBodyModel(int slot) {
+        switch(slot) {
+            case 2:
+                return leggings;
+            case 1:
+                return chest;
+            case 3:
+                return feet;
+            default:
+                return null;
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static ModelScaleHelmet scaleHelmet = new ModelScaleHelmet();
+    @SideOnly(Side.CLIENT)
+    private static ModelDualLayerArmor chest = new ModelDualLayerArmor(1.0f);
+    @SideOnly(Side.CLIENT)
+    private static ModelDualLayerArmor leggings = new ModelDualLayerArmor(0.5f);
+    @SideOnly(Side.CLIENT)
+    private static ModelDualLayerArmor feet = new ModelDualLayerArmor(0.5f);
+
     @SideOnly(Side.CLIENT)
     @Override
-    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
-        if (armorSlot == 0)
-            return new ModelScaleHelmet();
-        return null;
+    protected ModelBiped getHeadModel() {
+        return scaleHelmet;
     }
 
     @Override

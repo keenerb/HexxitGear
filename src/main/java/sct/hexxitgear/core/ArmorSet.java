@@ -25,9 +25,11 @@ import sct.hexxitgear.core.ability.Ability;
 import sct.hexxitgear.core.ability.AbilityInvisibility;
 import sct.hexxitgear.core.ability.AbilityKnockback;
 import sct.hexxitgear.core.ability.AbilityShield;
+import sct.hexxitgear.core.ability.AbilityRegeneration;
 import sct.hexxitgear.core.buff.BuffScaleSet;
 import sct.hexxitgear.core.buff.BuffThiefSet;
 import sct.hexxitgear.core.buff.BuffTribalSet;
+import sct.hexxitgear.core.buff.BuffMagicianSet;
 import sct.hexxitgear.core.buff.IBuffHandler;
 
 import java.util.*;
@@ -40,7 +42,8 @@ public class ArmorSet {
             Arrays.asList(HexxitGear.thiefHelmet, HexxitGear.thiefChest, HexxitGear.thiefLeggings, HexxitGear.thiefBoots), new BuffThiefSet(), new AbilityInvisibility());
     public static ArmorSet scaleSet = new ArmorSet("Scale", "http://hexxit.sctgaming.com/capes/purplecape.png",
             Arrays.asList(HexxitGear.scaleHelmet, HexxitGear.scaleChest, HexxitGear.scaleLeggings, HexxitGear.scaleBoots), new BuffScaleSet(), new AbilityShield());
-
+    public static ArmorSet magicSet = new ArmorSet("Magician", "http://hexxit.sctgaming.com/capes/magiccape.png",
+            Arrays.asList(HexxitGear.magicHelmet, HexxitGear.magicChest, HexxitGear.magicLeggings, HexxitGear.magicBoots), new BuffMagicianSet(), new AbilityRegeneration());
     private static List<ArmorSet>armorSets;
     private static Map<String, ArmorSet> playerMap = new HashMap<String, ArmorSet>();
     private static List<String> activeArmors = new ArrayList<String>();

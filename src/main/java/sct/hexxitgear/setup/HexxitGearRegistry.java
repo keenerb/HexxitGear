@@ -160,6 +160,47 @@ public class HexxitGearRegistry {
                         'H', HexxitGear.hexicalDiamond
                 }));
 
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(HexxitGear.magicHelmet), new Object[]
+                {
+                        " B ",
+                        "OHO",
+                        "W W",
+                        'B', Items.book,
+                        'O', Blocks.obsidian,
+                        'H', HexxitGear.hexicalDiamond,
+                        'W', Blocks.wool
+                }));
+  
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(HexxitGear.magicChest), new Object[]
+                {
+                        "G G",
+                        "WHW",
+                        "GBG",
+                        'G', "ingotGold",
+                        'W', Blocks.wool,
+                        'H', HexxitGear.hexicalDiamond,
+                        'B', Items.book
+                }));
+  
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(HexxitGear.magicLeggings), new Object[]
+               {
+                        "GBG",
+                        "WHW",
+                        "G G",
+                        'G', "ingotGold",
+                        'W', Blocks.wool,
+                        'H', HexxitGear.hexicalDiamond,
+                        'B', Items.book
+                }));
+  
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(HexxitGear.magicBoots), new Object[]
+                {
+                        "WHW",
+                        "G G",
+                        'G', "ingotGold",
+                        'W', Blocks.wool,
+                        'H', HexxitGear.hexicalDiamond
+                }));
 
         /* Add repair recipes */
         GameRegistry.addShapelessRecipe(new ItemStack(HexxitGear.tribalHelmet, 1, 0), new ItemStack(HexxitGear.tribalHelmet, 1, Short.MAX_VALUE), HexxitGear.hexicalEssence);

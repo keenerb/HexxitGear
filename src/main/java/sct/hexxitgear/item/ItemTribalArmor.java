@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 import sct.hexxitgear.HexxitGear;
+import sct.hexxitgear.model.ModelDualLayerArmor;
 import sct.hexxitgear.model.ModelSkullHelmet;
 import sct.hexxitgear.util.FormatCodes;
 
@@ -39,22 +40,47 @@ public class ItemTribalArmor extends ItemHexxitArmor {
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, java.lang.String type) {
-        if (slot == 0)
-            return "hexxitgear:textures/maps/SkullHelmet.png";
+    @SideOnly(Side.CLIENT)
+    protected String getHoodTexture() {
+        return "hexxitgear:textures/maps/SkullHelmet.png";
+    }
 
-        if (stack.getItem() == HexxitGear.tribalLeggings)
-            return "hexxitgear:textures/armor/tribal2.png";
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected String getBodyTexture() {
+        return "hexxitgear:textures/armor/tribal2.png";
+    }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected String getOverlayTexture() {
         return "hexxitgear:textures/armor/tribal.png";
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    protected ModelDualLayerArmor getBodyModel(int slot) {
+        switch (slot) {
+            case 1: return chest;
+            case 2: return leggings;
+            case 3: return feet;
+            default: return null;
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static ModelSkullHelmet skullHelmet = new ModelSkullHelmet();
+    @SideOnly(Side.CLIENT)
+    private static ModelDualLayerArmor chest = new ModelDualLayerArmor(1.0f);
+    @SideOnly(Side.CLIENT)
+    private static ModelDualLayerArmor leggings = new ModelDualLayerArmor(0.5f);
+    @SideOnly(Side.CLIENT)
+    private static ModelDualLayerArmor feet = new ModelDualLayerArmor(0.5f);
+
     @SideOnly(Side.CLIENT)
     @Override
-    public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
-        if (armorSlot == 0)
-            return new ModelSkullHelmet();
-        return null;
+    protected ModelSkullHelmet getHeadModel() {
+        return skullHelmet;
     }
 
     @Override
