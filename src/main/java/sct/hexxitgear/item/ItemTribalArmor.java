@@ -50,10 +50,23 @@ public class ItemTribalArmor extends ItemHexxitArmor {
     }
 
     @SideOnly(Side.CLIENT)
+    private static ModelSkullHelmet skullHelmet;
+
+    @SideOnly(Side.CLIENT)
+    private ModelSkullHelmet getHelmet() {
+        if (skullHelmet == null)
+            skullHelmet = new ModelSkullHelmet();
+        return skullHelmet;
+    }
+
+    @SideOnly(Side.CLIENT)
     @Override
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
-        if (armorSlot == 0)
-            return new ModelSkullHelmet();
+        if (armorSlot == 0) {
+            ModelBiped skull = getHelmet();
+            skull.isSneak = entityLiving.isSneaking();
+            return skull;
+        }
         return null;
     }
 

@@ -29,13 +29,14 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.StatCollector;
 import sct.hexxitgear.HexxitGear;
 import sct.hexxitgear.model.ModelHoodHelmet;
+import sct.hexxitgear.model.ModelSageHood;
 import sct.hexxitgear.util.FormatCodes;
 
 import java.util.List;
 
-public class ItemThiefArmor extends ItemHexxitArmor {
+public class ItemMagicianArmor extends ItemHexxitArmor {
 
-    public ItemThiefArmor(int renderIndex, int slot) {
+    public ItemMagicianArmor(int renderIndex, int slot) {
         super(ArmorMaterial.DIAMOND, renderIndex, slot);
     }
 
@@ -49,38 +50,37 @@ public class ItemThiefArmor extends ItemHexxitArmor {
 
         // If the helmet slot, return helmet texture map
         if (slot == 0)
-            return "hexxitgear:textures/maps/HoodHelmet.png";
+            return "hexxitgear:textures/maps/SageHood.png";
 
-        if (stack.getItem() == HexxitGear.thiefLeggings)
-            return "hexxitgear:textures/armor/thief2.png";
+        if (stack.getItem() == HexxitGear.magicLeggings)
+            return "hexxitgear:textures/armor/sage2.png";
 
-        return "hexxitgear:textures/armor/thief.png";
+        return "hexxitgear:textures/armor/sage.png";
     }
 
     @SideOnly(Side.CLIENT)
-    private static ModelHoodHelmet hoodHelmet;
+    private static ModelSageHood hood;
 
     @SideOnly(Side.CLIENT)
-    private ModelBiped getHelmet() {
-        if (hoodHelmet == null)
-            hoodHelmet = new ModelHoodHelmet();
-
-        return hoodHelmet;
+    protected ModelSageHood getHoodModel() {
+        if (hood == null)
+            hood = new ModelSageHood();
+        return hood;
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
         if (armorSlot == 0) {
-            ModelBiped helmet = getHelmet();
-            helmet.isSneak = entityLiving.isSneaking();
-            return helmet;
+            ModelBiped retVal = getHoodModel();
+            retVal.isSneak = entityLiving.isSneaking();
+            return retVal;
         }
         return null;
     }
 
     @Override
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List infoList, boolean par4) {
-        infoList.add(FormatCodes.Indigo.format + StatCollector.translateToLocal("gui.hexxitgear.set.thief"));
+        infoList.add(FormatCodes.Indigo.format + StatCollector.translateToLocal("gui.hexxitgear.set.magician"));
     }
 }

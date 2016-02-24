@@ -48,7 +48,7 @@ public class ModelSkullHelmet extends ModelBiped {
         Shape4.mirror = true;
         setRotation(Shape4, 0F, 0F, 0F);
         Shape1 = new ModelRenderer(this, 25, 0);
-        Shape1.addBox(-7F, -7F, 0F, 3, 2, 2);
+        Shape1.addBox(4F, -7F, 0F, 3, 2, 2);
         Shape1.setRotationPoint(0F, 0F, 0F);
         Shape1.setTextureSize(64, 32);
         Shape1.mirror = true;
@@ -60,7 +60,7 @@ public class ModelSkullHelmet extends ModelBiped {
         Shape2.mirror = true;
         setRotation(Shape2, 0F, 0F, 0F);
         Shape3 = new ModelRenderer(this, 25, 5);
-        Shape3.addBox(-7F, -8F, 0F, 1, 1, 1);
+        Shape3.addBox(-5F, -7F, 0F, 1, 1, 1);
         Shape3.setRotationPoint(0F, 0F, 0F);
         Shape3.setTextureSize(64, 32);
         Shape3.mirror = true;
@@ -82,6 +82,7 @@ public class ModelSkullHelmet extends ModelBiped {
         model.rotateAngleX = x;
         model.rotateAngleY = y;
         model.rotateAngleZ = z;
+        model.rotationPointY = (this.isSneak)?1.0f:0;
     }
 
     @Override
@@ -95,7 +96,6 @@ public class ModelSkullHelmet extends ModelBiped {
         setRotation(Shape2, newX, newY, 0);
         setRotation(Shape3, newX, newY, 0);
         setRotation(Shape4, newX, newY, 0);
-
     }
 
 }

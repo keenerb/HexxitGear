@@ -50,10 +50,23 @@ public class ItemScaleArmor extends ItemHexxitArmor {
     }
 
     @SideOnly(Side.CLIENT)
+    private static ModelScaleHelmet scaleHelmet;
+
+    @SideOnly(Side.CLIENT)
+    private ModelBiped getHelmet() {
+        if (scaleHelmet == null)
+            scaleHelmet = new ModelScaleHelmet();
+        return scaleHelmet;
+    }
+
+    @SideOnly(Side.CLIENT)
     @Override
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, int armorSlot) {
-        if (armorSlot == 0)
-            return new ModelScaleHelmet();
+        if (armorSlot == 0) {
+            ModelBiped helmet = getHelmet();
+            helmet.isSneak = entityLiving.isSneaking();
+            return helmet;
+        }
         return null;
     }
 

@@ -51,7 +51,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void setPlayerCape(String playerName, String capeUrl) {
         EntityPlayer player = HexxitGear.proxy.findPlayer(playerName);
-        setPlayerCape(player, capeUrl);
+//      setPlayerCape(player, capeUrl);
     }
 
     @Override

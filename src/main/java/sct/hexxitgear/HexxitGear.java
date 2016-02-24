@@ -27,6 +27,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Logger;
 import sct.hexxitgear.block.BlockHexbiscus;
@@ -78,6 +79,11 @@ public class HexxitGear {
     public static Item scaleLeggings;
     public static Item scaleBoots;
 
+    public static Item magicHelmet;
+    public static Item magicChest;
+    public static Item magicLeggings;
+    public static Item magicBoots;
+
     public static List<Integer> dimensionalBlacklist = new ArrayList<Integer>();
 
     @Mod.EventHandler
@@ -110,6 +116,10 @@ public class HexxitGear {
         thiefChest = new ItemThiefArmor(proxy.addArmor("thief"), 1).setUnlocalizedName("hexxitgear.thief.chest").setTextureName("hexxitgear:thief.chest");
         thiefLeggings = new ItemThiefArmor(proxy.addArmor("thief"), 2).setUnlocalizedName("hexxitgear.thief.leggings").setTextureName("hexxitgear:thief.leggings");
         thiefBoots = new ItemThiefArmor(proxy.addArmor("thief"), 3).setUnlocalizedName("hexxitgear.thief.boots").setTextureName("hexxitgear:thief.boots");
+        magicHelmet = new ItemMagicianArmor(proxy.addArmor("magic"), 0).setUnlocalizedName("hexxitgear.magic.helmet").setTextureName("hexxitgear:sage.helmet");
+        magicChest = new ItemMagicianArmor(proxy.addArmor("magic"), 1).setUnlocalizedName("hexxitgear.magic.chest").setTextureName("hexxitgear:sage.chest");
+        magicLeggings = new ItemMagicianArmor(proxy.addArmor("magic"), 2).setUnlocalizedName("hexxitgear.magic.leggings").setTextureName("hexxitgear:sage.leggings");
+        magicBoots = new ItemMagicianArmor(proxy.addArmor("magic"), 3).setUnlocalizedName("hexxitgear.magic.boots").setTextureName("hexxitgear:sage.boots");
 
         hexicalEssence = new Item().setCreativeTab(HGCreativeTab.tab).setUnlocalizedName("hexxitgear.hexicalessence").setTextureName("hexxitgear:hexicalEssence");
         hexicalDiamond = new Item().setTextureName("hexxitgear:hexicalDiamond").setCreativeTab(HGCreativeTab.tab).setUnlocalizedName("hexxitgear.hexicaldiamond");
@@ -127,6 +137,10 @@ public class HexxitGear {
         GameRegistry.registerItem(thiefChest, "thiefChest");
         GameRegistry.registerItem(thiefLeggings, "thiefLeggings");
         GameRegistry.registerItem(thiefBoots, "thiefBoots");
+        GameRegistry.registerItem(magicHelmet, "magicHelmet");
+        GameRegistry.registerItem(magicChest, "magicChest");
+        GameRegistry.registerItem(magicLeggings, "magicLeggings");
+        GameRegistry.registerItem(magicBoots, "magicBoots");
         GameRegistry.registerItem(hexicalEssence, "hexxicalEssence");
         GameRegistry.registerItem(hexicalDiamond, "hexxicalDiamond");
 
@@ -148,5 +162,15 @@ public class HexxitGear {
 
     public static List<Integer> getDimBlacklist() {
         return dimensionalBlacklist;
+    }
+ 
+    public static void translateAndAdd(String key, List list) {
+        for (int i=0;i<10;i++) {
+            if (StatCollector.canTranslate(key + Integer.toString(i))) {
+                String line = StatCollector.translateToLocal(key + Integer.toString(i));
+                list.add(line);
+            } else
+                break;
+        }
     }
 }
