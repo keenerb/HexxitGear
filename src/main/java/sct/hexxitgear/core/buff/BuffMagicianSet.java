@@ -26,18 +26,13 @@ public class BuffMagicianSet implements IBuffHandler {
 
     @Override
     public void applyPlayerBuffs(EntityPlayer player) {
-        player.addPotionEffect(new PotionEffect(Potion.fireResistance.id, 20, 0));
+        player.addPotionEffect(new PotionEffect(Potion.fireResistance.id, 20, 2));
+        player.addPotionEffect(new PotionEffect(Potion.waterBreathing.id, 20, 2));
         player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 21 * 20, 0));
-//        player.landMovementFactor = 0.15f;
-//        player.jumpMovementFactor = player.landMovementFactor * 0.5F;
-
-//        player.stepHeight = 1.003F;
     }
 
     @Override
     public void removePlayerBuffs(EntityPlayer player) {
-        if (player.stepHeight == 1.003F) {
-            player.stepHeight = 0.5001F;
-        }
+
     }
 }
